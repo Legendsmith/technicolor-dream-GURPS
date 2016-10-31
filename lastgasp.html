@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GURPS Last Gasp Assistant</title>
+  <style>
+  .left{float:left; width:33%;}
+  .insm{width:40px;}
+</style>
+
+</head>
+<body style="font-family:sans-serif;">
+<div id="main" style="width:600px;margin-left:auto; margin-right:auto;background-color:#e6e6ff;border-radius:20px;padding:20px"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
+<p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
+<p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled. I have no idea why this happens. Blame javascript and refresh.</p>
+<div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
+<input class=insm type="number" id="in_ST" value =10> ST</input></br>
+<input class=insm type="number" id="in_AP" value =0> Additional AP</input></br>
+<input class=insm type="number" id="in_FP" value = 0> Additional FP</input> </br><input type="checkbox" id="cb_fit"> Fit; Halve Recovery times.</input></div>
+
+<div style="width:50%;float:left;">
+<input class=insm type="number" id="in_DX" value =10> DX</input></br>
+<input class=insm type="number" id="in_IQ" value =10> IQ</input></br>
+<input class=insm type="number" id="in_mov" value =0> Move Modifier</input></br>
+<input class=insm type="number" id="in_enc" value = 0>lbs Weight Carried</input></br>
+<input type="checkbox" id="cb_vfit">Very Fit; Halve Recovery times.</input>
+</div>
+<div style="clear:left;"><hr></div>
+<button id="btn_init">Initialise</button>  <button id="btn_save">Save</button> <button id="btn_load">Load</button>
+</br>
+<div style="float:left;width:295px">
+<h3><span id="txt_AP">X/X AP</span> <input class=insm type="number" id="in_aps" value =0></br></h3>
+<h3><span id="txt_FP">X/X FP</span> <input class=insm type="number" id="in_fps" value =0></br></h3>
+<span id = "txt_st">[uninitialized]</span></br>
+<span id = "txt_dx">[uninitialized]</span></br>
+<span id = "txt_iq">[uninitialized]</span></br>
+<span id = "txt_ht">[uninitialized]</span></br>
+</br>
+<span id = "txt_lif">[uninitialized]</span></br>
+<span id ="txt_mov">[uninitialized]</span></br>
+<span id = "txt_enc">[uninitialized]</span></br>
+<span id = "txt_status">[uninitialized]</span></br></div>
+
+<div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
+  <button id="btn_wnd">Spend 1 FP to regain AP</button></br>
+  This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</br>
+  <button id="btn_one">Do a 1 AP action</button>
+  <ul>
+    <li>Step (First is free)</li>
+    <li>Active Defense</li>
+    <li>Melee Attack</li>
+    <li>Draw a Bow/Crossbow</li>
+    <li>Defensive Attack</li>
+    <li>Fast Draw/Quick Ready</li>
+    <li>Feint</li>
+    <li>Injury 1/HP:, resistable</li>
+    <li>Change Facing (1 per 60°)</li>
+    <li>Change Posture</li>
+  </ul>
+  <button id="btn_two">Do a 2 AP action</button>
+  <ul>
+    <li>Melee All-out Attack</li>
+    <li>Committed Attack</li>
+  </ul>
+  <b>Recovery Events</b>
+  <p>The NEXT turn after taking one of these manuvers Roll HT (Penalised by Impairment). On a success, recover 1 AP plus 1 per 4 margin of success. No bonus to HT unless otherwise noted.<p>
+  <ul>
+    <li>Do Nothing, +4 to HT roll</li>
+    <li>Evaluate, gives +1 to attack</li>
+    <li>Wait, only recovers if not triggered</li>
+  </ul>
+</div>
+<div style="float:left;width:295px;background-color:#ffffff;border-radius:10px;"><div style="padding:10px">Recovery</br>
+ <button id="btn_not">Roll For Recovery (Do Nothing)</button>
+ <button id="btn_eva">Roll For Recovery (Eval/Wait)</button></br>Manual Update</br><button id="btn_updt">Update</button> <button id="btn_apf">Fill AP</button><button id="btn_fpf">Fill FP</button></br></div></div>
+<span id ="txt_out"></span>
+<div style="clear:left;clear:right"></div>
+
+
+
+<script>
+//setup
+btn_updt.disabled = true;
+btn_save.disabled = true;
+btn_load.disabled = true;
+btn_wnd.disabled = true;
+btn_one.disabled = true;
+btn_two.disabled = true;
+var dotrack = {}
+var status = ""
+
+cb_fit.onchange=function(){
+  if (document.getElementById("cb_fit").checked== true){document.getElementById("cb_vfit").checked=false}
+}
+cb_vfit.onchange=function(){
+  if (document.getElementById("cb_vfit").checked == true){document.getElementById("cb_fit").checked=false}
+}
+//buttons for AP recovery
+btn_not.onclick=function(){
+  document.getElementById("txt_out").innerHTML = rollHT(4) + fitbon;
+  update();
+}
+btn_eva.onclick=function(){
+  document.getElementById("txt_out").innerHTML = rollHT(0) + fitbon;
+  update();
+}
+
+function rollHT(_bon){
+  var r = Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)
+  var op = "" //output
+  if (r <= (dotrack.ht + _bon)) {
+    dotrack.ap += 1 + Math.floor(((dotrack.ht + _bon) -r)/4)
+    op = "<b style=\"color:green\">Success: "+r+"</b>"
+  }else{op="<b style=\"color:red\">Failure: "+r+"</b>"}
+  return op
+}
+
+//buttons for AP use
+btn_wnd.onclick=function(){
+  dotrack.fp -=1
+  dotrack.ap += Math.ceil(dotrack.htmax * 0.5)
+  update();
+}
+btn_one.onclick=function(){
+  dotrack.ap -= 1
+  update();
+}
+btn_two.onclick=function(){
+  dotrack.ap -= 2
+  update();
+}
+
+///script begin.
+btn_init.onclick=function(){ //initialisation
+  if(document.getElementById("cb_fit").checked){
+    fitbon = 1
+    console.log("fit bonus active")
+  }else if(document.getElementById("cb_vfit").checked){
+    fitbon = 2
+    console.log("v. fit bonus active")
+  }else{fitbon=0}
+    dotrack.stmax=parseInt(in_ST.value);
+    dotrack.htmax =parseInt(in_HT.value);
+    dotrack.iqmax =parseInt(in_IQ.value);
+    dotrack.iq=dotrack.iqmax;
+    dotrack.htmax =parseInt(in_HT.value);
+    dotrack.ht =dotrack.htmax
+    dotrack.blmax=parseInt(in_ST.value);
+    dotrack.apmax=parseInt(in_HT.value)+parseInt(in_AP.value);
+    dotrack.fpmax=parseInt(in_HT.value)+parseInt(in_FP.value);
+    dotrack.dxmax=parseInt(in_DX.value)
+    dotrack.dx=dotrack.dxmax
+    dotrack.movmax=((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value)
+    dotrack.mov = dotrack.movmax
+    dotrack.ap = dotrack.apmax
+    dotrack.st = dotrack.stmax
+    dotrack.fp = dotrack.fpmax
+    dotrack.st = dotrack.stmax
+    dotrack.fppoint = Math.ceil(dotrack.fpmax/5)
+    dotrack.dodge = 0
+    calc();
+    encumber();
+    display();
+    btn_updt.disabled = false;
+    btn_wnd.disabled = false;
+    btn_one.disabled = false;
+    btn_two.disabled = false;
+
+}
+
+//callbacks
+btn_updt.onclick=function(){
+  dotrack.fp += parseInt(in_fps.value);
+  dotrack.ap += parseInt(in_aps.value);
+  update();
+}
+
+btn_apf.onclick=function(){
+  dotrack.fp=dotrack.apmax
+  update()
+}
+btn_fpf.onclick=function(){
+  dotrack.fp=dotrack.fpmax
+  update()
+}
+
+function update(){
+  
+  calc()
+  encumber()
+  display()
+  if(dotrack.fp > dotrack.fpmax){dotrack.fp = dotrack.fpmax};
+}
+
+//functions
+
+function basiclift(_st){
+    bl = (_st * _st)/5
+    if(bl>10){
+
+    }else{bl = Math.floor(bl *10)/10}
+    return bl
+}
+
+function encumber(){
+  var _enc = Math.ceil(parseInt(in_enc.value)/basiclift(dotrack.st))
+  if (_enc >6){_enc = 10}else if(_enc > 3){_enc = 6;} //rounding encumberance
+  switch(_enc){
+    default:
+    console.log("an error in encumberance occured, value= "+_enc)
+    case 0:
+    dotrack.mov = ((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value)
+      dotrack.dodge =0
+    break;
+    case 1:
+      dotrack.mov = ((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value)
+      dotrack.dodge =0
+    break;
+    case 2:
+      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.8)
+      dotrack.dodge =-1
+     break;
+     case 3:
+      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.6)
+      dotrack.dodge =-2
+    break;
+    case 6:
+      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.4)
+      dotrack.dodge =-3
+    break;
+    case 10:
+      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.2)
+      dotrack.dodge =-4
+    break;
+  }  
+}
+
+//display
+function display(){
+  document.getElementById("txt_AP").innerHTML = dotrack.ap +"/"+ dotrack.apmax + " AP"
+  document.getElementById("txt_FP").innerHTML = dotrack.fp +"/"+ dotrack.fpmax + " FP"
+  document.getElementById("txt_st").innerHTML = dotrack.st +"/"+ dotrack.stmax + " ST"
+  document.getElementById("txt_dx").innerHTML = dotrack.dx +"/"+ dotrack.dxmax + " DX"
+  document.getElementById("txt_iq").innerHTML = dotrack.iq +"/"+ dotrack.iqmax + " IQ"
+  document.getElementById("txt_ht").innerHTML = dotrack.ht +"/"+ dotrack.htmax + " HT"
+  document.getElementById("txt_lif").innerHTML = basiclift(dotrack.st) +"/"+ basiclift(dotrack.st) + " lbs Basic Lift"
+  document.getElementById("txt_enc").innerHTML = "Dodge penalty: "+ dotrack.dodge
+  document.getElementById("txt_mov").innerHTML = dotrack.mov +" Move"
+  document.getElementById("txt_status").innerHTML = status
+}
+//calc
+function round(_x){
+  return _x
+}
+
+function calc(){
+  dotrack.st = (dotrack.stmax * ((dotrack.fp/(dotrack.fppoint))+5)/10)
+  var penalty = Math.floor(10-(((dotrack.fp/(dotrack.fppoint))+5)/10)*10)
+  dotrack.iq = dotrack.iqmax -  penalty
+  dotrack.dx = dotrack.dxmax - penalty
+  dotrack.ht = dotrack.htmax - penalty
+  if((dotrack.fp/(dotrack.fppoint)>=4)){
+    status = "<b>Mild Fatigue</br>Hours Per FP recovered:</b> " +  Math.floor((20/dotrack.fpmax)*100)/100
+  }else if (dotrack.fp/(dotrack.fppoint)<4 && dotrack.fp/(dotrack.fppoint)>=0){
+    status = "<b style=\"color:red;\">Severe Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((80/dotrack.fpmax)*100)/100
+  }else if((dotrack.fp/dotrack.fppoint)< 0 ){
+    status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((240/dotrack.fpmax)*100)/100
+  }
+}
+
+///fun stuff
+document.onclick=function(){
+	function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+	}
+	var helements = document.querySelectorAll(".he")
+	for (var i = 0; i < helements.length; i++) {
+    helements[i].style.color = getRandomColor()
+}
+
+}
+
+
+</script>
+<p style="font-size:10px">Last Gasp Tracker made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a>. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p></div>
+
+</body>
+</html> 
