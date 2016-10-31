@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Technicolor Dream GURPS</title>
+</head>
+
+<body style="font-family:Verdana, Geneva, sans-serif">
+<h1>Technicolour Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></h1>
+<p style="font-size:12px">By <a href="http://legendsmith.net">Legendsmith.net</a></p>
+<p><a href="https://legendsmith.github.io/technicolor-dream-GURPS/woundtracker">Wound Tracker</a> for Accumulated Wounds, Basic Set p420</p>
+<p><a href="https://legendsmith.github.io/technicolor-dream-GURPS/lastgasp">Last Gasp Assistant</a> for The Last Gasp, Pyramid 3/44: Alternate GURPS II</p>
+  <script>
+document.onclick=function(){
+	function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+	}
+	var helements = document.querySelectorAll(".he")
+	for (var i = 0; i < helements.length; i++) {
+    helements[i].style.color = getRandomColor()
+}
+
+}
+  </script>
+
+</body>
+</html>
