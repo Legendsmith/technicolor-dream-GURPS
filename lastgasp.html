@@ -35,7 +35,7 @@
 <span id = "txt_dx">[uninitialized]</span></br>
 <span id = "txt_iq">[uninitialized]</span></br>
 <span id = "txt_ht">[uninitialized]</span></br>
-</br>
+<span id = "txt_pen">[uninitialized]</span></br>
 <span id = "txt_lif">[uninitialized]</span></br>
 <span id ="txt_mov">[uninitialized]</span></br>
 <span id = "txt_enc">[uninitialized]</span></br>
@@ -43,7 +43,7 @@
 
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
   <button id="btn_wnd">Spend 1 FP to regain AP</button></br>
-  This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</br>
+  This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</br><hr></br>
   <button id="btn_one">Do a 1 AP action</button>
   <ul>
     <li>Step (First is free)</li>
@@ -247,15 +247,16 @@ function encumber(){
 
 //display
 function display(){
-  document.getElementById("txt_AP").innerHTML = dotrack.ap +"/"+ dotrack.apmax + " AP"
-  document.getElementById("txt_FP").innerHTML = dotrack.fp +"/"+ dotrack.fpmax + " FP"
-  document.getElementById("txt_st").innerHTML = dotrack.st +"/"+ dotrack.stmax + " ST"
-  document.getElementById("txt_dx").innerHTML = dotrack.dx +"/"+ dotrack.dxmax + " DX"
-  document.getElementById("txt_iq").innerHTML = dotrack.iq +"/"+ dotrack.iqmax + " IQ"
-  document.getElementById("txt_ht").innerHTML = dotrack.ht +"/"+ dotrack.htmax + " HT"
-  document.getElementById("txt_lif").innerHTML = basiclift(dotrack.st) +"/"+ basiclift(dotrack.st) + " lbs Basic Lift"
-  document.getElementById("txt_enc").innerHTML = "Dodge penalty: "+ dotrack.dodge
-  document.getElementById("txt_mov").innerHTML = dotrack.mov +" Move"
+  document.getElementById("txt_AP").textContent = dotrack.ap +"/"+ dotrack.apmax + " AP"
+  document.getElementById("txt_FP").textContent = dotrack.fp +"/"+ dotrack.fpmax + " FP"
+  document.getElementById("txt_st").textContent = dotrack.st +"/"+ dotrack.stmax + " ST"
+  document.getElementById("txt_dx").textContent = dotrack.dx +"/"+ dotrack.dxmax + " DX"
+  document.getElementById("txt_pen").textContent = dotrack.dx - dotrack.dxmax + " to most skills."
+  document.getElementById("txt_iq").textContent = dotrack.iq +"/"+ dotrack.iqmax + " IQ"
+  document.getElementById("txt_ht").textContent = dotrack.ht +"/"+ dotrack.htmax + " HT"
+  document.getElementById("txt_lif").textContent = basiclift(dotrack.st) +"/"+ basiclift(dotrack.st) + " lbs Basic Lift"
+  document.getElementById("txt_enc").textContent = "Dodge penalty: "+ dotrack.dodge
+  document.getElementById("txt_mov").textContent = dotrack.mov +" Move"
   document.getElementById("txt_status").innerHTML = status
 }
 //calc
@@ -271,7 +272,10 @@ function calc(){
   }else if (dotrack.fp/(dotrack.fppoint)<4 && dotrack.fp/(dotrack.fppoint)>=0){
     status = "<b style=\"color:red;\">Severe Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((80/dotrack.fpmax)*100)/100
   }else if((dotrack.fp/dotrack.fppoint)< 0 ){
-    status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((240/dotrack.fpmax)*100)/100
+    status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</br>Hours Per FP recovered: </b> Lose HP for each FP spent" +  Math.floor((240/dotrack.fpmax)*100)/100
+  }
+  if(dotrack.fp <= -dotrack.fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((240/dotrack.fpmax)*100)/100
+  dotrack.fp = -dotrack.fpmax
   }
 }
 
