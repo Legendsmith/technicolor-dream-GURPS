@@ -156,7 +156,7 @@ btn_init.onclick=function(){ //initialisation
     dotrack.st = dotrack.stmax
     dotrack.fp = dotrack.fpmax
     dotrack.st = dotrack.stmax
-    dotrack.fppoint = Math.ceil(dotrack.fpmax/5)
+    dotrack.fppoint = dotrack.fpmax/5
     dotrack.dodge = 0
     calc();
     encumber();
@@ -194,10 +194,19 @@ function update(){
 
 //functions
 
-function basiclift(_st){
-    bl = (_st * _st)/5
-    if(bl>10){
+function round(_n){
+  var r = Math.floor(_n);
+  var res =0
+  if(r>=0.5){
+    res = Math.ceil(_n)
+  }else{res=Math.floor(_n)}
+  return res
+}
 
+function basiclift(_st){
+    var bl = (_st * _st)/5
+    if(bl>10){
+      bl = round(bl)
     }else{bl = Math.floor(bl *10)/10}
     return bl
 }
@@ -249,9 +258,6 @@ function display(){
   document.getElementById("txt_status").innerHTML = status
 }
 //calc
-function round(_x){
-  return _x
-}
 
 function calc(){
   dotrack.st = (dotrack.stmax * ((dotrack.fp/(dotrack.fppoint))+5)/10)
