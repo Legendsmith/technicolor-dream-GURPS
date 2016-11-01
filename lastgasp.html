@@ -13,17 +13,19 @@
 <div id="main" style="width:600px;margin-left:auto; margin-right:auto;background-color:#e6e6ff;border-radius:20px;padding:20px"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
 <p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled. I have no idea why this happens. Blame javascript and refresh.</p>
+<b>Enter your character's stats</b></br>
+<p style="font-size:12px">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>,  halve shown recovery times. The other bonuses from such advantages are taken into account automatically.</p>
 <div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
 <input class=insm type="number" id="in_ST" value =10> ST</input></br>
 <input class=insm type="number" id="in_AP" value =0> Additional AP</input></br>
-<input class=insm type="number" id="in_FP" value = 0> Additional FP</input> </br><input type="checkbox" id="cb_fit"> Fit; Halve Recovery times.</input></div>
+<input class=insm type="number" id="in_FP" value = 0> Additional FP</input> </br><input type="checkbox" id="cb_fit"> Fit</input></div>
 
 <div style="width:50%;float:left;">
 <input class=insm type="number" id="in_DX" value =10> DX</input></br>
 <input class=insm type="number" id="in_IQ" value =10> IQ</input></br>
 <input class=insm type="number" id="in_mov" value =0> Move Modifier</input></br>
 <input class=insm type="number" id="in_enc" value = 0>lbs Weight Carried</input></br>
-<input type="checkbox" id="cb_vfit">Very Fit; Halve Recovery times.</input>
+<input type="checkbox" id="cb_vfit">Very Fit</input>
 </div>
 <div style="clear:left;"><hr></div>
 <button id="btn_init">Initialise</button>  <button id="btn_save">Save</button> <button id="btn_load">Load</button>
@@ -31,6 +33,7 @@
 <div style="float:left;width:295px">
 <h3><span id="txt_AP">X/X AP</span> <input class=insm type="number" id="in_aps" value =0></br></h3>
 <h3><span id="txt_FP">X/X FP</span> <input class=insm type="number" id="in_fps" value =0></br></h3>
+<h4>Stats and Impairment</h4>
 <span id = "txt_st">[uninitialized]</span></br>
 <span id = "txt_dx">[uninitialized]</span></br>
 <span id = "txt_iq">[uninitialized]</span></br>
@@ -42,8 +45,7 @@
 <span id = "txt_status">[uninitialized]</span></br></div>
 
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
-  <button id="btn_wnd">Spend 1 FP to regain AP</button></br>
-  This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</br><hr></br>
+  <h4>Spending AP</h4>
   <button id="btn_one">Do a 1 AP action</button>
   <ul>
     <li>Step (First is free)</li>
@@ -62,18 +64,22 @@
     <li>Melee All-out Attack</li>
     <li>Committed Attack</li>
   </ul>
-  <b>Recovery Events</b>
-  <p>The NEXT turn after taking one of these manuvers Roll HT (Penalised by Impairment). On a success, recover 1 AP plus 1 per 4 margin of success. No bonus to HT unless otherwise noted.<p>
+  <b>Recovery Events</b></br>
+
+  <p>The <b>next</b> turn after taking one of these manuvers Roll HT (Penalised by Impairment). On a success, recover 1 AP plus 1 per 4 margin of success. No bonus to HT unless otherwise noted.<p>
   <ul>
     <li>Do Nothing, +4 to HT roll</li>
     <li>Evaluate, gives +1 to attack</li>
     <li>Wait, only recovers if not triggered</li>
   </ul>
 </div>
-<div style="float:left;width:295px;background-color:#ffffff;border-radius:10px;"><div style="padding:10px">Recovery</br>
+<div style="float:left;width:295px;background-color:#ffffff;border-radius:10px;"><div style="padding:10px"><b>AP Recovery</b></br><button id="btn_wnd">Spend 1 FP to regain AP</button></br>
+  <p>This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</p>
+  <h3>Recovery Events</h3>
+  <span style="font-size:12px"><input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input></span>
  <button id="btn_not">Roll For Recovery (Do Nothing)</button>
- <button id="btn_eva">Roll For Recovery (Eval/Wait)</button></br>Manual Update</br><button id="btn_updt">Update</button> <button id="btn_apf">Fill AP</button><button id="btn_fpf">Fill FP</button></br></div></div>
-<span id ="txt_out"></span>
+ <button id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></br><hr>Manual Update</br><button id="btn_updt">Update</button> <button id="btn_apf">Fill AP</button><button id="btn_fpf">Fill FP</button></br></div></div>
+
 <div style="clear:left;clear:right"></div>
 
 
@@ -95,18 +101,64 @@ cb_fit.onchange=function(){
 cb_vfit.onchange=function(){
   if (document.getElementById("cb_vfit").checked == true){document.getElementById("cb_fit").checked=false}
 }
+var currenthtbonus = 0
 //buttons for AP recovery
 btn_not.onclick=function(){
-  document.getElementById("txt_out").innerHTML = rollHT(4 + fitbon);
+  currenthtbonus=4+fitbon
+  if(cb_rnd.checked){
+    rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRoll)
+    document.getElementById("txt_out").innerHTML = "Waiting for Random.org"
+  }else{
+    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+  }
+  //update ui and everything
   update();
 }
 btn_eva.onclick=function(){
-  document.getElementById("txt_out").innerHTML = rollHT(0 + fitbon);
+  currenthtbonus=fitbon
+  if(cb_rnd.checked){
+    rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRoll)
+    document.getElementById("txt_out").innerHTML = "Waiting for Random.org"
+  }else{
+    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+  }
+//update ui and everything
   update();
 }
 
-function rollHT(_bon){
-  var r = Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)
+function rollparse(_in){
+  var rollarray=_in.split("\n")
+  var _x =0
+  for (i = 0; i < 3; i++){
+    _x += parseInt(rollarray[i])
+  }
+  return _x
+}
+///callback for random.org
+function callbackRoll(_result){
+  var _rroll = rollparse(_result);
+  document.getElementById("txt_out").innerHTML = rollHT(_rroll);
+  update();
+}
+
+
+//////////////random.org stuff//////////
+var HttpClient = function() {
+    this.get = function(aUrl, aCallback) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function() { 
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                aCallback(anHttpRequest.responseText);
+        }
+
+        anHttpRequest.open( "GET", aUrl, true );            
+        anHttpRequest.send( null );
+    }
+}
+////////////////////////////////////////
+
+function rollHT(r){
+  var _bon = currenthtbonus
   var op = "" //output
   if (r <= (dotrack.ht + _bon)) {
     dotrack.ap += 1 + Math.floor(((dotrack.ht + _bon) -r)/4)
@@ -132,6 +184,7 @@ btn_two.onclick=function(){
 
 ///script begin.
 btn_init.onclick=function(){ //initialisation
+  rollClient= new HttpClient();
   if(document.getElementById("cb_fit").checked){
     fitbon = 1
     console.log("fit bonus active")
