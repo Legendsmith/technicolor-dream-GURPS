@@ -53,7 +53,7 @@
     <li>Defensive Attack</li>
     <li>Fast Draw/Quick Ready</li>
     <li>Feint</li>
-    <li>Injury 1/HP:, resistable</li>
+    <li>Injury 1/HP, resistable</li>
     <li>Change Facing (1 per 60°)</li>
     <li>Change Posture</li>
   </ul>
@@ -185,11 +185,12 @@ btn_fpf.onclick=function(){
 }
 
 function update(){
-  
+  if(dotrack.fp > dotrack.fpmax){dotrack.fp = dotrack.fpmax};
+  if(dotrack.ap > dotrack.apmax){dotrack.ap = dotrack.apmax};
   calc()
   encumber()
-  display()
   if(dotrack.fp > dotrack.fpmax){dotrack.fp = dotrack.fpmax};
+  display()
 }
 
 //functions
