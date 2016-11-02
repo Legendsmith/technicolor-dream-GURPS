@@ -104,15 +104,16 @@
 <h3><span id="txt_AP">X/X AP</span> <input class=insm type="number" id="in_aps" value =0></br></h3>
 <h3><span id="txt_FP">X/X FP</span> <input class=insm type="number" id="in_fps" value =0></br></h3>
 <h4>Stats and Impairment</h4>
-<span id = "txt_st">[uninitialized]</span></br>
-<span id = "txt_dx">[uninitialized]</span></br>
-<span id = "txt_iq">[uninitialized]</span></br>
-<span id = "txt_ht">[uninitialized]</span></br>
-<span id = "txt_pen">[uninitialized]</span></br>
-<span id = "txt_lif">[uninitialized]</span></br>
-<span id ="txt_mov">[uninitialized]</span></br>
-<span id = "txt_enc">[uninitialized]</span></br>
-<span id = "txt_status">[uninitialized]</span></br></div>
+<span id = "txt_st">|</span></br>
+<span id = "txt_dx">|</span></br>
+<span id = "txt_iq">|</span></br>
+<span id = "txt_ht">|</span></br>
+<span id = "txt_pen">|</span></br>
+<span id = "txt_lif">|</span></br>
+<span id ="txt_mov">|</span></br>
+<span id = "txt_enc">|</span></br><hr>
+<span id = "txt_dmg">|</span></br>
+<span id = "txt_status">|</span></br></div>
 
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
   <b style="font-size:16px;margin-bottom:5px">Spending AP</b></br>
@@ -156,7 +157,7 @@
 <div style="clear:left;clear:right"></div>
 
 
-
+<script type="text/javascript" src="https://legendsmith.github.io/technicolor-dream-GURPS/damagetables.json"></script>
 <script>
 //setup
 var btns = document.getElementsByTagName('button');
@@ -207,9 +208,9 @@ btn_not.onclick=function(){
   currenthtbonus=4+fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
-    document.getElementById("txt_out").innerHTML = "Waiting for Random.org"
+    document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").textContent = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
   }
   //update ui and everything
   update();
@@ -218,9 +219,9 @@ btn_eva.onclick=function(){
   currenthtbonus=fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
-    document.getElementById("txt_out").innerHTML = "Waiting for Random.org"
+    document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").textContent = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
   }
     //update ui and everything
   update();
@@ -229,9 +230,9 @@ btn_eva.onclick=function(){
 btn_injury.onclick=function(){
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackmitigate)
-    document.getElementById("txt_out2").innerHTML = "Waiting for Random.org"
+    document.getElementById("txt_out2").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out2").innerHTML = rollmitigate(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out2").textContent = rollmitigate(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
   }
   update();
 }
@@ -466,6 +467,7 @@ function display(){
   document.getElementById("txt_enc").textContent = "Dodge penalty: "+ dotrack.dodge
   document.getElementById("txt_mov").textContent = dotrack.mov +" Move"
   document.getElementById("txt_status").innerHTML = status
+  document.getElementById("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(dotrack.st)]} sw: ${dmgtbl.swing[Math.floor(dotrack.st)]}`
 }
 //calc
 
