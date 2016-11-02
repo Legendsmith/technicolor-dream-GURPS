@@ -97,7 +97,7 @@
 <input class=insm type="number" id="in_enc" value = 0>lbs Weight Carried</input></br>
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
-<div style="clear:left;"><hr></div>
+<div style="clear:left;"><p style="font-size:10px">If the <i>base</i> level of a stat changes due to magic or some other force, you will need to reinitialise. The exception to this is Weight Carried, that can (and should) be modified on the fly as characters move loads.</p></div><hr>
 <button class="fancybtn" id="btn_init">Initialise</button>  <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button><span style="font-size:12px"><input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input></span>
 </br>
 <div style="float:left;width:295px">
@@ -197,6 +197,10 @@ cb_vufit.onchange=function(){
     document.getElementById("cb_fit").checked=false
   }
 }
+in_enc.onchange=function(){
+  update();
+}
+
 var currenthtbonus = 0
 //buttons for AP recovery
 btn_not.onclick=function(){
@@ -245,7 +249,7 @@ function rollparse(_in){
 
 function callbackmitigate(_result){
   var _rroll = rollparse(_result);
-  document.getElementById("txt_out").innerHTML = rollmitigate(_rroll);
+  document.getElementById("txt_out2").innerHTML = rollmitigate(_rroll);
   update();
 }
 
@@ -386,11 +390,12 @@ btn_fpf.onclick=function(){
 }
 
 function update(){
-  if(dotrack.fp > dotrack.fpmax){dotrack.fp = dotrack.fpmax};
-  if(dotrack.ap > dotrack.apmax){dotrack.ap = dotrack.apmax};
-  calc()
+  dotrack.fp = Math.min(dotrack.fp,dotrack.fpmax);
+  dotrack.fp = Math.max(dotrack.fp,-dotrack.fpmax);
+  dotrack.ap = Math.min(dotrack.ap,dotrack.apmax);
+  dotrack.ap = Math.max(dotrack.ap,0);
   encumber()
-  if(dotrack.fp > dotrack.fpmax){dotrack.fp = dotrack.fpmax};
+  calc()
   display()
 }
 
@@ -417,32 +422,34 @@ function encumber(){
   var _enc = Math.ceil(parseInt(in_enc.value)/basiclift(dotrack.st))
   if (_enc >6){_enc = 10}else if(_enc > 3){_enc = 6;} //rounding encumberance
   switch(_enc){
-    default:
-    console.log("an error in encumberance occured, value= "+_enc)
     case 0:
-    dotrack.mov = ((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value)
+    dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))
       dotrack.dodge =0
     break;
     case 1:
-      dotrack.mov = ((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value)
+      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))
       dotrack.dodge =0
     break;
     case 2:
-      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.8)
+      dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.8)
       dotrack.dodge =-1
      break;
      case 3:
-      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.6)
+      dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.6)
+      console.log(dotrack.mov)
       dotrack.dodge =-2
     break;
     case 6:
-      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.4)
+      dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.4)
       dotrack.dodge =-3
     break;
     case 10:
-      dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value) *0.2)
+      dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.2)
       dotrack.dodge =-4
     break;
+    default:
+    console.log("an error in encumberance occured, value= "+_enc)
+    
   }  
 }
 
@@ -463,11 +470,12 @@ function display(){
 //calc
 
 function calc(){
-  dotrack.st = (dotrack.stmax * ((dotrack.fp/(dotrack.fppoint))+5)/10)
-  var penalty = Math.floor(10-(((dotrack.fp/(dotrack.fppoint))+5)/10)*10)
-  dotrack.iq = dotrack.iqmax -  penalty
-  dotrack.dx = dotrack.dxmax - penalty
-  dotrack.ht = dotrack.htmax - penalty
+  dotrack.fp = Math.max(dotrack.fp, -dotrack.fpmax);
+  dotrack.st = (dotrack.stmax * ((dotrack.fp/(dotrack.fppoint))+5)/10);
+  var penalty = Math.floor(10-(((dotrack.fp/(dotrack.fppoint))+5)/10)*10);
+  dotrack.iq = dotrack.iqmax -  penalty;
+  dotrack.dx = dotrack.dxmax - penalty;
+  dotrack.ht = dotrack.htmax - penalty;
   if((dotrack.fp/(dotrack.fppoint)>=4)){
     status = "<b>Mild Fatigue</br>Hours Per FP recovered:</b> " +  Math.floor((20/dotrack.fpmax)*100)/100
   }else if (dotrack.fp/(dotrack.fppoint)<4 && dotrack.fp/(dotrack.fppoint)>=0){
@@ -476,8 +484,6 @@ function calc(){
     status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</br>Hours Per FP recovered: </b> Lose HP for each FP spent" +  Math.floor((240/dotrack.fpmax)*100)/100
   }
   if(dotrack.fp <= -dotrack.fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((240/dotrack.fpmax)*100)/100
-  dotrack.fp = -dotrack.fpmax;
-  if(dotrack.ap<0){dotrack.ap=0};
   }
 }
 
