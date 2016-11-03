@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GURPS GM's Last Gasp Assistant</title>
+  <style>
+  .left{float:left; width:33%;}
+  .insm{width:40px;
+    text-align: right;
+  border: solid 1px #fff;
+  box-shadow: inset 1px 1px 2px 0 #707070;
+  transition: box-shadow 0.3s;}
+  .insm:focus,.insm.focus{
+  box-shadow: inset 1px 1px 2px 0 #c9c9FF;
+}
+
+.mookrow {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
+  background:-moz-linear-gradient(top, #ededed 5%, #f2f2f2 100%);
+  background:-webkit-linear-gradient(top, #ededed 5%, #f2f2f2 100%);
+  background:-o-linear-gradient(top, #ededed 5%, #f2f2f2 100%);
+  background:-ms-linear-gradient(top, #ededed 5%, #f2f2f2 100%);
+  background:linear-gradient(to bottom, #ededed 5%, #f2f2f2 100%);
+  -moz-border-radius:8px;
+  -webkit-border-radius:8px;
+  border-radius:8px;
+  border:2px solid #4e6096;
+}
+
+.fancybtn {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
+  background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#7892c2', endColorstr='#476e9e',GradientType=0);
+  background-color:#7892c2;
+  -moz-border-radius:8px;
+  -webkit-border-radius:8px;
+  border-radius:8px;
+  border:1px solid #4e6096;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  margin-top:3px; 
+  margin-bottom:3px;
+  font-family:Arial;
+  font-size:14px;
+  font-weight:bold;
+  padding:2px 5px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #283966;
+}
+.fancybtn:hover {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+  background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
+  background-color:#476e9e;
+}
+.fancybtn:active {
+  position:relative;
+  top:1px;
+}
+
+}
+.fancybtn:hover {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+  background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
+  background-color:#476e9e;
+}
+.fancybtn:active {
+  position:relative;
+  top:1px;
+}
+.fancybtn:disabled {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+  background:-moz-linear-gradient(top, #777777 5%, #666666 100%);
+  background:-webkit-linear-gradient(top, #777777 5%, #666666 100%);
+  background:-o-linear-gradient(top, #777777 5%, #666666 100%);
+  background:-ms-linear-gradient(top, #777777 5%, #666666 100%);
+  background:linear-gradient(to bottom, #777777 5%, #666666 100%)
+}
+.main {
+  width:600px;margin-left:auto;
+  margin-right:auto;
+  background-color:#e6e6ff;
+  border-radius:20px;
+  padding:20px
+}
+body {
+  font-family:sans-serif;
+}
+</style>
+
+</head>
+<body>
+<div class="main"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> GM's Last Gasp</h1></br><p>This tool is designed to allow a GM to keep track of multiple NPCs when using The Last Gasp rules.</p><button class="fancybtn" id="newtracker">New NPC</button>
+<div id="area">
+
+</div>
+
+</div>
+</body>
+<script type="text/javascript" src = "https://legendsmith.github.io/technicolor-dream-GURPS/damagetables.json"></script>
+<script type="text/javascript">
+//setup
+class Mook {
+  constructor(_st,_mov,_ht,_hp,_fp){
+    var this.stm = _st;
+    var this.hpm = _hp;
+    var this.fpm = _fp;
+    var this.htm = _ht;
+    var this.mov = _mov;
+    var this.st = this.stm;
+    var this.hp = this.hpm;
+    var this.fp = this.fpm;
+    var this.fp = this.fpm;
+    var this.mov = this.mov;
+    var this.apm = this.ht;
+    var this.ap = this.apm;
+    var this.sp = 0
+  }
+}
+var mooks = []
+
+//simple functions
+function rdsix(){
+  return Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)
+}
+// display
+function display(){
+  var asdf = ""
+  for (var i = mooks.length - 1; i >= 0; i--) {
+    asdf = asdf.concat(`Enemy #${mooks[i]} | ST ${mooks[i].st} THR: {dmgtbl.thrust[Math.floor(mooks[i].st)]} SW: {dmgtbl.swing[Math.floor(mooks[i].st)]} | Skill Penalty ${mooks[i].sp} `)
+  };
+
+sds
+  document.getElementById("area").innerHTML =
+}
+
+
+///fun stuff
+document.onclick=function(){
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  var helements = document.querySelectorAll(".he")
+  for (var i = 0; i < helements.length; i++) {
+    helements[i].style.color = getRandomColor()
+}
+
+}
+</script>
+</html>
