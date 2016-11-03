@@ -320,7 +320,7 @@ btn_not.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").textContent = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
   }
   //update ui and everything
   update();
@@ -331,7 +331,7 @@ btn_eva.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").textContent = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
   }
     //update ui and everything
   update();
@@ -416,9 +416,10 @@ function rollHT(r){
   var _bon = currenthtbonus
   var op = "" //output
   if (r <= (dotrack.ht + _bon)) {
-    dotrack.ap += 1 + Math.floor(((dotrack.ht + _bon) -r)/4)
-    op = "<b style=\"color:green\">Success: "+r+"</b>"
-  }else{op="<b style=\"color:red\">Failure: "+r+"</b>"}
+    var aprecovered = 1 + Math.floor(((dotrack.ht + _bon) -r)/4)
+    dotrack.ap += aprecovered;
+    op = `<b style=\"color:green\">Success: ${r} Recovered ${aprecovered} AP</b>`
+  }else{op=`<b style=\"color:red\">Failure: ${r}</b>`}
   return op
 }
 
