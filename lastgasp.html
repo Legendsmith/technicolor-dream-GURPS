@@ -13,6 +13,14 @@
   .insm:focus,.insm.focus{
   box-shadow: inset 1px 1px 2px 0 #c9c9FF;
 }
+h4 {
+    display: block;
+    margin-top: 0em;
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
 .fancybtn {
   background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
   background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
@@ -92,7 +100,7 @@
 <div id="main">
 <div id="controls"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
-<p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled; I have no idea why. Blame javascript and hard refresh (ctrl+F5).</p>
+<p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled; I have no idea why. Blame javascript and hard refresh (ctrl+F5) The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge to prevent ambiguity.</p>
 <b>Enter your character's stats</b></br>
 <p style="font-size:12px">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>These bonuses from advantages <b>are</b> taken into account automatically.</i></p>
 <div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
@@ -104,7 +112,7 @@
 <input class=insm type="number" id="in_DX" value =10> DX</input></br>
 <input class=insm type="number" id="in_IQ" value =10> IQ</input></br>
 <input class=insm type="number" id="in_mov" value =0> Move Modifier</input></br>
-<input class=insm type="number" id="in_enc" value = 0>lbs Weight Carried</input></br>
+<input class=insm type="number" id="in_dod" value = 0>Dodge Modifier</input></br>
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
 <div style="clear:left;"><p style="font-size:10px">If the <i>base</i> level of a stat changes due to magic or some other force, you will need to reinitialise. The exception to this is Weight Carried, that can (and should) be modified on the fly as characters move loads.</p></div><hr>
@@ -119,7 +127,7 @@
 <span id = "txt_iq">|</span></br>
 <span id = "txt_ht">|</span></br>
 <span id = "txt_pen">|</span></br>
-<span id = "txt_lif">|</span></br>
+<span id = "txt_lif">|</span> // <input class=insm type="number" id="in_enc" value = 0>lbs Carried</input></br>
 <span id ="txt_mov">|</span></br>
 <span id = "txt_enc">|</span></br><hr>
 <span id = "txt_dmg">|</span></br>
@@ -470,7 +478,7 @@ btn_init.onclick=function(){ //initialisation
     dotrack.fp = dotrack.fpmax
     dotrack.st = dotrack.stmax
     dotrack.fppoint = dotrack.fpmax/2
-    dotrack.dodge = 0
+    dotrack.dodgepen = 0
     calc();
     encumber();
     display();
@@ -536,28 +544,28 @@ function encumber(){
   switch(_enc){
     case 0:
     dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))
-      dotrack.dodge =0
+      dotrack.dodgepen =0
     break;
     case 1:
       dotrack.mov = Math.floor(((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))
-      dotrack.dodge =0
+      dotrack.dodgepen =0
     break;
     case 2:
       dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.8)
-      dotrack.dodge =-1
+      dotrack.dodgepen =-1
      break;
      case 3:
       dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.6)
       console.log(dotrack.mov)
-      dotrack.dodge =-2
+      dotrack.dodgepen =-2
     break;
     case 6:
       dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.4)
-      dotrack.dodge =-3
+      dotrack.dodgepen =-3
     break;
     case 10:
       dotrack.mov = Math.floor((((parseInt(dotrack.dx)+parseInt(dotrack.ht))/4)+parseInt(in_mov.value))*0.2)
-      dotrack.dodge =-4
+      dotrack.dodgepen =-4
     break;
     default:
     console.log("an error in encumberance occured, value= "+_enc)
@@ -578,9 +586,9 @@ function display(){
   document.getElementById("txt_pen").textContent = pentext
   document.getElementById("txt_iq").textContent = dotrack.iq +"/"+ dotrack.iqmax + " IQ"
   document.getElementById("txt_ht").textContent = dotrack.ht +"/"+ dotrack.htmax + " HT"
-  document.getElementById("txt_lif").textContent = basiclift(dotrack.st) +"/"+ basiclift(dotrack.st) + " lbs Basic Lift"
-  document.getElementById("txt_enc").textContent = "Dodge penalty: "+ dotrack.dodge
-  document.getElementById("txt_mov").textContent = dotrack.mov +" Move"
+  document.getElementById("txt_lif").innerHTML = basiclift(dotrack.st) +"/"+ basiclift(dotrack.st) + "lbs <b>BL</b>"
+  document.getElementById("txt_enc").textContent = "Encumberance Dodge penalty: "+ dotrack.dodgepen
+  document.getElementById("txt_mov").textContent =`Move: ${dotrack.mov} || Dodge: ${Math.floor(((dotrack.ht + dotrack.dx)/4)+3 + parseInt(in_dod.value))}`
   document.getElementById("txt_status").innerHTML = status
   document.getElementById("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(dotrack.st)]} sw: ${dmgtbl.swing[Math.floor(dotrack.st)]}`
 }
@@ -601,7 +609,7 @@ function calc(){
     dotrack.ht = dotrack.htmax - penalty;
   };
   if((dotrack.fp/(dotrack.fppoint)>=1)){
-    status = "<b>Mild Fatigue</b> " +  (Math.floor(((20/dotrack.fpmax)*fittime)*100)/100) +"</br>"
+    status = "<b>Mild Fatigue</b></br>"
   }else if (dotrack.fp/(dotrack.fppoint)<1 && dotrack.fp/(dotrack.fppoint)>=0){
     status = "<b style=\"color:red;\">Severe Fatigue</b></br>"
   }else if((dotrack.fp/dotrack.fppoint)< 0 ){
