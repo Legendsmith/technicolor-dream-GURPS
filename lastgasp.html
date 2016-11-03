@@ -69,18 +69,28 @@
   top:1px;
 }
 .fancybtn:disabled {
-  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #777777), color-stop(1, #666666));
   background:-moz-linear-gradient(top, #777777 5%, #666666 100%);
   background:-webkit-linear-gradient(top, #777777 5%, #666666 100%);
   background:-o-linear-gradient(top, #777777 5%, #666666 100%);
   background:-ms-linear-gradient(top, #777777 5%, #666666 100%);
   background:linear-gradient(to bottom, #777777 5%, #666666 100%)
 }
+#main{
+  width:800px;margin-left:auto; margin-right:auto;
+}
+#controls{
+  width:600px;float:left;background-color:#e6e6ff;border-radius:20px;padding:20px;
+}
+#display{
+  width:150px;height:875px;float:left;float:left;background-color:#ffffff;border-radius:20px;border:1px solid #3333aa;margin-top:66%;
+}
 </style>
 
 </head>
 <body style="font-family:sans-serif;">
-<div id="main" style="width:600px;margin-left:auto; margin-right:auto;background-color:#e6e6ff;border-radius:20px;padding:20px"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
+<div id="main">
+<div id="controls"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
 <p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled; I have no idea why. Blame javascript and hard refresh (ctrl+F5).</p>
 <b>Enter your character's stats</b></br>
@@ -113,7 +123,7 @@
 <span id ="txt_mov">|</span></br>
 <span id = "txt_enc">|</span></br><hr>
 <span id = "txt_dmg">|</span></br>
-<span id = "txt_status">|</span></br></div>
+<span id = "txt_status">|</br>|</br></span></br></div>
 
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
   <b style="font-size:16px;margin-bottom:5px">Spending AP</b></br>
@@ -156,8 +166,14 @@
 
 <div style="clear:left;clear:right"></div>
 
+<p style="font-size:10px">Last Gasp Tracker made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a>. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p style="font-size:12px" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a></p></div>
+<canvas id="display" width="150px" height="875px">
+</canvas> </div>
 
-<script type="text/javascript" src="https://legendsmith.github.io/technicolor-dream-GURPS/damagetables.json"></script>
+</body>
+
+<script type="text/javascript" src="damagetables.json"></script>
+<script type="text/javascript" src="patterns.js"></script>
 <script>
 //setup
 var btns = document.getElementsByTagName('button');
@@ -166,8 +182,94 @@ for (var i = btns.length - 1; i >= 0; i--) {
 };
 
 btn_init.disabled=false
+///patterns
+
 var dotrack = {}
 var status = ""
+var cvs = document.getElementById("display")
+var ctx = cvs.getContext("2d");
+//canvas
+function cvssetup(_fp){
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle="#000000"
+  ctx.font= "32px Arial";
+  ctx.fillText("FP",30,32)
+  ctx.font= "20px Arial";
+  ctx.translate(0,72)
+  var dsplyhght =(cvs.height - 85) //height minus the big FP
+    for (var i = _fp*2; i >= 0; i--) {
+    var _x = 5
+    var _y = (dsplyhght-(dsplyhght/(_fp*2) * i))+6
+    ctx.fillText((-_fp)+i,_x,_y);
+  }
+  
+}
+
+function cvsdisplay(){
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, cvs.width, cvs.height);
+  ctx.translate(0,72)
+  var dsplyhght =(cvs.height - 85)
+  //
+  
+  //
+  var sevblock_o = 0//SEVERE BLOCK origin
+  var sevblock_size = 0
+
+  if(dotrack.fp<dotrack.fpmax){
+    var mldtext_y = dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp) // it's actually the line of the fp point
+    var mldblock_yo = Math.max(dsplyhght-((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp+Math.floor(dotrack.fppoint))),0)
+    var mildsize = Math.min(((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax-dotrack.fp)),
+      (dsplyhght/dotrack.fpmax/2)*dotrack.fppoint);
+    //ctx.fillStyle="#"
+    ctx.fillStyle=ctx.createPattern(p,'repeat');
+
+    ctx.fillRect(25,mldblock_yo,80,mildsize);//MILD FATIGUE DRAW
+    ctx.fillStyle="#000000";
+    ctx.font= "16px Arial";
+    ctx.fillText("Mild",110,mldtext_y-((mldtext_y - mldblock_yo)/2)+6)
+    ctx.font= "bolder 16px Arial";
+    ctx.strokeStyle="#FFFFFF";
+    ctx.strokeText((Math.floor((20/dotrack.fpmax)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
+    ctx.strokeText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
+    ctx.font= "bold 16px Arial";
+    ctx.fillText((Math.floor((20/dotrack.fpmax)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
+    ctx.fillText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
+    //severe block
+    var sevblock_size = Math.max(dsplyhght-((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp+Math.floor(dotrack.fppoint))),0)
+    ctx.font= "16px Arial";
+  }
+
+  if(dotrack.fp<0){
+    ctx.font= "15px Arial";
+    ctx.fillStyle="Purple";
+    ctx.fillRect(25,0,80,(dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp))
+    sevblock_o = (dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)
+    ctx.fillStyle="#000000";
+    ctx.fillText("Deep",110,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2))
+    ctx.font= "bold 16px Arial";
+    ctx.fillStyle="#FFFFFF";
+    ctx.fillText((Math.floor((240/dotrack.fpmax)*100)/100),60,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2)-8)
+    ctx.fillText("hours/FP",32,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2)+8)
+    sevblock_size += (dsplyhght/dotrack.fpmax/2)*dotrack.fp //reduce the size of the severe block
+  }
+  if(dotrack.fp<(dotrack.fpmax-dotrack.fppoint)){ //severe block actual drawing
+    ctx.font= "bold 16px Arial";
+    ctx.fillStyle="#FF9999"
+    ctx.fillRect(25,sevblock_o,80,sevblock_size)
+    ctx.fillStyle="#000000";
+    ctx.fillText(Math.floor((80/dotrack.fpmax)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
+    ctx.fillText("hours/FP",32,sevblock_o+(sevblock_size/2)+8)
+    ctx.font= "12px Arial";
+    ctx.fillText("Severe",108,sevblock_o+(sevblock_size/2))
+  };
+  //main FP bar
+  if(dotrack.fp>0){ctx.fillStyle="#99ff33";}else{ctx.fillStyle="#77CC22"}//colour of the main FP bar
+  ctx.fillRect(25, dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp),80,cvs.height)
+  cvssetup(dotrack.fpmax);
+
+}
+
 //I know this is hacky but vOv
 cb_fit.onchange=function(){
   if (document.getElementById("cb_fit").checked== true){
@@ -372,6 +474,8 @@ btn_init.onclick=function(){ //initialisation
     };
     btn_save.disabled=true;
     btn_load.disabled=true;
+    //canvas init
+    cvsdisplay(dotrack.fpmax);
 }
 
 //button calls
@@ -395,9 +499,10 @@ function update(){
   dotrack.fp = Math.max(dotrack.fp,-dotrack.fpmax);
   dotrack.ap = Math.min(dotrack.ap,dotrack.apmax);
   dotrack.ap = Math.max(dotrack.ap,0);
-  encumber()
-  calc()
-  display()
+  encumber();
+  calc();
+  display();
+  cvsdisplay();
 }
 
 //functions
@@ -479,11 +584,11 @@ function calc(){
   dotrack.dx = dotrack.dxmax - penalty;
   dotrack.ht = dotrack.htmax - penalty;
   if((dotrack.fp/(dotrack.fppoint)>=4)){
-    status = "<b>Mild Fatigue</br>Hours Per FP recovered:</b> " +  Math.floor((20/dotrack.fpmax)*100)/100
+    status = "<b>Mild Fatigue</br>Hours Per FP recovered:</b> " +  (Math.floor((20/dotrack.fpmax)*100)/100) +"</br>"
   }else if (dotrack.fp/(dotrack.fppoint)<4 && dotrack.fp/(dotrack.fppoint)>=0){
-    status = "<b style=\"color:red;\">Severe Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((80/dotrack.fpmax)*100)/100
+    status = "<b style=\"color:red;\">Severe Fatigue</br>Hours Per FP recovered: </b>" +  (Math.floor((80/dotrack.fpmax)*100)/100) +"</br>"
   }else if((dotrack.fp/dotrack.fppoint)< 0 ){
-    status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</br>Hours Per FP recovered: </b> Lose HP for each FP spent" +  Math.floor((240/dotrack.fpmax)*100)/100
+    status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</br>Hours Per FP recovered: </b>" +  (Math.floor((240/dotrack.fpmax)*100)/100)+ "</br>Lose HP for each FP spent."
   }
   if(dotrack.fp <= -dotrack.fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((240/dotrack.fpmax)*100)/100
   }
@@ -508,7 +613,4 @@ document.onclick=function(){
 
 
 </script>
-<p style="font-size:10px">Last Gasp Tracker made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a>. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p style="font-size:12px" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a></p></div>
-
-</body>
 </html> 
