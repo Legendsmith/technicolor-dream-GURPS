@@ -94,7 +94,7 @@
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
 <p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled; I have no idea why. Blame javascript and hard refresh (ctrl+F5).</p>
 <b>Enter your character's stats</b></br>
-<p style="font-size:12px">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>,  halve shown recovery times. <i>Unfit</i> and Very Unfit</i> double recovery times. The other bonuses from such advantages are taken into account automatically.</p>
+<p style="font-size:12px">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>These bonuses from advantages <b>are</b> taken into account automatically.</i></p>
 <div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
 <input class=insm type="number" id="in_ST" value =10> ST</input></br>
 <input class=insm type="number" id="in_AP" value =0> Additional AP</input></br>
@@ -108,7 +108,7 @@
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
 <div style="clear:left;"><p style="font-size:10px">If the <i>base</i> level of a stat changes due to magic or some other force, you will need to reinitialise. The exception to this is Weight Carried, that can (and should) be modified on the fly as characters move loads.</p></div><hr>
-<button class="fancybtn" id="btn_init">Initialise</button>  <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button><span style="font-size:12px"><input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input></span>
+<button class="fancybtn" id="btn_init">Initialise</button>  <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button><span style="font-size:12px"><input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input><input type="checkbox" id="cb_highres">High Resoluton stat loss</input></span>
 </br>
 <div style="float:left;width:295px">
 <h3><span id="txt_AP">X/X AP</span> <input class=insm type="number" id="in_aps" value =0></br></h3>
@@ -123,7 +123,7 @@
 <span id ="txt_mov">|</span></br>
 <span id = "txt_enc">|</span></br><hr>
 <span id = "txt_dmg">|</span></br>
-<span id = "txt_status">|</br>|</br></span></br></div>
+<span id = "txt_status">|</br>|</span></br></div>
 
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
   <b style="font-size:16px;margin-bottom:5px">Spending AP</b></br>
@@ -230,17 +230,17 @@ function cvsdisplay(){
     ctx.fillText("Mild",110,mldtext_y-((mldtext_y - mldblock_yo)/2)+6)
     ctx.font= "bolder 16px Arial";
     ctx.strokeStyle="#FFFFFF";
-    ctx.strokeText((Math.floor((20/dotrack.fpmax)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
+    ctx.strokeText((Math.floor(((20/dotrack.fpmax)*fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
     ctx.strokeText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
     ctx.font= "bold 16px Arial";
-    ctx.fillText((Math.floor((20/dotrack.fpmax)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
+    ctx.fillText((Math.floor(((20/dotrack.fpmax)*fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
     ctx.fillText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
     //severe block
     var sevblock_size = Math.max(dsplyhght-((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp+Math.floor(dotrack.fppoint))),0)
     ctx.font= "16px Arial";
   }
 
-  if(dotrack.fp<0){
+  if(dotrack.fp<0){//deep
     ctx.font= "15px Arial";
     ctx.fillStyle="Purple";
     ctx.fillRect(25,0,80,(dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp))
@@ -248,8 +248,8 @@ function cvsdisplay(){
     ctx.fillStyle="#000000";
     ctx.fillText("Deep",110,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2))
     ctx.font= "bold 16px Arial";
-    ctx.fillStyle="#FFFFFF";
-    ctx.fillText((Math.floor((240/dotrack.fpmax)*100)/100),60,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2)-8)
+    ctx.fillStyle="#EEEEEE";
+    ctx.fillText((Math.floor(((240/dotrack.fpmax)*fittime)*100)/100),60,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2)-8)
     ctx.fillText("hours/FP",32,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2)+8)
     sevblock_size += (dsplyhght/dotrack.fpmax/2)*dotrack.fp //reduce the size of the severe block
   }
@@ -258,7 +258,7 @@ function cvsdisplay(){
     ctx.fillStyle="#FF9999"
     ctx.fillRect(25,sevblock_o,80,sevblock_size)
     ctx.fillStyle="#000000";
-    ctx.fillText(Math.floor((80/dotrack.fpmax)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
+    ctx.fillText(Math.floor(((80/dotrack.fpmax)*fittime)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
     ctx.fillText("hours/FP",32,sevblock_o+(sevblock_size/2)+8)
     ctx.font= "12px Arial";
     ctx.fillText("Severe",108,sevblock_o+(sevblock_size/2))
@@ -430,19 +430,25 @@ btn_two.onclick=function(){
 }
 
 ///script begin.
+var fitbon = 0
+var fittime =1
 btn_init.onclick=function(){ //initialisation
   rollClient= new HttpClient();
   if(document.getElementById("cb_fit").checked){
     fitbon = 1
+    fittime = 0.5
     console.log("fit bonus active")
   }else if(document.getElementById("cb_vfit").checked){
     fitbon = 2
+    fittime = 0.5
     console.log("v. fit bonus active")
   }else if(document.getElementById("cb_ufit").checked){
     fitbon = -1
+    fittime = 2
     console.log("Unfit penalty active")
   }else if(document.getElementById("cb_vufit").checked){
     console.log("Very Unfit penalty active")
+    fittime = 2
     fitbon = -2
   }
   else{fitbon=0}
@@ -463,7 +469,7 @@ btn_init.onclick=function(){ //initialisation
     dotrack.st = dotrack.stmax
     dotrack.fp = dotrack.fpmax
     dotrack.st = dotrack.stmax
-    dotrack.fppoint = dotrack.fpmax/5
+    dotrack.fppoint = dotrack.fpmax/2
     dotrack.dodge = 0
     calc();
     encumber();
@@ -563,9 +569,13 @@ function encumber(){
 function display(){
   document.getElementById("txt_AP").textContent = dotrack.ap +"/"+ dotrack.apmax + " AP"
   document.getElementById("txt_FP").textContent = dotrack.fp +"/"+ dotrack.fpmax + " FP"
-  document.getElementById("txt_st").textContent = dotrack.st +"/"+ dotrack.stmax + " ST"
+  document.getElementById("txt_st").textContent = round(dotrack.st*10)/10 +"/"+ dotrack.stmax + " ST"
   document.getElementById("txt_dx").textContent = dotrack.dx +"/"+ dotrack.dxmax + " DX"
-  document.getElementById("txt_pen").textContent = dotrack.dx - dotrack.dxmax + " to most skills."
+  var pentext = -Math.floor((dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2*10) + " to most skills.";
+  if(cb_highres.checked){
+    pentext = `IQ skills: ${dotrack.iq - dotrack.iqmax} DX skills: ${dotrack.dx - dotrack.dxmax}`
+  }
+  document.getElementById("txt_pen").textContent = pentext
   document.getElementById("txt_iq").textContent = dotrack.iq +"/"+ dotrack.iqmax + " IQ"
   document.getElementById("txt_ht").textContent = dotrack.ht +"/"+ dotrack.htmax + " HT"
   document.getElementById("txt_lif").textContent = basiclift(dotrack.st) +"/"+ basiclift(dotrack.st) + " lbs Basic Lift"
@@ -577,20 +587,27 @@ function display(){
 //calc
 
 function calc(){
-  dotrack.fp = Math.max(dotrack.fp, -dotrack.fpmax);
-  dotrack.st = (dotrack.stmax * ((dotrack.fp/(dotrack.fppoint))+5)/10);
-  var penalty = Math.floor(10-(((dotrack.fp/(dotrack.fppoint))+5)/10)*10);
-  dotrack.iq = dotrack.iqmax -  penalty;
-  dotrack.dx = dotrack.dxmax - penalty;
-  dotrack.ht = dotrack.htmax - penalty;
-  if((dotrack.fp/(dotrack.fppoint)>=4)){
-    status = "<b>Mild Fatigue</br>Hours Per FP recovered:</b> " +  (Math.floor((20/dotrack.fpmax)*100)/100) +"</br>"
-  }else if (dotrack.fp/(dotrack.fppoint)<4 && dotrack.fp/(dotrack.fppoint)>=0){
-    status = "<b style=\"color:red;\">Severe Fatigue</br>Hours Per FP recovered: </b>" +  (Math.floor((80/dotrack.fpmax)*100)/100) +"</br>"
+  dotrack.fp = Math.max(dotrack.fp, -dotrack.fpmax); //floor of fp loss
+  dotrack.st = dotrack.stmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2)
+  
+  if(cb_highres.checked){
+    dotrack.iq = Math.ceil(dotrack.iqmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2));
+    dotrack.dx = Math.ceil(dotrack.dxmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2));
+    dotrack.ht = Math.ceil(dotrack.htmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2));
+  }else{
+    var penalty = Math.floor((dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2*10);
+    dotrack.iq = dotrack.iqmax -  penalty;
+    dotrack.dx = dotrack.dxmax - penalty;
+    dotrack.ht = dotrack.htmax - penalty;
+  };
+  if((dotrack.fp/(dotrack.fppoint)>=1)){
+    status = "<b>Mild Fatigue</b> " +  (Math.floor(((20/dotrack.fpmax)*fittime)*100)/100) +"</br>"
+  }else if (dotrack.fp/(dotrack.fppoint)<1 && dotrack.fp/(dotrack.fppoint)>=0){
+    status = "<b style=\"color:red;\">Severe Fatigue</b></br>"
   }else if((dotrack.fp/dotrack.fppoint)< 0 ){
-    status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</br>Hours Per FP recovered: </b>" +  (Math.floor((240/dotrack.fpmax)*100)/100)+ "</br>Lose HP for each FP spent."
+    status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</b>" + "</br>Lose HP for each FP spent."
   }
-  if(dotrack.fp <= -dotrack.fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor((240/dotrack.fpmax)*100)/100
+  if(dotrack.fp <= -dotrack.fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor(((240/dotrack.fpmax)*fittime)*100)/100
   }
 }
 
