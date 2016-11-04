@@ -3,106 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>GURPS Last Gasp Assistant</title>
-  <style>
-  .left{float:left; width:33%;}
-  .insm{width:40px;
-    text-align: right;
-  border: solid 1px #fff;
-  box-shadow: inset 1px 1px 2px 0 #707070;
-  transition: box-shadow 0.3s;}
-  .insm:focus,.insm.focus{
-  box-shadow: inset 1px 1px 2px 0 #c9c9FF;
-}
-h4 {
-    display: block;
-    margin-top: 0em;
-    margin-bottom: 0.5em;
-    margin-left: 0;
-    margin-right: 0;
-    font-weight: bold;
-}
-.fancybtn {
-  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
-  background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-  background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-  background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-  background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-  background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#7892c2', endColorstr='#476e9e',GradientType=0);
-  background-color:#7892c2;
-  -moz-border-radius:8px;
-  -webkit-border-radius:8px;
-  border-radius:8px;
-  border:1px solid #4e6096;
-  display:inline-block;
-  cursor:pointer;
-  color:#ffffff;
-  margin-top:3px; 
-  margin-bottom:3px;
-  font-family:Arial;
-  font-size:14px;
-  font-weight:bold;
-  padding:2px 5px;
-  text-decoration:none;
-  text-shadow:0px 1px 0px #283966;
-}
-.fancybtn:hover {
-  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
-  background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
-  background-color:#476e9e;
-}
-.fancybtn:active {
-  position:relative;
-  top:1px;
-}
-
-}
-.fancybtn:hover {
-  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
-  background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-  background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
-  background-color:#476e9e;
-}
-.fancybtn:active {
-  position:relative;
-  top:1px;
-}
-.fancybtn:disabled {
-  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #777777), color-stop(1, #666666));
-  background:-moz-linear-gradient(top, #777777 5%, #666666 100%);
-  background:-webkit-linear-gradient(top, #777777 5%, #666666 100%);
-  background:-o-linear-gradient(top, #777777 5%, #666666 100%);
-  background:-ms-linear-gradient(top, #777777 5%, #666666 100%);
-  background:linear-gradient(to bottom, #777777 5%, #666666 100%)
-}
-#main{
-  width:800px;margin-left:auto; margin-right:auto;
-}
-#controls{
-  width:600px;float:left;background-color:#e6e6ff;border-radius:20px;padding:20px;
-}
-#display{
-  width:150px;height:875px;float:left;float:left;background-color:#ffffff;border-radius:20px;border:1px solid #3333aa;margin-top:66%;
-}
-</style>
-
+  <link rel="stylesheet" type="text/css" href="gaspstyle.css">
 </head>
-<body style="font-family:sans-serif;">
+<body>
 <div id="main">
 <div id="controls"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
 <p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled; I have no idea why. Blame javascript and hard refresh (ctrl+F5) The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge to prevent ambiguity.</p>
-<b>Enter your character's stats</b></br>
-<p style="font-size:12px">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>These bonuses from advantages <b>are</b> taken into account automatically.</i></p>
+<b>Enter your character's stats</b> <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button></br>
+<p class="subnote">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>These bonuses from advantages <b>are</b> taken into account automatically.</i></p>
 <div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
 <input class=insm type="number" id="in_ST" value =10> ST</input></br>
 <input class=insm type="number" id="in_AP" value =0> Additional AP</input></br>
@@ -116,7 +25,7 @@ h4 {
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
 <div style="clear:left;"><p style="font-size:10px">If the <i>base</i> level of a stat changes due to magic or some other force, you will need to reinitialise. The exception to this is Weight Carried, that can (and should) be modified on the fly as characters move loads.</p></div><hr>
-<button class="fancybtn" id="btn_init">Initialise</button>  <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button><span style="font-size:12px"><input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input><input type="checkbox" id="cb_highres">High Resoluton stat loss</input></span>
+<button class="fancybtn" id="btn_init">Initialise</button><span class="subnote"> <input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input> <input type="checkbox" id="cb_highres"></input><div class="tooltip">High Resoluton stat loss.<span class="tooltiptext">Normally stat loss increases by -1 per 20% FP lost, for -10 at -1×FP. Enabling this option turns it to 10% per 20% FP lost, so that high stat characters will still reach 0 DX, IQ, etc at -1×FP</span></div> <input type="checkbox" id="cb_cap"><div class="tooltip">Cap penalties at -5 or -50%.<span class="tooltiptext">With this option stat loss will not exceed -5, or -50% of the base stat when using High Resolution stat loss.</span></div></input>  </span>
 </br>
 <div style="float:left;width:295px">
 <h3><span id="txt_AP">X/X AP</span> <input class=insm type="number" id="in_aps" value =0></br></h3>
@@ -174,12 +83,10 @@ h4 {
 
 <div style="clear:left;clear:right"></div>
 
-<p style="font-size:10px">Last Gasp Tracker made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a>. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p style="font-size:12px" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a></p></div>
+<p style="font-size:10px">Last Gasp Tracker made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a>. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a></p></div>
 <canvas id="display" width="150px" height="875px">
 </canvas> </div>
-
 </body>
-
 <script type="text/javascript" src="damagetables.json"></script>
 <script type="text/javascript" src="patterns.js"></script>
 <script>
@@ -191,7 +98,6 @@ for (var i = btns.length - 1; i >= 0; i--) {
 
 btn_init.disabled=false
 ///patterns
-
 var dotrack = {}
 var status = ""
 var cvs = document.getElementById("display")
@@ -598,13 +504,20 @@ function display(){
 function calc(){
   dotrack.fp = Math.max(dotrack.fp, -dotrack.fpmax); //floor of fp loss
   dotrack.st = dotrack.stmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2)
+  var penalty = Math.floor((dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2*10);
+  if(cb_cap.checked){
+    penalty = Math.min(penalty,5)
+  }
   
-  if(cb_highres.checked){
+  if(cb_highres.checked && !cb_cap.checked){
     dotrack.iq = Math.ceil(dotrack.iqmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2));
     dotrack.dx = Math.ceil(dotrack.dxmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2));
     dotrack.ht = Math.ceil(dotrack.htmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2));
+  }else if(cb_highres.checked && cb_cap.checked){
+    dotrack.iq = Math.ceil(dotrack.iqmax * Math.max((1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2),0.5));
+    dotrack.ht = Math.ceil(dotrack.htmax * Math.max((1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2),0.5));
+    dotrack.dx = Math.ceil(dotrack.dxmax * Math.max((1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2),0.5));
   }else{
-    var penalty = Math.floor((dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2*10);
     dotrack.iq = dotrack.iqmax -  penalty;
     dotrack.dx = dotrack.dxmax - penalty;
     dotrack.ht = dotrack.htmax - penalty;
