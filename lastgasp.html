@@ -9,9 +9,9 @@
 <div id="main">
 <div id="controls"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
-<p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes. Also, sometimes random buttons may get disabled; I have no idea why. Blame javascript and hard refresh (ctrl+F5) The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge to prevent ambiguity.</p>
-<b>Enter your character's stats</b> <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button></br>
-<p class="subnote">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>These bonuses from advantages <b>are</b> taken into account automatically.</i></p>
+<p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes.The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge in order to prevent ambiguity.</p> <p>The FP bar on the side tracks your current FP. As expected, it decreases when you spend it and show you the stages of fatigue. But when you increase it will show a hatched line pattern, this allows you to see what stage of fatigue you are working through. Once your fatigue returns to maximum, the solid bar will fill again. 
+<h4>Enter your character's stats <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button></h4>
+<p class="subnote">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
 <div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
 <input class=insm type="number" id="in_ST" value =10> ST</input></br>
 <input class=insm type="number" id="in_AP" value =0> Additional AP</input></br>
@@ -28,8 +28,20 @@
 <button class="fancybtn" id="btn_init">Initialise</button><span class="subnote"> <input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input> <input type="checkbox" id="cb_highres"></input><div class="tooltip">High Resoluton stat loss.<span class="tooltiptext">Normally stat loss increases by -1 per 20% FP lost, for -10 at -1×FP. Enabling this option turns it to 10% per 20% FP lost, so that high stat characters will still reach 0 DX, IQ, etc at -1×FP</span></div> <input type="checkbox" id="cb_cap"><div class="tooltip">Cap penalties at -5 or -50%.<span class="tooltiptext">With this option stat loss will not exceed -5, or -50% of the base stat when using High Resolution stat loss.</span></div></input>  </span>
 </br>
 <div style="float:left;width:295px">
-<h3><span id="txt_AP">X/X AP</span> <input class=insm type="number" id="in_aps" value =0></br></h3>
-<h3><span id="txt_FP">X/X FP</span> <input class=insm type="number" id="in_fps" value =0></br></h3>
+<h3>
+  <button class="fancybtn" id="btn_app1">+1</button>
+  <button class="fancybtn" id="btn_apm1">-1</button>
+  <span id="txt_AP">X/X AP</span>
+  <input class=insm type="number" id="in_aps" value =0></br>
+</h3>
+<h3>
+  <button class="fancybtn" id="btn_fpp1">+1</button>
+  <button class="fancybtn" id="btn_fpm1">-1</button>
+  <span id="txt_FP">X/X FP</span>
+  <input class=insm type="number" id="in_fps" value =0>
+</br>
+</h3>
+<button class="fancybtn" id="btn_apf">Fill AP</button> <button class="fancybtn" id="btn_fpf">Fill FP</button> <button class="fancybtn" id="btn_updt">Update</button>
 <h4>Stats and Impairment</h4>
 <span id = "txt_st">|</span></br>
 <span id = "txt_dx">|</span></br>
@@ -66,7 +78,7 @@
   <input class=insm type="number" id="in_inj" value =0 min=0>Injury<br>
   <input class=insm type="number" id="in_jcap" value =0 min=0>AP Loss Cap<br>
   <button class="fancybtn" id="btn_injury">Roll AP loss/Mitigation from Injury</button></br><span id ="txt_out2"></span></br><hr>
-  <b>Recovery Events</b></br>
+  <b>AP Recovery Events</b></br>
 
   <p>The <b>next</b> turn after taking one of these manuvers Roll HT (Penalised by Impairment). On a success, recover 1 AP plus 1 per 4 margin of success. No bonus to HT unless otherwise noted.<p>
   <ul>
@@ -79,7 +91,7 @@
   <p>This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</p>
   <h3>Recovery Events</h3>
  <button class="fancybtn" id="btn_not">Roll For Recovery (Do Nothing)</button>
- <button class="fancybtn" id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></br><hr>Manual Update</br><button class="fancybtn" id="btn_updt">Update</button> <button class="fancybtn" id="btn_apf">Fill AP</button> <button class="fancybtn" id="btn_fpf">Fill FP</button></br></div></div>
+ <button class="fancybtn" id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></div></div>
 
 <div style="clear:left;clear:right"></div>
 
@@ -130,15 +142,45 @@ function cvsdisplay(){
   var sevblock_o = 0//SEVERE BLOCK origin
   var sevblock_size = 0
 
-  if(dotrack.fp<dotrack.fpmax){
-    var mldtext_y = dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp) // it's actually the line of the fp point
-    var mldblock_yo = Math.max(dsplyhght-((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp+Math.floor(dotrack.fppoint))),0)
-    var mildsize = Math.min(((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax-dotrack.fp)),
+  if(dotrack.fprec<dotrack.fpmax){
+    var mldtext_y = dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fprec) // it's actually the line of the fp point
+    var mldblock_yo = Math.max(dsplyhght-((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fprec+Math.floor(dotrack.fppoint))),0)
+    var mildsize = Math.min(((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax-dotrack.fprec)),
       (dsplyhght/dotrack.fpmax/2)*dotrack.fppoint);
     //ctx.fillStyle="#"
     ctx.fillStyle=ctx.createPattern(p,'repeat');
 
     ctx.fillRect(25,mldblock_yo,80,mildsize);//MILD FATIGUE DRAW
+    //severe block
+    var sevblock_size = Math.max(dsplyhght-((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fprec+Math.floor(dotrack.fppoint))),0)
+    ctx.font= "16px Arial";
+  }
+
+  if(dotrack.fprec<0){//deep
+    ctx.font= "15px Arial";
+    ctx.fillStyle="Purple";
+    ctx.fillRect(25,0,80,(dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fprec))
+    sevblock_o = (dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fprec)
+    sevblock_size += (dsplyhght/dotrack.fpmax/2)*dotrack.fprec //reduce the size of the severe block
+  }
+  if(dotrack.fprec<(dotrack.fpmax-dotrack.fppoint)){ //severe block actual drawing
+    ctx.font= "bold 16px Arial";
+    ctx.fillStyle="#FF9999"
+    ctx.fillRect(25,sevblock_o,80,sevblock_size)
+  };
+  //fp recovery block
+  var fprecsize = (dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fprec)) - (dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp))
+  ctx.fillStyle = ctx.createPattern(p2,'repeat');
+  ctx.fillRect(25,(dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp)),80,fprecsize)
+  ctx.strokeStyle = "#77DD66";
+  ctx.lineWidth =3
+  ctx.beginPath()
+  ctx.moveTo(25,(dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp)))
+  ctx.lineTo(105,(dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp)))
+  ctx.closePath()
+  ctx.stroke()
+  //TEXT
+  if(dotrack.fprec<dotrack.fpmax){//mild
     ctx.fillStyle="#000000";
     ctx.font= "16px Arial";
     ctx.fillText("Mild",110,mldtext_y-((mldtext_y - mldblock_yo)/2)+6)
@@ -149,37 +191,28 @@ function cvsdisplay(){
     ctx.font= "bold 16px Arial";
     ctx.fillText((Math.floor(((20/dotrack.fpmax)*fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
     ctx.fillText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
-    //severe block
-    var sevblock_size = Math.max(dsplyhght-((dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp+Math.floor(dotrack.fppoint))),0)
-    ctx.font= "16px Arial";
-  }
 
-  if(dotrack.fp<0){//deep
-    ctx.font= "15px Arial";
-    ctx.fillStyle="Purple";
-    ctx.fillRect(25,0,80,(dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp))
-    sevblock_o = (dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)
-    ctx.fillStyle="#000000";
-    ctx.fillText("Deep",110,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2))
-    ctx.font= "bold 16px Arial";
-    ctx.fillStyle="#EEEEEE";
-    ctx.fillText((Math.floor(((240/dotrack.fpmax)*fittime)*100)/100),60,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2)-8)
-    ctx.fillText("hours/FP",32,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fp)/2)+8)
-    sevblock_size += (dsplyhght/dotrack.fpmax/2)*dotrack.fp //reduce the size of the severe block
   }
-  if(dotrack.fp<(dotrack.fpmax-dotrack.fppoint)){ //severe block actual drawing
-    ctx.font= "bold 16px Arial";
-    ctx.fillStyle="#FF9999"
-    ctx.fillRect(25,sevblock_o,80,sevblock_size)
+  if(dotrack.fprec<(dotrack.fpmax-dotrack.fppoint)){//SEVERE
     ctx.fillStyle="#000000";
     ctx.fillText(Math.floor(((80/dotrack.fpmax)*fittime)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
     ctx.fillText("hours/FP",32,sevblock_o+(sevblock_size/2)+8)
     ctx.font= "12px Arial";
     ctx.fillText("Severe",108,sevblock_o+(sevblock_size/2))
+
   };
+  if(dotrack.fprec<0){ // deep
+    ctx.fillText("Deep",110,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fprec)/2))
+    ctx.font= "bold 16px Arial";
+    ctx.fillStyle="#EEEEEE";
+    ctx.fillText((Math.floor(((240/dotrack.fpmax)*fittime)*100)/100),60,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fprec)/2)-8)
+    ctx.fillText("hours/FP",32,((dsplyhght/dotrack.fpmax/2)*Math.abs(dotrack.fprec)/2)+8)
+  };
+
+
   //main FP bar
-  if(dotrack.fp>0){ctx.fillStyle="#99ff33";}else{ctx.fillStyle="#77CC22"}//colour of the main FP bar
-  ctx.fillRect(25, dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fp),80,cvs.height)
+  if(dotrack.fprec>0){ctx.fillStyle="#99ff33";}else{ctx.fillStyle="#77CC22"}//colour of the main FP bar
+  ctx.fillRect(25, dsplyhght-(dsplyhght/dotrack.fpmax/2)*(dotrack.fpmax+dotrack.fprec),80,cvs.height)
   cvssetup(dotrack.fpmax);
 
 }
@@ -217,8 +250,28 @@ cb_vufit.onchange=function(){
 in_enc.onchange=function(){
   update();
 }
-
 var currenthtbonus = 0
+//fp and AP recovery quick buttons.
+btn_app1.onclick=function(){
+  dotrack.ap+=1
+  update();
+}
+btn_apm1.onclick=function(){
+  dotrack.ap-=1
+  update();
+}
+btn_fpp1.onclick=function(){
+  dotrack.fp+=1
+  update();
+}
+btn_fpm1.onclick=function(){
+  dotrack.fp-=1
+  update();
+}
+
+
+
+
 //buttons for AP recovery
 btn_not.onclick=function(){
   currenthtbonus=4+fitbon
@@ -383,6 +436,7 @@ btn_init.onclick=function(){ //initialisation
     dotrack.ap = dotrack.apmax
     dotrack.st = dotrack.stmax
     dotrack.fp = dotrack.fpmax
+    dotrack.fprec = dotrack.fpmax
     dotrack.st = dotrack.stmax
     dotrack.fppoint = dotrack.fpmax/2
     dotrack.dodgepen = 0
@@ -420,6 +474,9 @@ function update(){
   dotrack.fp = Math.max(dotrack.fp,-dotrack.fpmax);
   dotrack.ap = Math.min(dotrack.ap,dotrack.apmax);
   dotrack.ap = Math.max(dotrack.ap,0);
+  if(dotrack.fp == dotrack.fpmax){
+    dotrack.fprec = dotrack.fpmax;
+  }
   encumber();
   calc();
   display();
@@ -504,7 +561,11 @@ function display(){
 function calc(){
   dotrack.fp = Math.max(dotrack.fp, -dotrack.fpmax); //floor of fp loss
   dotrack.st = dotrack.stmax * (1 - (dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2)
+  //fp recovery for showing where someone's actually at in recovery.
+  dotrack.fprec = Math.min(dotrack.fprec,dotrack.fp)
+  //
   var penalty = Math.floor((dotrack.fpmax -dotrack.fp)/dotrack.fpmax/2*10);
+
   if(cb_cap.checked){
     penalty = Math.min(penalty,5)
   }
