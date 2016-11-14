@@ -21,16 +21,16 @@
     width: 210px;
     background-color: #555;
     color: #fff;
-    text-align: center;
+    text-align: left;
     padding: 5px 5px;
     border-radius: 6px;
 
     /* Position the tooltip text */
     position: absolute;
     z-index: 1;
-    bottom: 125%;
+    top: 125%;
     left: 50%;
-    margin-left: -60px;
+    margin-left: -105px;
 
     /* Fade in tooltip */
     opacity: 0;
@@ -41,12 +41,12 @@
 .tooltip .tooltiptext::after {
     content: "";
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 50%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: transparent transparent #555 transparent;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
@@ -64,6 +64,11 @@
   .insm:focus,.insm.focus{
   box-shadow: inset 1px 1px 2px 0 #c9c9FF;
 }
+/*tooltip list*/
+.tooltip ul {
+    list-style-position: inside;
+}
+/**/
 h4 {
     display: block;
     margin-top: 0em;
@@ -71,6 +76,10 @@ h4 {
     margin-left: 0;
     margin-right: 0;
     font-weight: bold;
+}
+h5 {
+  font-size:16px;
+  margin-bottom:5px
 }
 .fancybtn {
   background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
@@ -141,5 +150,14 @@ h4 {
   width:600px;float:left;background-color:#e6e6ff;border-radius:20px;padding:20px;
 }
 #display{
-  width:150px;height:875px;float:left;float:left;background-color:#ffffff;border-radius:20px;border:1px solid #3333aa;margin-top:700px;
+  width:150px;height:875px;
+  float:left;
+  background-color:#ffffff;
+  border-radius:20px;
+  border:1px solid #3333aa;
+  position: fixed;
+}
+#page-wrap { 
+  width: 600px;  
+  position: relative; 
 }

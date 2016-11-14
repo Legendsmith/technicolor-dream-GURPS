@@ -57,11 +57,10 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 <span id = "txt_dmg">|</span></br>
 <span id = "txt_status">|</br>|</span></br></div>
 
-<div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
-  <b style="font-size:16px;margin-bottom:5px">Spending AP</b></br>
-  <button class="fancybtn" id="btn_one">Do a 1 AP action</button>
-  <ul class="smallnote">
-    <li>Step (First is free)</li>
+<div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px;margin-top:10px;">
+  <h3>Quick Reference</h3>
+  <h4 class="tooltip" style="font-size:14">One AP Actions
+  <ul class="tooltiptext">
     <li>Active Defense</li>
     <li>Melee Attack</li>
     <li>Draw a Bow/Crossbow</li>
@@ -70,12 +69,16 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
     <li>Feint</li>
     <li>Change Facing (1 per 60°)</li>
     <li>Change Posture</li>
-  </ul>
-  <button class="fancybtn" id="btn_two">Do a 2 AP action</button>
-  <ul class="smallnote">
+  </ul></span></h4></br>
+  <h4 class="tooltip" style="font-size:14">Two AP Actions<ul class="tooltiptext">
     <li>Melee All-out Attack</li>
     <li>Committed Attack</li>
-  </ul>
+  </ul></h4>
+  <hr>
+  <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>
+<!-- <input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br> -->
+<input type="range" id="rn_mov"><span id="txt_rnmov" step="1"></span></br>
+<span class="subnote">This feature is not yet complete!</span>
   <hr>
   Taking injury also reduces AP, but this can be mitigated with a HT Roll.</br>
   <input class=insm type="number" id="in_inj" value =0 min=0> Injury<br>
@@ -96,10 +99,9 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
  <button class="fancybtn" id="btn_not">Roll For Recovery (Do Nothing)</button>
  <button class="fancybtn" id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></div></div>
 
-<div style="clear:left;clear:right"></div>
-<p style="font-size:10px">Last Gasp Assistant made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a> as part of the Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> project. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a> <input type="checkbox" id="cb_tcd">Disable Technicolour GURPS </p></div>
-<canvas id="display" width="150px" height="875px">
-</canvas> </div>
+<div style="clear:left;clear:right;float:left;font-size:10px">Last Gasp Assistant made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a> as part of the Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> project. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a> <input type="checkbox" id="cb_tcd">Disable Technicolour GURPS </div></div>
+</div>
+<div id="page-wrap"><canvas id="display" width="150px" ></canvas><div>
 </body>
 <script type="text/javascript" src="damagetables.json"></script>
 <script type="text/javascript" src="patterns.js"></script>
@@ -115,6 +117,7 @@ btn_init.disabled=false
 if(localStorage.lastgasp){
   btn_load.disabled=false
 }
+rn_mov.disabled =true
 ///patterns
 var dotrack = {}
 var status = ""
@@ -122,12 +125,13 @@ var cvs = document.getElementById("display")
 var ctx = cvs.getContext("2d");
 //canvas
 function cvssetup(_fp){
+  var fontscale = document.getElementById("display").height/875
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle="#000000"
-  ctx.font= "32px Arial";
+  ctx.font= `${round(Math.max(32*fontscale,8))}px Arial`;
   ctx.fillText("FP",30,32)
-  ctx.font= "20px Arial";
-  ctx.translate(0,72)
+  ctx.font= `${round(Math.max(18*fontscale,8))}px Arial`;
+  ctx.translate(0,72 * Math.max(document.getElementById("display").height/875),0.5)
   var dsplyhght =(cvs.height - 85) //height minus the big FP
     for (var i = _fp*2; i >= 0; i--) {
     var _x = 5
@@ -136,10 +140,19 @@ function cvssetup(_fp){
   }
 }
 
+window.onresize = function(){
+  cvsdisplay()
+}
+
 function cvsdisplay(){
+  //scale code
+  document.getElementById("display").style.height = Math.min(window.innerHeight,875)+"px"
+  document.getElementById("display").height = Math.min((window.innerHeight*0.95),875)
+  var fontscale = document.getElementById("display").height/875
+  //scale code
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, cvs.width, cvs.height);
-  ctx.translate(0,72)
+  ctx.translate(0,72 * Math.max(document.getElementById("display").height/875),0.5)
   var dsplyhght =(cvs.height - 85)
   //
   //
@@ -156,18 +169,18 @@ function cvsdisplay(){
     ctx.fillRect(25,mldblock_yo,80,mildsize);//MILD FATIGUE DRAW
     //severe block
     var sevblock_size = Math.max(dsplyhght-((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec+Math.floor(dotrack[sl_namelist.value].fppoint))),0)
-    ctx.font= "16px Arial";
+    ctx.font= `${round(Math.max(16*fontscale,8))}px Arial`;
   }
 
   if(dotrack[sl_namelist.value].fprec<0){//deep
-    ctx.font= "15px Arial";
+    ctx.font= `${round(Math.max(15*fontscale,8))}px Arial`;
     ctx.fillStyle="Purple";
     ctx.fillRect(25,0,80,(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec))
     sevblock_o = (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)
     sevblock_size += (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*dotrack[sl_namelist.value].fprec //reduce the size of the severe block
   }
   if(dotrack[sl_namelist.value].fprec<(dotrack[sl_namelist.value].fpmax-dotrack[sl_namelist.value].fppoint)){ //severe block actual drawing
-    ctx.font= "bold 16px Arial";
+    ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.fillStyle="#FF9999"
     ctx.fillRect(25,sevblock_o,80,sevblock_size)
   };
@@ -185,13 +198,13 @@ function cvsdisplay(){
   //TEXT
   if(dotrack[sl_namelist.value].fprec<dotrack[sl_namelist.value].fpmax){//mild
     ctx.fillStyle="#000000";
-    ctx.font= "16px Arial";
+    ctx.font= `${round(Math.min(16*fontscale,8))}px Arial`;
     ctx.fillText("Mild",110,mldtext_y-((mldtext_y - mldblock_yo)/2)+6)
-    ctx.font= "bolder 16px Arial";
+    ctx.font= `bolder ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.strokeStyle="#FFFFFF";
     ctx.strokeText((Math.floor(((20/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
     ctx.strokeText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
-    ctx.font= "bold 16px Arial";
+    ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.fillText((Math.floor(((20/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
     ctx.fillText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
 
@@ -200,13 +213,13 @@ function cvsdisplay(){
     ctx.fillStyle="#000000";
     ctx.fillText(Math.floor(((80/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
     ctx.fillText("hours/FP",32,sevblock_o+(sevblock_size/2)+8)
-    ctx.font= "12px Arial";
+    ctx.font= `${round(Math.max(12*fontscale,8))}px Arial`;
     ctx.fillText("Severe",108,sevblock_o+(sevblock_size/2))
 
   };
   if(dotrack[sl_namelist.value].fprec<0){ // deep
     ctx.fillText("Deep",110,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2))
-    ctx.font= "bold 16px Arial";
+    ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.fillStyle="#EEEEEE";
     ctx.fillText((Math.floor(((240/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2)-8)
     ctx.fillText("hours/FP",32,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2)+8)
@@ -391,14 +404,6 @@ btn_wnd.onclick=function(){
   dotrack[sl_namelist.value].ap += Math.ceil(dotrack[sl_namelist.value].htmax * 0.5)
   update();
 }
-btn_one.onclick=function(){
-  dotrack[sl_namelist.value].ap -= 1
-  update();
-}
-btn_two.onclick=function(){
-  dotrack[sl_namelist.value].ap -= 2
-  update();
-}
 
 ///script begin.
 dotrack.names = []
@@ -488,11 +493,19 @@ btn_init.onclick=function(){ //initialisation
     };
     //canvas init
     cvsdisplay(dotrack[ti_name.value].fpmax);
+    update();
+    document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+    rn_mov.disabled =false
 }
 //name list box
 
 
-//button calls
+//ui callbacks
+rn_mov.oninput=function(){
+  document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+}
+
+
 btn_updt.onclick=function(){
   dotrack[sl_namelist.value].fp += parseInt(in_fps.value);
   dotrack[sl_namelist.value].ap += parseInt(in_aps.value);
@@ -514,7 +527,7 @@ btn_save.onclick=function(){
 }
 btn_load.onclick=function(){
   var btns = document.getElementsByTagName('button');
-  
+  init = true
   
   var list = document.getElementById('sl_namelist')
   try{
@@ -534,6 +547,8 @@ btn_load.onclick=function(){
   encumber();
   display();
   cvsdisplay();
+  rn_mov.disabled=false
+  document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
 }
 catch(err){
   btn_load.textContent="Failed!"
@@ -551,6 +566,8 @@ function update(){
   if(dotrack[sl_namelist.value].fp == dotrack[sl_namelist.value].fpmax){
     dotrack[sl_namelist.value].fprec = dotrack[sl_namelist.value].fpmax;
   }
+  document.getElementById('rn_mov').min = 1
+  document.getElementById('rn_mov').max = dotrack[sl_namelist.value].mov
   encumber();
   calc();
   display();
@@ -608,7 +625,8 @@ function encumber(){
     default:
     console.log("an error in encumberance occured, value= "+_enc)
     
-  }  
+  }
+  dotrack[sl_namelist.value].mov = Math.max(dotrack[sl_namelist.value].mov,1)  
 }
 
 //display
