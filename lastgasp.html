@@ -135,7 +135,6 @@ function cvssetup(_fp){
     var _y = (dsplyhght-(dsplyhght/(_fp*2) * i))+6
     ctx.fillText((-_fp)+i,_x,_y);
   }
-  
 }
 
 function cvsdisplay(){
@@ -144,11 +143,9 @@ function cvsdisplay(){
   ctx.translate(0,72)
   var dsplyhght =(cvs.height - 85)
   //
-  
   //
   var sevblock_o = 0//SEVERE BLOCK origin
   var sevblock_size = 0
-
   if(dotrack[sl_namelist.value].fprec<dotrack[sl_namelist.value].fpmax){
     var mldtext_y = dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec) // it's actually the line of the fp point
     var mldblock_yo = Math.max(dsplyhght-((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec+Math.floor(dotrack[sl_namelist.value].fppoint))),0)
@@ -513,13 +510,15 @@ btn_fpf.onclick=function(){
 }
 btn_save.onclick=function(){
   localStorage.lastgasp = LZString.compress(JSON.stringify(dotrack))
+  btn_load.disabled =false
+  btn_load.textContent = "Load"
 }
 btn_load.onclick=function(){
   var btns = document.getElementsByTagName('button');
-  for (var i = btns.length - 1; i >= 0; i--) {
-    btns[i].disabled=false
-  };
+  
+  
   var list = document.getElementById('sl_namelist')
+  try{
   JSON.parse(LZString.decompress(localStorage.lastgasp)).names.forEach(function(item){
     var option = document.createElement('option')
     option.textContent=item
@@ -528,11 +527,19 @@ btn_load.onclick=function(){
   }
     )
   dotrack = JSON.parse(LZString.decompress(localStorage.lastgasp))
+  for (var i = btns.length - 1; i >= 0; i--) {
+    btns[i].disabled=false
+  };
   updatenamelist()
   calc();
   encumber();
   display();
   cvsdisplay();
+}
+catch(err){
+  btn_load.textContent="Failed!"
+  btn_load.disabled = true
+}
 }
 
 
