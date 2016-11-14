@@ -11,6 +11,9 @@
 .subnote{
     font-size:12px;
 }
+.smallnote{
+    font-size:14px;
+}
 
 /* Tooltip text */
 .tooltip .tooltiptext {

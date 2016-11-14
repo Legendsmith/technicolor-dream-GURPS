@@ -60,7 +60,7 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px">
   <b style="font-size:16px;margin-bottom:5px">Spending AP</b></br>
   <button class="fancybtn" id="btn_one">Do a 1 AP action</button>
-  <ul>
+  <ul class="subnote">
     <li>Step (First is free)</li>
     <li>Active Defense</li>
     <li>Melee Attack</li>
@@ -72,14 +72,14 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
     <li>Change Posture</li>
   </ul>
   <button class="fancybtn" id="btn_two">Do a 2 AP action</button>
-  <ul>
+  <ul class="subnote">
     <li>Melee All-out Attack</li>
     <li>Committed Attack</li>
   </ul>
   <hr>
   Taking injury also reduces AP, but this can be mitigated with a HT Roll.</br>
-  <input class=insm type="number" id="in_inj" value =0 min=0>Injury<br>
-  <input class=insm type="number" id="in_jcap" value =0 min=0>AP Loss Cap<br>
+  <input class=insm type="number" id="in_inj" value =0 min=0> Injury<br>
+  <input class=insm type="number" id="in_jcap" value =0 min=0> AP Loss Cap </br><input class=insm type="number" id="in_lossdiv" value=1 min=1> <div class="tooltip">AP Loss Divisor<span class="tooltiptext">This allows setting the injury required per 1 AP lost, as the GM may desire larger monsters and PCs to require heavier blows to properly exhaust them in combat. NOTE: This value is NOT saved per-character.</span> </div><br>
   <button class="fancybtn" id="btn_injury">Roll AP loss/Mitigation from Injury</button></br><span id ="txt_out2"></span></br><hr>
   <b>AP Recovery Events</b></br>
 
@@ -91,14 +91,13 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
   </ul>
 </div>
 <div style="float:left;width:295px;background-color:#ffffff;border-radius:10px;"><div style="padding:10px"><b>AP Recovery</b></br><button class="fancybtn" id="btn_wnd">Spend 1 FP to regain AP</button></br>
-  <p>This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</p>
+  <p class="subnote" >This regains you 50% of your max HT as AP. If you have the 2nd Wind Advantage, you gain 10% more per level, so use the manual update to reflect this.</p>
   <h3>Recovery Events</h3>
  <button class="fancybtn" id="btn_not">Roll For Recovery (Do Nothing)</button>
  <button class="fancybtn" id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></div></div>
 
 <div style="clear:left;clear:right"></div>
-
-<p style="font-size:10px">Last Gasp Tracker made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a> as part of the Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> project. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a> <input type="checkbox" id="cb_tcd">Disable Technicolour GURPS </p></div>
+<p style="font-size:10px">Last Gasp Assistant made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a> as part of the Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> project. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a> <input type="checkbox" id="cb_tcd">Disable Technicolour GURPS </p></div>
 <canvas id="display" width="150px" height="875px">
 </canvas> </div>
 </body>
@@ -341,7 +340,7 @@ function rollmitigate(r){
   if(parseInt(in_jcap.value) > 0){loss=Math.min(loss,in_jcap.value)}
 
   if (success) {
-    dotrack[sl_namelist.value].ap -= loss 
+    dotrack[sl_namelist.value].ap -= round(loss / in_lossdiv.valueAsNumber)
     op = "<b style=\"color:green\">Success: "+r+" Lost "+loss+" AP</b>"
   }else{
     dotrack[sl_namelist.value].ap -= loss 
