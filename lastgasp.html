@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-16">
   <title>GURPS Last Gasp Assistant</title>
   <link rel="stylesheet" type="text/css" href="gaspstyle.css">
 </head>
@@ -512,7 +512,7 @@ btn_fpf.onclick=function(){
   update()
 }
 btn_save.onclick=function(){
-  localStorage.lastgasp = LZString.compress(JSON.stringify(dotrack))
+  localStorage.lastgasp = LZString.compressToUTF16(JSON.stringify(dotrack))
 }
 btn_load.onclick=function(){
   var btns = document.getElementsByTagName('button');
@@ -520,7 +520,7 @@ btn_load.onclick=function(){
     btns[i].disabled=false
   };
   var list = document.getElementById('sl_namelist')
-  JSON.parse(LZString.decompress(localStorage.lastgasp)).names.forEach(function(item){
+  JSON.parse(LZString.decompressFromUTF16(localStorage.lastgasp)).names.forEach(function(item){
     var option = document.createElement('option')
     option.textContent=item
     option.value = item
