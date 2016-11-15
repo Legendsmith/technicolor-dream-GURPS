@@ -58,7 +58,7 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 <span id = "txt_status">|</br>|</span></br></div>
 
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px;margin-top:10px;">
-  <h3>Quick Reference</h3>
+  <h3>AP Quick Reference</h3>
   <h4 class="tooltip" style="font-size:14">One AP Actions
   <ul class="tooltiptext">
     <li>Active Defense</li>
@@ -69,11 +69,12 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
     <li>Feint</li>
     <li>Change Facing (1 per 60°)</li>
     <li>Change Posture</li>
-  </ul></span></h4></br>
+  </ul></span></h4> <button class="fancybtn" id="btn_one">Spend 1 AP</button></br>
   <h4 class="tooltip" style="font-size:14">Two AP Actions<ul class="tooltiptext">
     <li>Melee All-out Attack</li>
     <li>Committed Attack</li>
-  </ul></h4>
+  </ul></h4> <button class="fancybtn" id="btn_two">Spend 2 AP</button><br>
+  
   <hr>
   <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>
 <!-- <input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br> -->
@@ -525,6 +526,15 @@ btn_save.onclick=function(){
   btn_load.disabled =false
   btn_load.textContent = "Load"
 }
+btn_one.onclick=function(){
+  dotrack[sl_namelist.value].ap -= 1
+  update();
+}
+btn_two.onclick=function(){
+  dotrack[sl_namelist.value].ap -= 2
+  update();
+}
+
 btn_load.onclick=function(){
   var btns = document.getElementsByTagName('button');
   init = true
