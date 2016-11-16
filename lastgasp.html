@@ -142,7 +142,7 @@ function cvssetup(_fp){
 }
 
 window.onresize = function(){
-  cvsdisplay()
+  if(init){cvsdisplay()}
 }
 
 function cvsdisplay(){
