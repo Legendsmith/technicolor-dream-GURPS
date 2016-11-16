@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html manifest=lastgasp.manifest>
 <head>
   <meta charset="UTF-8">
   <title>GURPS Last Gasp Assistant</title>
@@ -106,7 +106,7 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 </body>
 <script type="text/javascript" src="damagetables.json"></script>
 <script type="text/javascript" src="patterns.js"></script>
-<script type="text/javascript" src="https://raw.githubusercontent.com/pieroxy/lz-string/master/libs/lz-string.min.js"></script>
+<script type="text/javascript" src="lz-string.min.js"></script>
 <script>
 //setup
 var btns = document.getElementsByTagName('button');
@@ -142,7 +142,7 @@ function cvssetup(_fp){
 }
 
 window.onresize = function(){
-  cvsdisplay()
+  if(init){cvsdisplay()}
 }
 
 function cvsdisplay(){
@@ -716,7 +716,18 @@ document.onclick=function(){
 }
 
 }}
+</script>
 
+<script>
+//analytics
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-87618703-1', 'auto');
+  ga('send', 'pageview');
 
 </script>
+
 </html> 
