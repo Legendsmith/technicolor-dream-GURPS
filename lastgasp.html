@@ -345,13 +345,13 @@ function rollmitigate(r){
   var success = false
   var loss = parseInt(in_inj.value)
   var shock = Math.min(loss,4)//if the shock value is greater than 4, lower it to 4
+  if(parseInt(in_jcap.value) > 0){loss=Math.min(loss,in_jcap.value)}
+    
   if (r <= (dotrack[sl_namelist.value].ht-shock)){
     success=true;
     loss -= ((dotrack[sl_namelist.value].ht-shock) - r)
   }
-  if(loss<0){loss=0}
-
-  if(parseInt(in_jcap.value) > 0){loss=Math.min(loss,in_jcap.value)}
+  loss= Math.max(loss,0)
 
   if (success) {
     dotrack[sl_namelist.value].ap -= round(loss / in_lossdiv.valueAsNumber)
