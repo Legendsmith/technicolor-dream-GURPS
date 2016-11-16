@@ -76,7 +76,7 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
   </ul></h4> <button class="fancybtn" id="btn_two">Spend 2 AP</button><br>
   
   <hr>
-  <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>
+  <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>t
 <!-- <input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br> -->
 <input type="range" id="rn_mov"><span id="txt_rnmov" step="1"></span></br>
 <span class="subnote">This feature is not yet complete!</span>
@@ -318,7 +318,7 @@ btn_injury.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackmitigate)
     document.getElementById("txt_out2").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out2").textContent = rollmitigate(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out2").innerHTML = rollmitigate(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
   }
   update();
 }
