@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <title>GURPS Last Gasp Assistant</title>
   <link rel="stylesheet" type="text/css" href="gaspstyle.css">
+//analytics
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-87618703-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
 </head>
 <body>
 <div id="main">
@@ -76,7 +87,7 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
   </ul></h4> <button class="fancybtn" id="btn_two">Spend 2 AP</button><br>
   
   <hr>
-  <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>t
+  <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>
 <!-- <input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br> -->
 <input type="range" id="rn_mov"><span id="txt_rnmov" step="1"></span></br>
 <span class="subnote">This feature is not yet complete!</span>
@@ -717,17 +728,4 @@ document.onclick=function(){
 
 }}
 </script>
-
-<script>
-//analytics
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-87618703-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
 </html> 
