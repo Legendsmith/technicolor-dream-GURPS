@@ -161,3 +161,11 @@ h5 {
   width: 600px;  
   position: relative; 
 }
+#wounds{
+  width:600px;
+  margin-left:auto;
+  margin-right:auto;
+  background-color:Wheat;
+  border-radius:20px;
+  padding:20px;
+}
