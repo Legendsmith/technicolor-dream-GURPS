@@ -146,19 +146,27 @@ h5 {
 #main{
   width:800px;margin-left:auto; margin-right:auto;
 }
-#controls{
+#lastgasp{
   width:600px;float:left;background-color:#e6e6ff;border-radius:20px;padding:20px;
+  margin-top: 40px;
+}
+#controls{
+  width:600px;float:left;background-color:#e6ffe6;border-radius:20px;padding:20px;
+  margin-top: 40px;
 }
 #display{
-  width:150px;height:875px;
-  float:left;
+  width:150px;height:895px;
   background-color:#ffffff;
   border-radius:20px;
   border:1px solid #3333aa;
   position: fixed;
 }
-#page-wrap { 
-  width: 600px;  
+.page-wrap { 
+  width: 600px;
+  position: relative; 
+}
+.tab-wrap { 
+  width: 600px;
   position: relative; 
 }
 #wounds{
@@ -169,3 +177,63 @@ h5 {
   border-radius:20px;
   padding:20px;
 }
+/*tabs*/
+/* Style the list */
+ /* Style the list */
+ul.tab {
+    position: fixed;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    border-radius: 20px;
+    width:640px;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 8px 10px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {background-color: #ddd;}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {background-color: #ccc;}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+ul.tab li select {
+    display: inline-block;
+    text-align: center;
+    padding: 6px 6px;
+    text-decoration: none;
+    font-size: 17px;
+}
+ul.tab li button {
+    display: inline-block;
+    color: black;
+    margin-top: 1px;
+    border-style: none;
+    text-align: center;
+    padding: 6px 6px;
+    font-size: 17px;
+}
+ul.tab li button:hover {background-color: #ddd;}
