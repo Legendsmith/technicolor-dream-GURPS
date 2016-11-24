@@ -32,6 +32,8 @@ btn_init.disabled=false
 if(localStorage.lastgasp){
   btn_load.disabled=false
 }
+init = false
+supportcheck();
 rn_mov.disabled =true
 ///patterns
 var dotrack = {}
@@ -54,6 +56,25 @@ function cvssetup(_fp){
     ctx.fillText((-_fp)+i,_x,_y);
   }
 }
+//dice
+      var rolldice = function(){ console.log("Something went very wrong with dice function"); return 0}
+      //use crypto random if browser supports it, otherwise fall back to awful js random
+      if(typeof window.crypto.getRandomValues !== 'undefined'){
+        console.log("cryptorandom active");
+        rolldice = function(){
+          var array = new Uint8ClampedArray(3);
+          window.crypto.getRandomValues(array);
+          r = 0
+          for (var i = 0; i < array.length; i++) {
+            r += Math.ceil(array[i]/255 *6)
+          }
+          return total
+        }
+      }else{
+        rolldice = function(){("awful js random active")
+          return Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)}
+      }
+
 
 window.onresize = function(){
   if(init){cvsdisplay()}
@@ -200,8 +221,50 @@ btn_fpm1.onclick=function(){
   update();
 }
 //saving and loading
-
-
+function supportcheck(){
+        if (window.File && window.FileReader && window.FileList && window.Blob && init) {
+          btn_fsave.disabled =false
+          btn_fload.disabled =false
+        }else if(window.File && window.FileReader && window.FileList && window.Blob){btn_fload.disabled =false} else {
+          alert('The File APIs are not fully supported in this browser.');
+          btn_fsave.disabled =true
+          btn_fload.disabled =true
+        }
+}
+function fsave(){
+        var sav = LZString.compressToEncodedURIComponent(JSON.stringify(dotrack));
+        var savBlob = new Blob([sav], {type:"text/plain"});
+        var savAsURL = window.URL.createObjectURL(savBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.download = "lastgasp";
+        downloadLink.innerHTML = "Download File";
+        downloadLink.href = savAsURL;
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+       
+        downloadLink.click();
+      }
+      function destroyClickedElement(event)
+      {
+          document.body.removeChild(event.target);
+}
+btn_fsave.onclick = fsave
+      function fload(){
+        document.getElementById('in_fload').click()
+        var fileReader = new FileReader()
+        fileReader.onload = function(floadEvent){
+          var inp = floadEvent.target.result;
+          load(inp,2)
+}
+        document.getElementById('in_fload').onchange = function(){
+          if(typeof document.getElementById('in_fload').files[0] !== 'undefined'){
+            var ftarget = document.getElementById('in_fload').files[0];
+            fileReader.readAsText(ftarget,"UTF-8")
+          };
+        }
+      }
+btn_fload.onclick = fload
 
 //buttons for AP recovery
 btn_not.onclick=function(){
@@ -210,7 +273,7 @@ btn_not.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").innerHTML = rollHT(rolldice());
   }
   //update ui and everything
   update();
@@ -221,7 +284,7 @@ btn_eva.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").innerHTML = rollHT(rolldice());
   }
     //update ui and everything
   update();
@@ -232,7 +295,7 @@ btn_injury.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackmitigate)
     document.getElementById("txt_out2").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out2").innerHTML = rollmitigate(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out2").innerHTML = rollmitigate(rolldice());
   }
   update();
 }
@@ -275,6 +338,7 @@ function rollmitigate(r){
     op="<b style=\"color:red\">Failure: "+r+" Lost "+loss+" AP</b>"
   }
   update();
+  in_enc.value = dotrack[sl_namelist.value].enc;
   return op
 }
 
@@ -343,8 +407,6 @@ function updatenamelist(){
     )
 }
 
-
-init = false
 btn_init.onclick=function(){ //initialisation
   init = true
   if(dotrack.names.indexOf(ti_name.value)== -1){ // if the name isn't in the list, add it to the list.
@@ -416,10 +478,18 @@ btn_init.onclick=function(){ //initialisation
 
 
 //ui callbacks
-rn_mov.oninput=function(){
-  document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+function movdo(){}
+  if(cb_mcv.checked){
+      document.getElementById('txt_rnmov').textContent = `Velocity: ${rn_mov.value}`
+      document.getElementById('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov/3)*10)}`
+      }else{
+        document.getElementById('txt_varmov').textContent = `
+`
+        document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`}
+       }
 }
 
+rn_mov.oninput=movdo
 
 btn_updt.onclick=function(){
   dotrack[sl_namelist.value].fp += parseInt(in_fps.value);
@@ -450,37 +520,57 @@ btn_two.onclick=function(){
 }
 
 btn_load.onclick=function(){
-  var btns = document.getElementsByTagName('button');
-  init = true
-  
-  var list = document.getElementById('sl_namelist')
-  try{
-  JSON.parse(LZString.decompress(localStorage.lastgasp)).names.forEach(function(item){
+  load(localStorage.lastgasp,1)
+}
+
+function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
+    var list = document.getElementById('sl_namelist') 
+    var fdata = ""
+    try{
+    switch(type){
+      case 1:
+      fdata = JSON.parse(LZString.decompress(loadsource))
+      break;
+      case 2:
+      fdata = JSON.parse(LZString.decompressFromEncodedURIComponent(loadsource))
+      break
+    }
+    var btns = document.getElementsByTagName('button');
+    init = true
+  fdata.names.forEach(function(item){
     var option = document.createElement('option')
     option.textContent=item
     option.value = item
     list.add(option);
   }
     )
-  dotrack = JSON.parse(LZString.decompress(localStorage.lastgasp))
+  dotrack = fdata
   for (var i = btns.length - 1; i >= 0; i--) {
     btns[i].disabled=false
   };
-  updatenamelist()
+  supportcheck();
+  updatenamelist();
   calc();
   encumber();
   display();
   cvsdisplay();
   rn_mov.disabled=false
-  document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+  movdo();
+  in_enc.value = dotrack[sl_namelist.value].enc
+  btn_fload.textContent = "Load From File"
 }
 catch(err){
-  btn_load.textContent="Failed!"
-  btn_load.disabled = true
+  switch(type){
+      case 1:
+      btn_load.textContent="Failed!"
+      btn_load.disabled = true
+      break;
+      case 2:
+      btn_fload.textContent = "File Corrupt"
+      break
+    }  
 }
 }
-
-
 
 function update(){
   dotrack[sl_namelist.value].fp = Math.min(dotrack[sl_namelist.value].fp,dotrack[sl_namelist.value].fpmax);
@@ -490,6 +580,7 @@ function update(){
   if(dotrack[sl_namelist.value].fp == dotrack[sl_namelist.value].fpmax){
     dotrack[sl_namelist.value].fprec = dotrack[sl_namelist.value].fpmax;
   }
+  dotrack[sl_namelist.value].enc = in_enc.valueAsNumber
   document.getElementById('rn_mov').min = 1
   document.getElementById('rn_mov').max = dotrack[sl_namelist.value].mov
   encumber();
