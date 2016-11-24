@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <title>GURPS Last Gasp Assistant</title>
   <link rel="stylesheet" type="text/css" href="gaspstyle.css">
-//analytics
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <script>
+  //analytics
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -17,11 +19,7 @@
 
 </head>
 <body>
-  <ul class="tab">
-  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'gasp')">Last Gasp</a></li>
-  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'wounds')">Wounds & HP</a></li>
-</ul>
-<div id="main" class="tabcontent">
+<div id="main">
 <div id="controls"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed for "The Last Gasp" rules found in <a href="http://www.warehouse23.com/products/pyramid-number-3-slash-44-alternate-gurps-ii"> Pyramid 3/44</a>. These rules add excellent depth to combat, but the extra tracking required can be a bit much for some. This small app is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
 <p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes.The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge in order to prevent ambiguity.</p> <p>The FP bar on the side tracks your current FP. As expected, it decreases when you spend it and show you the stages of fatigue. But when you increase it will show a hatched line pattern, this allows you to see what stage of fatigue you are working through. Once your fatigue returns to maximum, the solid bar will fill again. 
@@ -717,16 +715,16 @@ document.onclick=function(){
   if(!cb_tcd.checked){
 
 
-	function getRandomColor() {
+  function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
     for (var i = 0; i < 6; i++ ) {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-	}
-	var helements = document.querySelectorAll(".he")
-	for (var i = 0; i < helements.length; i++) {
+  }
+  var helements = document.querySelectorAll(".he")
+  for (var i = 0; i < helements.length; i++) {
     helements[i].style.color = getRandomColor()
 }
 
