@@ -64,14 +64,15 @@ function cvssetup(_fp){
         rolldice = function(){
           var array = new Uint8ClampedArray(3);
           window.crypto.getRandomValues(array);
-          r = 0
+          var r = 0
           for (var i = 0; i < array.length; i++) {
             r += Math.ceil(array[i]/255 *6)
           }
-          return total
+          return r
         }
       }else{
-        rolldice = function(){("awful js random active")
+        console.log("awful js random active")
+        rolldice = function(){
           return Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)}
       }
 
