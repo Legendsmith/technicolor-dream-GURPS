@@ -159,7 +159,8 @@ if(typeof window.crypto.getRandomValues !== 'undefined'){
     return r
   }
 }else{
-  rolldice = function(){("awful js random active")
+  console.log("awful js random active")
+  rolldice = function(){
     return Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)}
 }
 
