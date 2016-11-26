@@ -25,8 +25,6 @@
   <li><select id="sl_namelist" style="width:120px">Character</select></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'lastgasp')">Last Gasp</a></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'wounds')">Wounds & HP</a></li>
-  <li><button id="btn_save">Save</button></li>
-  <li><button id="btn_load">Load</button></li>
   </div>
 </ul>
 <div id="lastgasp" class="tabcontent">
@@ -80,9 +78,9 @@
   
   <hr>
   <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>
-<!-- <input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br> -->
+<input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br>
 <input type="range" id="rn_mov"><span id="txt_rnmov" step="1"></span></br>
-<span class="subnote">This feature is not yet complete!</span>
+<span id="txt_varmov"></br></span>
   <hr>
   Taking injury also reduces AP, but this can be mitigated with a HT Roll.</br>
   <input class=insm type="number" id="in_inj" value =0 min=0> Injury<br>
@@ -106,8 +104,9 @@
 
 
 <div id="controls" class="tabcontent">
-<p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed for "The Last Gasp" rules found in <a href="http://www.warehouse23.com/products/pyramid-number-3-slash-44-alternate-gurps-ii"> Pyramid 3/44</a>. These rules add excellent depth to combat, but the extra tracking required can be a bit much for some. This small app is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
-<p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes.The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge in order to prevent ambiguity.</p> <p>The FP bar on the side tracks your current FP. As expected, it decreases when you spend it and show you the stages of fatigue. But when you increase it will show a hatched line pattern, this allows you to see what stage of fatigue you are working through. Once your fatigue returns to maximum, the solid bar will fill again. 
+  <h2>Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Character Sheet</h2>
+<button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_fsave">Save To File</button>
+<button class="fancybtn" id="btn_load">Load</button> <button class="fancybtn" id="btn_fload">Load From File</button>
 <h4>Enter your character's stats</h4>
 <p class="subnote">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
 Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise</button></br>
@@ -124,7 +123,12 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
 <div style="clear:left;"><p style="font-size:10px">If the <i>base</i> level of a stat changes due to magic or some other force, you will need to reinitialise. The exception to this is Weight Carried, that can (and should) be modified on the fly as characters move loads.</p>
-<hr></div><div style="clear:left;"></div>
+<hr></div><div style="clear:left;"></div></hr>
+<p>This webapp is designed for use with less often used rules. Unlike other character sheet programs it aims to provide ease of use for less often used.</br> <b>Currently supported Rules:</b>
+<ul>
+  <li>"The Last Gasp" rules found in <a href="http://www.warehouse23.com/products/pyramid-number-3-slash-44-alternate-gurps-ii"> Pyramid 3/44</a></li>
+</ul>
+ <p>In Last Gasp Mode, the FP bar on the side tracks your current FP. As expected, it decreases when you spend it and show you the stages of fatigue. But when you increase it will show a hatched line pattern, this allows you to see what stage of fatigue you are working through. Once your fatigue returns to maximum, the solid bar will fill again.</p>
 </br>
 <div style="clear:left;clear:right;float:left;font-size:10px">Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> created by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a>. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a> <input type="checkbox" id="cb_tcd">Disable Technicolour GURPS </div>
 <!--lat gasp-->

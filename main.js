@@ -473,19 +473,20 @@ btn_init.onclick=function(){ //initialisation
     update();
     document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
     rn_mov.disabled =false
+    sl_namelist.selectedIndex = sl_namelist.length-1
 }
 //name list box
 
 
 //ui callbacks
-function movdo(){}
+function movdo(){
   if(cb_mcv.checked){
       document.getElementById('txt_rnmov').textContent = `Velocity: ${rn_mov.value}`
       document.getElementById('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov/3)*10)}`
       }else{
         document.getElementById('txt_varmov').textContent = `
 `
-        document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`}
+        document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
        }
 }
 
