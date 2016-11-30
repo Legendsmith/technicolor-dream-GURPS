@@ -9,12 +9,11 @@
 
 </head>
 <body style="font-family:sans-serif;">
-<div id="main" style="width:600px;margin-left:auto; margin-right:auto;background-color:Wheat;border-radius:20px;padding:20px"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Wound Tracker</h1>
+<div id="wounds" class="tabcontent" style="width:600px;margin-left:auto; margin-right:auto;background-color:Wheat;border-radius:20px;padding:20px"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Wound Tracker</h1>
 <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Basic Set has rules for Accumulated Wounds to limbs on page 420. It mentions that this is more realistic, but causes more record keeping. This simple page is designed to make such record keeping easy.</p>
 <p>To use: Enter your character's Max HP and press Initialise to begin. Enter damage values and press update to "damage" limbs, this will also automatically carry the appropriate damage across to the body's "core" where appropriate. Healing is completely per-part though, so healing an arm will not affect the core HP, you must enter healing completely individually. Pressing Initialise again will also reset the form to full HP.</p>
 <span>Saving and loading are enabled if you allow cookies. To load, you must enter the max HP again and then Initialise before pressing load.</span></br>
 <input class=insm type="number" id="maxhp"></input> Max HP</br>
-<button id="btn_init">Initialise</button>  <button id="btn_save">Save</button> <button id="btn_load">Load</button>
 </br>
 <h3>Core HP Including Head, Neck, Torso</h3>
 Injury/Heal: <input type="number" class=insm id="in_to" value=0 min=0  autocomplete='off'></input> || HP <span id="txt_to">__</span> Total HP </br>
@@ -28,7 +27,7 @@ Injury/Heal: <input type="number" class=insm id="in_rl" value=0 min=0  autocompl
 Injury/Heal: <input type="number" class=insm id="in_ll" value=0 min=0  autocomplete='off'></input> || <span id="txt_ll">_/_</span> Left Leg</br>
 Injury/Heal: <input type="number" class=insm id="in_rf" value=0 min=0  autocomplete='off'></input> || <span id="txt_rf">_/_</span> Right Foot</br>
 Injury/Heal: <input type="number" class=insm id="in_lf" value=0 min=0  autocomplete='off'></input> || <span id="txt_lf">_/_</span> Left Foot</br>
-<button id="btn_updt">Update</button> Damage:<input type="radio" name="group_hd" value="damage" checked id="rb_d"> Heal:<input type="radio" name="group_hd" value="heal">
+<button id="btn_wt_updt">Update</button> Damage:<input type="radio" name="group_hd" value="damage" checked id="rb_d"> Heal:<input type="radio" name="group_hd" value="heal">
 <script>
 document.onclick=function(){
 	function getRandomColor() {
@@ -47,9 +46,6 @@ document.onclick=function(){
 }
 
 
-btn_updt.disabled = true
-btn_save.disabled = true
-btn_load.disabled = true
 var ey = {
     "mod": 10,
     "hhash": "ey"

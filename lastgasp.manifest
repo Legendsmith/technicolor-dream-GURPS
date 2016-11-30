@@ -3,8 +3,13 @@ CACHE MANIFEST
 /technicolor-dream-GURPS/gaspstyle.css
 /technicolor-dream-GURPS/damagetables.json
 /technicolor-dream-GURPS/patterns.js
+<<<<<<< HEAD
+/technicolor-dream-GURPS/favicon.ico
+/technicolor-dream-GURPS/lz-string.min.js
+=======
 /technicolor-dream-GURPS/lz-string.min.js
 /technicolor-dream-GURPS/favicon.ico
+>>>>>>> refs/remotes/origin/master
 
 NETWORK:
 *
