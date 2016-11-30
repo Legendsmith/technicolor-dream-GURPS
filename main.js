@@ -1,4 +1,14 @@
 var currentTab = "";
+///shortcuts
+function getId(str){ //jquer broke everything so lol here we go.
+  return document.getElementById(str)
+}
+
+
+chara = function(){ //this serves as a shortcut for writing out that long as sl namelist thing over and over.
+  return dotrack[sl_namelist.value]
+}
+
 //tabs
 function openTab(evt, tabName) {
     // Declare all variables
@@ -18,12 +28,13 @@ function openTab(evt, tabName) {
     }
 
     // Show the current tab, and add an "active" class to the link that opened the tab
-    document.getElementById(tabName).style.display = "block";
+    getId(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-document.getElementById('defaultOpen').click()
+getId('defaultOpen').click()
 
 //setup
+
 
 var btns = document.getElementsByTagName('button');
 for (var i = btns.length - 1; i >= 0; i--) {
@@ -40,17 +51,17 @@ rn_mov.disabled =true
 ///patterns
 var dotrack = {}
 var status = ""
-var cvs = document.getElementById("display")
+var cvs = getId("display")
 var ctx = cvs.getContext("2d");
 //canvas
 function cvssetup(_fp){
-  var fontscale = document.getElementById("display").height/875
+  var fontscale = getId("display").height/875
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle="#000000"
   ctx.font= `${round(Math.max(32*fontscale,8))}px Arial`;
   ctx.fillText("FP",30,32)
   ctx.font= `${round(Math.max(18*fontscale,8))}px Arial`;
-  ctx.translate(0,72 * Math.max(document.getElementById("display").height/875),0.5)
+  ctx.translate(0,72 * Math.max(getId("display").height/875),0.5)
   var dsplyhght =(cvs.height - 85) //height minus the big FP
     for (var i = _fp*2; i >= 0; i--) {
     var _x = 5
@@ -85,13 +96,13 @@ window.onresize = function(){
 
 function cvsdisplay(){
   //scale code
-  document.getElementById("display").style.height = Math.min(window.innerHeight,875)+"px"
-  document.getElementById("display").height = Math.min((window.innerHeight*0.95),875)
-  var fontscale = document.getElementById("display").height/875
+  getId("display").style.height = Math.min(window.innerHeight,875)+"px"
+  getId("display").height = Math.min((window.innerHeight*0.95),875)
+  var fontscale = getId("display").height/875
   //scale code
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, cvs.width, cvs.height);
-  ctx.translate(0,72 * Math.max(document.getElementById("display").height/875),0.5)
+  ctx.translate(0,72 * Math.max(getId("display").height/875),0.5)
   var dsplyhght =(cvs.height - 85)
   //
   //
@@ -174,32 +185,32 @@ function cvsdisplay(){
 
 //I know this is hacky but vOv
 cb_fit.onchange=function(){
-  if (document.getElementById("cb_fit").checked== true){
-    document.getElementById("cb_vfit").checked=false
-    document.getElementById("cb_ufit").checked=false
-    document.getElementById("cb_vufit").checked=false
+  if (getId("cb_fit").checked== true){
+    getId("cb_vfit").checked=false
+    getId("cb_ufit").checked=false
+    getId("cb_vufit").checked=false
   }
 }
 cb_vfit.onchange=function(){
-  if (document.getElementById("cb_vfit").checked == true){
-    document.getElementById("cb_fit").checked=false
-    document.getElementById("cb_vufit").checked=false
-    document.getElementById("cb_ufit").checked=false
+  if (getId("cb_vfit").checked == true){
+    getId("cb_fit").checked=false
+    getId("cb_vufit").checked=false
+    getId("cb_ufit").checked=false
   }
 }
 cb_ufit.onchange=function(){
-  if (document.getElementById("cb_ufit").checked == true){
-    document.getElementById("cb_fit").checked=false
-    document.getElementById("cb_vfit").checked=false
-    document.getElementById("cb_vufit").checked=false
+  if (getId("cb_ufit").checked == true){
+    getId("cb_fit").checked=false
+    getId("cb_vfit").checked=false
+    getId("cb_vufit").checked=false
   }
 }
 
 cb_vufit.onchange=function(){
-  if (document.getElementById("cb_vufit").checked == true){
-    document.getElementById("cb_ufit").checked=false
-    document.getElementById("cb_vfit").checked=false
-    document.getElementById("cb_fit").checked=false
+  if (getId("cb_vufit").checked == true){
+    getId("cb_ufit").checked=false
+    getId("cb_vfit").checked=false
+    getId("cb_fit").checked=false
   }
 }
 in_enc.onchange=function(){
@@ -248,21 +259,21 @@ function fsave(){
        
         downloadLink.click();
       }
-      function destroyClickedElement(event)
+      function destroyClickedElement(e)
       {
-          document.body.removeChild(event.target);
+          document.body.removeChild(e.target);
 }
 btn_fsave.onclick = fsave
-      function fload(){
-        document.getElementById('in_fload').click()
+function fload(){
+        getId('in_fload').click()
         var fileReader = new FileReader()
         fileReader.onload = function(floadEvent){
           var inp = floadEvent.target.result;
           load(inp,2)
 }
-        document.getElementById('in_fload').onchange = function(){
-          if(typeof document.getElementById('in_fload').files[0] !== 'undefined'){
-            var ftarget = document.getElementById('in_fload').files[0];
+        getId('in_fload').onchange = function(){
+          if(typeof getId('in_fload').files[0] !== 'undefined'){
+            var ftarget = getId('in_fload').files[0];
             fileReader.readAsText(ftarget,"UTF-8")
           };
         }
@@ -274,9 +285,9 @@ btn_not.onclick=function(){
   currenthtbonus=4+chara().fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
-    document.getElementById("txt_out").textContent = "Waiting for Random.org"
+    getId("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(rolldice());
+    getId("txt_out").innerHTML = rollHT(rolldice());
   }
   //update ui and everything
   update();
@@ -285,9 +296,9 @@ btn_eva.onclick=function(){
   currenthtbonus=chara().fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
-    document.getElementById("txt_out").textContent = "Waiting for Random.org"
+    getId("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(rolldice());
+    getId("txt_out").innerHTML = rollHT(rolldice());
   }
     //update ui and everything
   update();
@@ -296,9 +307,9 @@ btn_eva.onclick=function(){
 btn_injury.onclick=function(){
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackmitigate)
-    document.getElementById("txt_out2").textContent = "Waiting for Random.org"
+    getId("txt_out2").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out2").innerHTML = rollmitigate(rolldice());
+    getId("txt_out2").innerHTML = rollmitigate(rolldice());
   }
   update();
 }
@@ -316,7 +327,7 @@ function rollparse(_in){
 
 function callbackmitigate(_result){
   var _rroll = rollparse(_result);
-  document.getElementById("txt_out2").innerHTML = rollmitigate(_rroll);
+  getId("txt_out2").innerHTML = rollmitigate(_rroll);
   update();
 }
 
@@ -349,7 +360,7 @@ function rollmitigate(r){
 ///HT callback for random.org
 function callbackRollHT(_result){
   var _rroll = rollparse(_result);
-  document.getElementById("txt_out").innerHTML = rollHT(_rroll);
+  getId("txt_out").innerHTML = rollHT(_rroll);
   update();
 }
 
@@ -399,10 +410,6 @@ function updatenamelist(){
   repopulatelist('sl_namelist', dotrack.names)
 }
 
-chara = function(){
-  return dotrack[sl_namelist.value]
-}
-
 btn_init.onclick=function(){ //initialisation
   init = true
   if(dotrack.names.indexOf(ti_name.value)== -1){ // if the name isn't in the list, add it to the list.
@@ -414,22 +421,22 @@ btn_init.onclick=function(){ //initialisation
   dotrack[ti_name.value].fittime =1
   dotrack[ti_name.value].notes = ""
   rollClient= new HttpClient();
-  if(document.getElementById("cb_fit").checked){
+  if(getId("cb_fit").checked){
     dotrack[ti_name.value].fitbon = 1
     dotrack[ti_name.value].fittime = 0.5
     dotrack[ti_name.value].notes = "Fit"
     console.log("fit bonus active")
-  }else if(document.getElementById("cb_vfit").checked){
+  }else if(getId("cb_vfit").checked){
     dotrack[ti_name.value].fitbon = 2
     dotrack[ti_name.value].fittime = 0.5
     dotrack[ti_name.value].notes = "V. Fit"
     console.log("v. fit bonus active")
-  }else if(document.getElementById("cb_ufit").checked){
+  }else if(getId("cb_ufit").checked){
     dotrack[ti_name.value].fitbon = -1
     dotrack[ti_name.value].fittime = 2
     dotrack[ti_name.value].notes = "Unfit"
     console.log("Unfit penalty active")
-  }else if(document.getElementById("cb_vufit").checked){
+  }else if(getId("cb_vufit").checked){
     console.log("Very Unfit penalty active")
     dotrack[ti_name.value].fittime = 2
     dotrack[ti_name.value].fitbon = -2
@@ -460,6 +467,10 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].fp = dotrack[ti_name.value].fpmax
     dotrack[ti_name.value].fprec = dotrack[ti_name.value].fpmax
     dotrack[ti_name.value].st = dotrack[ti_name.value].stmax
+    dotrack[ti_name.value].will = in_WILL.valueAsNumber
+    dotrack[ti_name.value].willmax = in_WILL.valueAsNumber
+    dotrack[ti_name.value].per = in_PER.valueAsNumber
+    dotrack[ti_name.value].permax = in_PER.valueAsNumber
     dotrack[ti_name.value].fppoint = dotrack[ti_name.value].fpmax/2
     dotrack[ti_name.value].dodgepen = 0;
     dotrack[ti_name.value].skills=[];
@@ -475,7 +486,7 @@ btn_init.onclick=function(){ //initialisation
     //canvas init
     cvsdisplay(dotrack[ti_name.value].fpmax);
     update();
-    document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
+    getId('txt_rnmov').textContent = getId('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
     rn_mov.disabled =false
 
 }
@@ -485,12 +496,12 @@ btn_init.onclick=function(){ //initialisation
 //ui callbacks
 function movdo(){
   if(cb_mcv.checked){
-      document.getElementById('txt_rnmov').textContent = `Velocity: ${rn_mov.value}`
-      document.getElementById('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/chara().mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/chara().mov/3)*10)}`
+      getId('txt_rnmov').textContent = `Velocity: ${rn_mov.value}`
+      getId('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/chara().mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/chara().mov/3)*10)}`
       }else{
-        document.getElementById('txt_varmov').textContent = `
+        getId('txt_varmov').textContent = `
 `
-        document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
+        getId('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
        }
 }
 
@@ -529,7 +540,7 @@ btn_load.onclick=function(){
 }
 
 function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
-    var list = document.getElementById('sl_namelist') 
+    var list = getId('sl_namelist') 
     var fdata = ""
     try{
     switch(type){
@@ -563,7 +574,8 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   rn_mov.disabled=false
   movdo();
   in_enc.value = chara().enc
-  btn_fload.textContent = "Load From File"
+  btn_fload.textContent = "Load From File";
+  initskill();
 }
 catch(err){
   switch(type){
@@ -587,8 +599,8 @@ function update(){
     chara().fprec = chara().fpmax;
   }
   chara().enc = in_enc.valueAsNumber
-  document.getElementById('rn_mov').min = 1
-  document.getElementById('rn_mov').max = chara().mov
+  getId('rn_mov').min = 1
+  getId('rn_mov').max = chara().mov
   encumber();
   calc();
   display();
@@ -658,23 +670,26 @@ function encumber(){
 
 //display
 function display(){
-  document.getElementById("txt_name").textContent = chara().name
-  document.getElementById("txt_AP").textContent = chara().ap +"/"+ chara().apmax + " AP"
-  document.getElementById("txt_FP").textContent = chara().fp +"/"+ chara().fpmax + " FP"
-  document.getElementById("txt_st").textContent = round(chara().st*10)/10 +"/"+ chara().stmax + " ST"
-  document.getElementById("txt_dx").textContent = chara().dx +"/"+ chara().dxmax + " DX"
+  getId("txt_name").textContent = chara().name
+  getId("txt_AP").textContent = chara().ap +"/"+ chara().apmax + " AP"
+  getId("txt_FP").textContent = chara().fp +"/"+ chara().fpmax + " FP"
+  getId("txt_st").textContent = round(chara().st*10)/10 +"/"+ chara().stmax + " ST"
+  getId("txt_dx").textContent = chara().dx +"/"+ chara().dxmax + " DX"
   var pentext = -Math.floor((chara().fpmax -chara().fp)/chara().fpmax/2*10) + " to most skills.";
   if(cb_highres.checked){
     pentext = `IQ skills: ${chara().iq - chara().iqmax} DX skills: ${chara().dx - chara().dxmax}`
   }
-  document.getElementById("txt_pen").textContent = pentext
-  document.getElementById("txt_iq").textContent = chara().iq +"/"+ chara().iqmax + " IQ"
-  document.getElementById("txt_ht").textContent = chara().ht +"/"+ chara().htmax + " HT"
-  document.getElementById("txt_lif").innerHTML = basiclift(chara().st) +"/"+ basiclift(chara().st) + "lbs <b>BL</b>"
-  document.getElementById("txt_enc").textContent = "Encumberance Dodge penalty: "+ chara().dodgepen
-  document.getElementById("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(((chara().ht + chara().dx)/4)+3 + parseInt(in_dod.value))} || ${chara().notes} `
-  document.getElementById("txt_status").innerHTML = status
-  document.getElementById("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(chara().st)]} sw: ${dmgtbl.swing[Math.floor(chara().st)]}`
+  getId("txt_pen").textContent = pentext
+  getId("txt_iq").textContent = chara().iq +"/"+ chara().iqmax + " IQ"
+  getId("txt_ht").textContent = chara().ht +"/"+ chara().htmax + " HT"
+  getId("txt_will").textContent = chara().per +"/"+ chara().willmax + " Will"
+  getId("txt_per").textContent = chara().per +"/"+ chara().permax + " Perception"
+  getId("txt_lif").innerHTML = basiclift(chara().st) +"/"+ basiclift(chara().st) + "lbs <b>BL</b>"
+  getId("txt_enc").textContent = "Encumberance Dodge penalty: "+ chara().dodgepen
+  getId("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(((chara().ht + chara().dx)/4)+3 + parseInt(in_dod.value))} || ${chara().notes} `
+  getId("txt_status").innerHTML = status
+  getId("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(chara().st)]} sw: ${dmgtbl.swing[Math.floor(chara().st)]}`
+  skilldisplay()
 }
 //calc
 
@@ -688,20 +703,30 @@ function calc(){
 
   if(cb_cap.checked){
     penalty = Math.min(penalty,5)
+    chara().st = Math.max(chara().st = chara().stmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2),chara().stmax/2)
   }
+
+  
   
   if(cb_highres.checked && !cb_cap.checked){
     chara().iq = Math.ceil(chara().iqmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
     chara().dx = Math.ceil(chara().dxmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
     chara().ht = Math.ceil(chara().htmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
+    chara().will = Math.ceil(chara().willmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
+    chara().per = Math.ceil(chara().permax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
   }else if(cb_highres.checked && cb_cap.checked){
     chara().iq = Math.ceil(chara().iqmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
     chara().ht = Math.ceil(chara().htmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
     chara().dx = Math.ceil(chara().dxmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
+    chara().will = Math.ceil(chara().willmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
+    chara().per = Math.ceil(chara().permax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
   }else{
     chara().iq = chara().iqmax -  penalty;
     chara().dx = chara().dxmax - penalty;
     chara().ht = chara().htmax - penalty;
+    chara().per = chara().permax - penalty;
+    chara().will = chara().willmax - penalty;
+
   };
   if((chara().fp/(chara().fppoint)>=1)){
     status = "<b>Mild Fatigue</b></br>"
@@ -712,6 +737,11 @@ function calc(){
   }
   if(chara().fp <= -chara().fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor(((240/chara().fpmax)*chara().fittime)*100)/100
   }
+  //calculate skill level
+  for (var i = 0; i < chara().skills.length; i++) {
+    var max =   chara()[chara().skills[i].base.toLowerCase()+"max"] + chara().skills[i].RSL
+    chara().skills[i].sl = max + (chara()[chara().skills[i].base.toLowerCase()] - chara()[chara().skills[i].base.toLowerCase()+"max"])
+  };
 }
 
 ////////////////SKILL ZONE GIT GUD/////////////
@@ -721,7 +751,6 @@ function initskill(){
       dotrack[sl_namelist[i].value].skills = []
     }
   };
-
 }
 
 function updateskilllist(){
@@ -729,23 +758,57 @@ function updateskilllist(){
   repopulatelist('sl_nsba',["ST","DX","IQ","HT","WILL","PER"])
 }
 
-
 function newskill(){
   chara().skills.push({
-    "name":ti_s_nsname.value,
+    "name":ti_nsname.value,
     "base":sl_nsba.value,
-    "RSL":ti_nsnum.valueAsNumber
+    "RSL":ti_nsnum.valueAsNumber,
+    "sl": (chara()[sl_nsba.value.toLowerCase()] + ti_nsnum.valueAsNumber)
   }
     )
+  skilldisplay();
 }
-
-
 btn_nskill.onclick = newskill
 
+
+rollqueue = []
+function rollskill(e){
+  var success = false
+  var thisskill = chara().skills[parseInt(e.target.id.split("_")[1])]
+  var sl = thisskill.sl
+  r = rolldice()
+
+  if (r <= sl){
+    success=true;
+    e.target.textContent = `Roll ${thisskill.name} ${sl}  RSL: ${thisskill.base}+${thisskill.RSL} Success: ${r} MoS: ${sl-r}`
+    e.target.style.border = 'border:2px solid #33FF33;'
+  }else{
+    e.target.textContent = `Roll ${thisskill.name} ${sl}  RSL: ${thisskill.base}+${thisskill.RSL} Failure: ${r} MoF: ${r-sl}`
+    e.target.style.border = 'border:2px solid #FF3333;'
+  }
+
+  
+}
+
+function skilldisplay(){
+  var h  = getId('skillholder')
+  while(h.lastChild){
+    h.removeChild(h.lastChild);
+  }
+  for (var i = 0; i < chara().skills.length; i++) {
+    var nb = document.createElement("button")
+    //nb.className
+    nb.className = "skillbar"
+    nb.id=`skill_${[i]}`
+    nb.textContent=`Roll ${chara().skills[i].name} ${chara().skills[i].sl}  RSL: ${chara().skills[i].base}+${chara().skills[i].RSL}`
+    nb.onclick = rollskill
+    h.appendChild(nb)
+  };
+}
 //////////////////ZONE END SCRUB//////////////
 
 function repopulatelist(list,arr){
-  var list = document.getElementById(list)
+  var list = getId(list)
   while(list.lastChild){
     list.removeChild(list.lastChild);
   }

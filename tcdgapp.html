@@ -19,13 +19,14 @@
 <script type="text/javascript" src="lz-string.min.js"></script>
 </head>
 <body>
+  <input type="file" id="in_fload" style="display:none">
 <div id="main">
   <div id="tabwrap"><ul class="tab">
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'controls')" id="defaultOpen">Characters</a></li>
   <li><select id="sl_namelist" style="width:120px">Character</select></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'lastgasp')">Last Gasp</a></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'wounds')">Wounds & HP</a></li>
-  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'skills')">Attacks & Skills</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'attacksskills')">Attacks & Skills</a></li>
   </div>
 </ul>
 <div id="page-wrap"><canvas id="display" width="150px" ></canvas></div>
@@ -53,6 +54,8 @@
 <span id = "txt_dx">|</span></br>
 <span id = "txt_iq">|</span></br>
 <span id = "txt_ht">|</span></br>
+<span id = "txt_will">|</span></br>
+<span id = "txt_per">|</span></br>
 <span id = "txt_pen">|</span></br>
 <span id = "txt_lif">|</span> // <input class=insm type="number" id="in_enc" value = 0>lbs Carried</input></br>
 <span id ="txt_mov">|</span></br>
@@ -103,13 +106,13 @@
  <button class="fancybtn" id="btn_not">Roll For Recovery (Do Nothing)</button>
  <button class="fancybtn" id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></div></div></div>
 
-<div id="skills" class="tabcontent">
+<div id="attacksskills" class="tabcontent">
   <h2>Skills</h2>
-  <p> <input type="text" class=insmt id="ti_s_nsname" maxlength="20" value="Skill Name"></input> RSL:<select style="width:50px" id="sl_nsba">Base Attribute</select><input type="number" class=insm id="ti_s_nsnum" width="30" value=0> <button class="fancybtn" id="btn_nskill">New Skill</button></p>
+  <p> <input type="text" class=insmt id="ti_nsname" maxlength="20" value="Skill Name"></input> RSL:<select style="width:50px" id="sl_nsba">Base Attribute</select><input type="number" class=insm id="ti_nsnum" width="30" value=0> <button class="fancybtn" id="btn_nskill">New Skill</button></p>
   </hr>
   <div id="skillholder"></div>
 </div>
-<div id='wounds' class="tabcontent"></div>
+<div id='wounds' class="tabcontent">Feature not Implimented, please wait!</div>
 
 <div id="controls" class="tabcontent">
   <h2>Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Character Sheet</h2>
@@ -121,6 +124,7 @@ Name: <input type="text" id="ti_name" class=insmt maxlength="26" value="default"
 <div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
 <input class=insm type="number" id="in_ST" value =10> ST</input></br>
 <input class=insm type="number" id="in_HT" value =10> HT</input></br>
+<input class=insm type="number" id="in_WILL" value =10> Will</input></br>
 <input class=insm type="number" id="in_FP" value = 0> FP</input> </br>
 <input class=insm type="number" id="in_AP" value =0> Extra AP</input></br>
 <input type="checkbox" id="cb_fit">Fit</input></br><input type="checkbox" id="cb_ufit">Unfit</input></div>
@@ -128,6 +132,7 @@ Name: <input type="text" id="ti_name" class=insmt maxlength="26" value="default"
 <div style="width:50%;float:left;">
 <input class=insm type="number" id="in_DX" value =10> DX</input></br>
 <input class=insm type="number" id="in_IQ" value =10> IQ</input></br>
+<input class=insm type="number" id="in_PER" value =10> Per</input></br>
 <input class=insm type="number" id="in_spd" value =5> Speed</input></br>
 <input class=insm type="number" id="in_mov" value =5> Move</input></br>
 <input class=insm type="number" id="in_dod" value = 0> Dodge Modifier</input></br>
