@@ -64,6 +64,15 @@
   .insm:focus,.insm.focus{
   box-shadow: inset 1px 1px 2px 0 #c9c9FF;
 }
+
+.insmt{width:120px;
+  border: solid 1px #fff;
+  box-shadow: inset 1px 1px 2px 0 #707070;
+  transition: box-shadow 0.3s;}
+  .insmt:focus,.insmt.focus{
+  box-shadow: inset 1px 1px 2px 0 #c9c9FF;
+}
+
 /*tooltip list*/
 .tooltip ul {
     list-style-position: inside;
@@ -148,19 +157,30 @@ h5 {
 }
 #lastgasp{
   width:600px;float:left;background-color:#e6e6ff;border-radius:20px;padding:20px;
-  margin-top: 40px;
+  
 }
 #controls{
   width:600px;float:left;background-color:#e6ffe6;border-radius:20px;padding:20px;
-  margin-top: 40px;
 }
+
 #display{
   width:150px;height:895px;
   background-color:#ffffff;
   border-radius:20px;
   border:1px solid #3333aa;
   position: fixed;
+  margin-left: 640px
 }
+
+.skillbar{
+  width: 600px;
+  border-radius:20px;
+  background-color:#DDDDBB;
+  border:1px solid #BBBB99;
+  display: block;
+}
+
+
 .page-wrap { 
   width: 600px;
   position: relative; 
@@ -171,11 +191,22 @@ h5 {
 }
 #wounds{
   width:600px;
+  float:left;
   margin-left:auto;
   margin-right:auto;
   background-color:Wheat;
   border-radius:20px;
   padding:20px;
+}
+#skills{
+  float:left;
+  width:600px;
+  margin-left:auto;
+  margin-right:auto;
+  background-color:#EEEECC;
+  border-radius:20px;
+  padding:20px;
+
 }
 /*tabs*/
 /* Style the list */
@@ -217,7 +248,7 @@ ul.tab li a:focus, .active {background-color: #ccc;}
     display: none;
     padding: 6px 12px;
     border: 1px solid #ccc;
-    border-top: none;
+    margin-top: 40px;
 }
 
 ul.tab li select {

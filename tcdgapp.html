@@ -25,8 +25,10 @@
   <li><select id="sl_namelist" style="width:120px">Character</select></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'lastgasp')">Last Gasp</a></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'wounds')">Wounds & HP</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'skills')">Attacks & Skills</a></li>
   </div>
 </ul>
+<div id="page-wrap"><canvas id="display" width="150px" ></canvas></div>
 <div id="lastgasp" class="tabcontent">
   <h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
   <span class="subnote"> <input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input> <input type="checkbox" id="cb_highres"></input><div class="tooltip">High Resoluton stat loss.<span class="tooltiptext">Normally stat loss increases by -1 per 20% FP lost, for -10 at -1×FP. Enabling this option turns it to 10% per 20% FP lost, so that high stat characters will still reach 0 DX, IQ, etc at -1×FP</span></div> <input type="checkbox" id="cb_cap"><div class="tooltip">Cap penalties at -5 or -50%.<span class="tooltiptext">With this option stat loss will not exceed -5, or -50% of the base stat when using High Resolution stat loss.</span></div></input>  </span>
@@ -101,25 +103,34 @@
  <button class="fancybtn" id="btn_not">Roll For Recovery (Do Nothing)</button>
  <button class="fancybtn" id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></div></div></div>
 
-
+<div id="skills" class="tabcontent">
+  <h2>Skills</h2>
+  <p> <input type="text" class=insmt id="ti_s_nsname" maxlength="20" value="Skill Name"></input> RSL:<select style="width:50px" id="sl_nsba">Base Attribute</select><input type="number" class=insm id="ti_s_nsnum" width="30" value=0> <button class="fancybtn" id="btn_nskill">New Skill</button></p>
+  </hr>
+  <div id="skillholder"></div>
+</div>
+<div id='wounds' class="tabcontent"></div>
 
 <div id="controls" class="tabcontent">
   <h2>Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Character Sheet</h2>
 <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_fsave">Save To File</button>
 <button class="fancybtn" id="btn_load">Load</button> <button class="fancybtn" id="btn_fload">Load From File</button>
 <h4>Enter your character's stats</h4>
-<p class="subnote">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
-Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise</button></br>
+<p class="subnote"> If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
+Name: <input type="text" id="ti_name" class=insmt maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise</button></br>
 <div style="width:50%;float:left;"><input class=insm type="number" id="in_HT" value =10> HT</input></br>
 <input class=insm type="number" id="in_ST" value =10> ST</input></br>
-<input class=insm type="number" id="in_AP" value =0> Additional AP</input></br>
-<input class=insm type="number" id="in_FP" value = 0> Additional FP</input> </br><input type="checkbox" id="cb_fit">Fit</input></br><input type="checkbox" id="cb_ufit">Unfit</input></div>
+<input class=insm type="number" id="in_HT" value =10> HT</input></br>
+<input class=insm type="number" id="in_FP" value = 0> FP</input> </br>
+<input class=insm type="number" id="in_AP" value =0> Extra AP</input></br>
+<input type="checkbox" id="cb_fit">Fit</input></br><input type="checkbox" id="cb_ufit">Unfit</input></div>
 
 <div style="width:50%;float:left;">
 <input class=insm type="number" id="in_DX" value =10> DX</input></br>
 <input class=insm type="number" id="in_IQ" value =10> IQ</input></br>
-<input class=insm type="number" id="in_mov" value =0> Move Modifier</input></br>
-<input class=insm type="number" id="in_dod" value = 0>Dodge Modifier</input></br>
+<input class=insm type="number" id="in_spd" value =5> Speed</input></br>
+<input class=insm type="number" id="in_mov" value =5> Move</input></br>
+<input class=insm type="number" id="in_dod" value = 0> Dodge Modifier</input></br>
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
 <div style="clear:left;"><p style="font-size:10px">If the <i>base</i> level of a stat changes due to magic or some other force, you will need to reinitialise. The exception to this is Weight Carried, that can (and should) be modified on the fly as characters move loads.</p>
@@ -127,13 +138,15 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 <p>This webapp is designed for use with less often used rules. Unlike other character sheet programs it aims to provide ease of use for less often used.</br> <b>Currently supported Rules:</b>
 <ul>
   <li>"The Last Gasp" rules found in <a href="http://www.warehouse23.com/products/pyramid-number-3-slash-44-alternate-gurps-ii"> Pyramid 3/44</a></li>
+  <li>Accumulated Wounds found in Basic Set</li>
 </ul>
  <p>In Last Gasp Mode, the FP bar on the side tracks your current FP. As expected, it decreases when you spend it and show you the stages of fatigue. But when you increase it will show a hatched line pattern, this allows you to see what stage of fatigue you are working through. Once your fatigue returns to maximum, the solid bar will fill again.</p>
+ <p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Basic Set has rules for Accumulated Wounds to limbs on page 420. It mentions that this is more realistic, but causes more record keeping. The Wounds & HP tab makes such record keeping easy.</p>
 </br>
 <div style="clear:left;clear:right;float:left;font-size:10px">Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> created by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a>. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a> <input type="checkbox" id="cb_tcd">Disable Technicolour GURPS </div>
 <!--lat gasp-->
 
-</div><div id="page-wrap"><canvas id="display" width="150px" ></canvas></div>
+</div>
 </div>
 </body>
 <script type="text/javascript" src="main.js"></script>

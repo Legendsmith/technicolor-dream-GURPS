@@ -1,7 +1,9 @@
+var currentTab = "";
 //tabs
 function openTab(evt, tabName) {
     // Declare all variables
     var i, tabcontent, tablinks;
+    currentTab = tabName;
 
     // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -29,7 +31,7 @@ for (var i = btns.length - 1; i >= 0; i--) {
 };
 
 btn_init.disabled=false
-if(localStorage.lastgasp){
+if(localStorage.tcdg){
   btn_load.disabled=false
 }
 init = false
@@ -95,78 +97,78 @@ function cvsdisplay(){
   //
   var sevblock_o = 0//SEVERE BLOCK origin
   var sevblock_size = 0
-  if(dotrack[sl_namelist.value].fprec<dotrack[sl_namelist.value].fpmax){
-    var mldtext_y = dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec) // it's actually the line of the fp point
-    var mldblock_yo = Math.max(dsplyhght-((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec+Math.floor(dotrack[sl_namelist.value].fppoint))),0)
-    var mildsize = Math.min(((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax-dotrack[sl_namelist.value].fprec)),
-      (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*dotrack[sl_namelist.value].fppoint);
+  if(chara().fprec<chara().fpmax){
+    var mldtext_y = dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec) // it's actually the line of the fp point
+    var mldblock_yo = Math.max(dsplyhght-((dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec+Math.floor(chara().fppoint))),0)
+    var mildsize = Math.min(((dsplyhght/chara().fpmax/2)*(chara().fpmax-chara().fprec)),
+      (dsplyhght/chara().fpmax/2)*chara().fppoint);
     //ctx.fillStyle="#"
     ctx.fillStyle=ctx.createPattern(p,'repeat');
 
     ctx.fillRect(25,mldblock_yo,80,mildsize);//MILD FATIGUE DRAW
     //severe block
-    var sevblock_size = Math.max(dsplyhght-((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec+Math.floor(dotrack[sl_namelist.value].fppoint))),0)
+    var sevblock_size = Math.max(dsplyhght-((dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec+Math.floor(chara().fppoint))),0)
     ctx.font= `${round(Math.max(16*fontscale,8))}px Arial`;
   }
 
-  if(dotrack[sl_namelist.value].fprec<0){//deep
+  if(chara().fprec<0){//deep
     ctx.font= `${round(Math.max(15*fontscale,8))}px Arial`;
     ctx.fillStyle="Purple";
-    ctx.fillRect(25,0,80,(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec))
-    sevblock_o = (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)
-    sevblock_size += (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*dotrack[sl_namelist.value].fprec //reduce the size of the severe block
+    ctx.fillRect(25,0,80,(dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec))
+    sevblock_o = (dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)
+    sevblock_size += (dsplyhght/chara().fpmax/2)*chara().fprec //reduce the size of the severe block
   }
-  if(dotrack[sl_namelist.value].fprec<(dotrack[sl_namelist.value].fpmax-dotrack[sl_namelist.value].fppoint)){ //severe block actual drawing
+  if(chara().fprec<(chara().fpmax-chara().fppoint)){ //severe block actual drawing
     ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.fillStyle="#FF9999"
     ctx.fillRect(25,sevblock_o,80,sevblock_size)
   };
   //fp recovery block
-  var fprecsize = (dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec)) - (dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp))
+  var fprecsize = (dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec)) - (dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp))
   ctx.fillStyle = ctx.createPattern(p2,'repeat');
-  ctx.fillRect(25,(dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp)),80,fprecsize)
+  ctx.fillRect(25,(dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp)),80,fprecsize)
   ctx.strokeStyle = "#77DD66";
   ctx.lineWidth =3
   ctx.beginPath()
-  ctx.moveTo(25,(dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp)))
-  ctx.lineTo(105,(dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp)))
+  ctx.moveTo(25,(dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp)))
+  ctx.lineTo(105,(dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp)))
   ctx.closePath()
   ctx.stroke()
   //TEXT
-  if(dotrack[sl_namelist.value].fprec<dotrack[sl_namelist.value].fpmax){//mild
+  if(chara().fprec<chara().fpmax){//mild
     ctx.fillStyle="#000000";
     ctx.font= `${round(Math.min(16*fontscale,8))}px Arial`;
     ctx.fillText("Mild",110,mldtext_y-((mldtext_y - mldblock_yo)/2)+6)
     ctx.font= `bolder ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.strokeStyle="#FFFFFF";
-    ctx.strokeText((Math.floor(((20/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
+    ctx.strokeText((Math.floor(((20/chara().fpmax)*chara().fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
     ctx.strokeText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
     ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
-    ctx.fillText((Math.floor(((20/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
+    ctx.fillText((Math.floor(((20/chara().fpmax)*chara().fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
     ctx.fillText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
 
   }
-  if(dotrack[sl_namelist.value].fprec<(dotrack[sl_namelist.value].fpmax-dotrack[sl_namelist.value].fppoint)){//SEVERE
+  if(chara().fprec<(chara().fpmax-chara().fppoint)){//SEVERE
     ctx.fillStyle="#000000";
-    ctx.fillText(Math.floor(((80/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
+    ctx.fillText(Math.floor(((80/chara().fpmax)*chara().fittime)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
     ctx.fillText("hours/FP",32,sevblock_o+(sevblock_size/2)+8)
     ctx.font= `${round(Math.max(12*fontscale,8))}px Arial`;
     ctx.fillText("Severe",108,sevblock_o+(sevblock_size/2))
 
   };
-  if(dotrack[sl_namelist.value].fprec<0){ // deep
-    ctx.fillText("Deep",110,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2))
+  if(chara().fprec<0){ // deep
+    ctx.fillText("Deep",110,((dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)/2))
     ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.fillStyle="#EEEEEE";
-    ctx.fillText((Math.floor(((240/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2)-8)
-    ctx.fillText("hours/FP",32,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2)+8)
+    ctx.fillText((Math.floor(((240/chara().fpmax)*chara().fittime)*100)/100),60,((dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)/2)-8)
+    ctx.fillText("hours/FP",32,((dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)/2)+8)
   };
 
 
   //main FP bar
-  if(dotrack[sl_namelist.value].fprec>0){ctx.fillStyle="#99ff33";}else{ctx.fillStyle="#77CC22"}//colour of the main FP bar
-  ctx.fillRect(25, dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec),80,cvs.height)
-  cvssetup(dotrack[sl_namelist.value].fpmax);
+  if(chara().fprec>0){ctx.fillStyle="#99ff33";}else{ctx.fillStyle="#77CC22"}//colour of the main FP bar
+  ctx.fillRect(25, dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec),80,cvs.height)
+  cvssetup(chara().fpmax);
 
 }
 
@@ -206,19 +208,19 @@ in_enc.onchange=function(){
 var currenthtbonus = 0
 //fp and AP recovery quick buttons.
 btn_app1.onclick=function(){
-  dotrack[sl_namelist.value].ap+=1
+  chara().ap+=1
   update();
 }
 btn_apm1.onclick=function(){
-  dotrack[sl_namelist.value].ap-=1
+  chara().ap-=1
   update();
 }
 btn_fpp1.onclick=function(){
-  dotrack[sl_namelist.value].fp+=1
+  chara().fp+=1
   update();
 }
 btn_fpm1.onclick=function(){
-  dotrack[sl_namelist.value].fp-=1
+  chara().fp-=1
   update();
 }
 //saving and loading
@@ -237,7 +239,7 @@ function fsave(){
         var savBlob = new Blob([sav], {type:"text/plain"});
         var savAsURL = window.URL.createObjectURL(savBlob);
         var downloadLink = document.createElement("a");
-        downloadLink.download = "lastgasp";
+        downloadLink.download = "tcdg_save";
         downloadLink.innerHTML = "Download File";
         downloadLink.href = savAsURL;
         downloadLink.onclick = destroyClickedElement;
@@ -269,7 +271,7 @@ btn_fload.onclick = fload
 
 //buttons for AP recovery
 btn_not.onclick=function(){
-  currenthtbonus=4+dotrack[sl_namelist.value].fitbon
+  currenthtbonus=4+chara().fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
@@ -280,7 +282,7 @@ btn_not.onclick=function(){
   update();
 }
 btn_eva.onclick=function(){
-  currenthtbonus=dotrack[sl_namelist.value].fitbon
+  currenthtbonus=chara().fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
@@ -325,21 +327,21 @@ function rollmitigate(r){
   var shock = Math.min(loss,4)//if the shock value is greater than 4, lower it to 4
   if(parseInt(in_jcap.value) > 0){loss=Math.min(loss,in_jcap.value)}
     
-  if (r <= (dotrack[sl_namelist.value].ht-shock)){
+  if (r <= (chara().ht-shock)){
     success=true;
-    loss -= ((dotrack[sl_namelist.value].ht-shock) - r)
+    loss -= ((chara().ht-shock) - r)
   }
   loss= Math.max(loss,0)
 
   if (success) {
-    dotrack[sl_namelist.value].ap -= round(loss / in_lossdiv.valueAsNumber)
+    chara().ap -= round(loss / in_lossdiv.valueAsNumber)
     op = "<b style=\"color:green\">Success: "+r+" Lost "+loss+" AP</b>"
   }else{
-    dotrack[sl_namelist.value].ap -= loss 
+    chara().ap -= loss 
     op="<b style=\"color:red\">Failure: "+r+" Lost "+loss+" AP</b>"
   }
   update();
-  in_enc.value = dotrack[sl_namelist.value].enc;
+  in_enc.value = chara().enc;
   return op
 }
 
@@ -370,9 +372,9 @@ var HttpClient = function() {
 function rollHT(r){
   var _bon = currenthtbonus
   var op = "" //output
-  if (r <= (dotrack[sl_namelist.value].ht + _bon)) {
-    var aprecovered = 1 + Math.floor(((dotrack[sl_namelist.value].ht + _bon) -r)/4)
-    dotrack[sl_namelist.value].ap += aprecovered;
+  if (r <= (chara().ht + _bon)) {
+    var aprecovered = 1 + Math.floor(((chara().ht + _bon) -r)/4)
+    chara().ap += aprecovered;
     op = `<b style=\"color:green\">Success: ${r} Recovered ${aprecovered} AP</b>`
   }else{op=`<b style=\"color:red\">Failure: ${r}</b>`}
   return op
@@ -380,8 +382,8 @@ function rollHT(r){
 
 //buttons for AP use
 btn_wnd.onclick=function(){
-  dotrack[sl_namelist.value].fp -=1
-  dotrack[sl_namelist.value].ap += Math.ceil(dotrack[sl_namelist.value].htmax * 0.5)
+  chara().fp -=1
+  chara().ap += Math.ceil(chara().htmax * 0.5)
   update();
 }
 
@@ -394,18 +396,11 @@ sl_namelist.onchange =  function(){
 
 function updatenamelist(){
   //PERFORMANCE, WHAT PERFORMANCE? IMMEDIATE MODE FOREVER
-  var list = document.getElementById('sl_namelist')
-  while(list.lastChild){
-    list.removeChild(list.lastChild);
-  }
-  //
-  dotrack.names.forEach(function(item){
-    var option = document.createElement('option')
-    option.textContent=item
-    option.value = item
-    list.add(option);
-  }
-    )
+  repopulatelist('sl_namelist', dotrack.names)
+}
+
+chara = function(){
+  return dotrack[sl_namelist.value]
 }
 
 btn_init.onclick=function(){ //initialisation
@@ -453,15 +448,23 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].fpmax=parseInt(in_HT.value)+parseInt(in_FP.value);
     dotrack[ti_name.value].dxmax=parseInt(in_DX.value)
     dotrack[ti_name.value].dx=dotrack[ti_name.value].dxmax
-    dotrack[ti_name.value].movmax=((parseInt(dotrack[ti_name.value].dx)+parseInt(dotrack[ti_name.value].ht))/4)+parseInt(in_mov.value)
+    //dotrack[ti_name.value].movmax=((parseInt(dotrack[ti_name.value].dx)+parseInt(dotrack[ti_name.value].ht))/4)+parseInt(in_mov.value)
+    dotrack[ti_name.value].spdmax= in_spd.valueAsNumber
+    dotrack[ti_name.value].spd= in_spd.valueAsNumber
+    dotrack[ti_name.value].spdmod = dotrack[ti_name.value].spdmax - ((dotrack[ti_name.value].ht + dotrack[ti_name.value].dx)/4)
+    dotrack[ti_name.value].movmax=in_mov.valueAsNumber
     dotrack[ti_name.value].mov = dotrack[ti_name.value].movmax
+    dotrack[ti_name.value].movmod = dotrack[ti_name.value].movmax - Math.floor((dotrack[ti_name.value].ht + dotrack[ti_name.value].dx)/4)
     dotrack[ti_name.value].ap = dotrack[ti_name.value].apmax
     dotrack[ti_name.value].st = dotrack[ti_name.value].stmax
     dotrack[ti_name.value].fp = dotrack[ti_name.value].fpmax
     dotrack[ti_name.value].fprec = dotrack[ti_name.value].fpmax
     dotrack[ti_name.value].st = dotrack[ti_name.value].stmax
     dotrack[ti_name.value].fppoint = dotrack[ti_name.value].fpmax/2
-    dotrack[ti_name.value].dodgepen = 0
+    dotrack[ti_name.value].dodgepen = 0;
+    dotrack[ti_name.value].skills=[];
+    updateskilllist();
+    sl_namelist.selectedIndex = sl_namelist.length-1
     calc();
     encumber();
     display();
@@ -472,9 +475,9 @@ btn_init.onclick=function(){ //initialisation
     //canvas init
     cvsdisplay(dotrack[ti_name.value].fpmax);
     update();
-    document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+    document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
     rn_mov.disabled =false
-    sl_namelist.selectedIndex = sl_namelist.length-1
+
 }
 //name list box
 
@@ -483,46 +486,46 @@ btn_init.onclick=function(){ //initialisation
 function movdo(){
   if(cb_mcv.checked){
       document.getElementById('txt_rnmov').textContent = `Velocity: ${rn_mov.value}`
-      document.getElementById('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov/3)*10)}`
+      document.getElementById('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/chara().mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/chara().mov/3)*10)}`
       }else{
         document.getElementById('txt_varmov').textContent = `
 `
-        document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+        document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
        }
 }
 
 rn_mov.oninput=movdo
 
 btn_updt.onclick=function(){
-  dotrack[sl_namelist.value].fp += parseInt(in_fps.value);
-  dotrack[sl_namelist.value].ap += parseInt(in_aps.value);
+  chara().fp += parseInt(in_fps.value);
+  chara().ap += parseInt(in_aps.value);
   update();
 }
 
 btn_apf.onclick=function(){
-  dotrack[sl_namelist.value].ap=dotrack[sl_namelist.value].apmax
+  chara().ap=chara().apmax
   update()
 }
 btn_fpf.onclick=function(){
-  dotrack[sl_namelist.value].fp=dotrack[sl_namelist.value].fpmax
+  chara().fp=chara().fpmax
   update()
 }
 btn_save.onclick=function(){
-  localStorage.lastgasp = LZString.compress(JSON.stringify(dotrack))
+  localStorage.tcdg = LZString.compress(JSON.stringify(dotrack))
   btn_load.disabled =false
   btn_load.textContent = "Load"
 }
 btn_one.onclick=function(){
-  dotrack[sl_namelist.value].ap -= 1
+  chara().ap -= 1
   update();
 }
 btn_two.onclick=function(){
-  dotrack[sl_namelist.value].ap -= 2
+  chara().ap -= 2
   update();
 }
 
 btn_load.onclick=function(){
-  load(localStorage.lastgasp,1)
+  load(localStorage.tcdg,1)
 }
 
 function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
@@ -550,6 +553,7 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   for (var i = btns.length - 1; i >= 0; i--) {
     btns[i].disabled=false
   };
+  updateskilllist();
   supportcheck();
   updatenamelist();
   calc();
@@ -558,7 +562,7 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   cvsdisplay();
   rn_mov.disabled=false
   movdo();
-  in_enc.value = dotrack[sl_namelist.value].enc
+  in_enc.value = chara().enc
   btn_fload.textContent = "Load From File"
 }
 catch(err){
@@ -575,16 +579,16 @@ catch(err){
 }
 
 function update(){
-  dotrack[sl_namelist.value].fp = Math.min(dotrack[sl_namelist.value].fp,dotrack[sl_namelist.value].fpmax);
-  dotrack[sl_namelist.value].fp = Math.max(dotrack[sl_namelist.value].fp,-dotrack[sl_namelist.value].fpmax);
-  dotrack[sl_namelist.value].ap = Math.min(dotrack[sl_namelist.value].ap,dotrack[sl_namelist.value].apmax);
-  dotrack[sl_namelist.value].ap = Math.max(dotrack[sl_namelist.value].ap,0);
-  if(dotrack[sl_namelist.value].fp == dotrack[sl_namelist.value].fpmax){
-    dotrack[sl_namelist.value].fprec = dotrack[sl_namelist.value].fpmax;
+  chara().fp = Math.min(chara().fp,chara().fpmax);
+  chara().fp = Math.max(chara().fp,-chara().fpmax);
+  chara().ap = Math.min(chara().ap,chara().apmax);
+  chara().ap = Math.max(chara().ap,0);
+  if(chara().fp == chara().fpmax){
+    chara().fprec = chara().fpmax;
   }
-  dotrack[sl_namelist.value].enc = in_enc.valueAsNumber
+  chara().enc = in_enc.valueAsNumber
   document.getElementById('rn_mov').min = 1
-  document.getElementById('rn_mov').max = dotrack[sl_namelist.value].mov
+  document.getElementById('rn_mov').max = chara().mov
   encumber();
   calc();
   display();
@@ -592,6 +596,12 @@ function update(){
 }
 
 //functions
+
+function diceadds(dice,modi){ //Thanks to Aion#4968 on the GURPS discord for help.
+  var fdi = dice + (Math.floor(modi / 7) *2) + Math.floor((modi % 7) / 4) //final dice
+  var fmodi = Math.floor(modifier % 7 % 4) //final modifier
+  return [fdi,fmodi]
+}
 
 function round(_n){
   var r = Math.floor(_n);
@@ -611,97 +621,141 @@ function basiclift(_st){
 }
 
 function encumber(){
-  var _enc = Math.ceil(parseInt(in_enc.value)/basiclift(dotrack[sl_namelist.value].st))
+  var _enc = Math.ceil(parseInt(in_enc.value)/basiclift(chara().st))
   if (_enc >6){_enc = 10}else if(_enc > 3){_enc = 6;} //rounding encumberance
   switch(_enc){
     case 0:
-    dotrack[sl_namelist.value].mov = Math.floor(((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))
-      dotrack[sl_namelist.value].dodgepen =0
+    chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)
+      chara().dodgepen =0
     break;
     case 1:
-      dotrack[sl_namelist.value].mov = Math.floor(((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))
-      dotrack[sl_namelist.value].dodgepen =0
+      chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)
+      chara().dodgepen =0
     break;
     case 2:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.8)
-      dotrack[sl_namelist.value].dodgepen =-1
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.8)
+      chara().dodgepen =-1
      break;
      case 3:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.6)
-      console.log(dotrack[sl_namelist.value].mov)
-      dotrack[sl_namelist.value].dodgepen =-2
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.6)
+      console.log(chara().mov)
+      chara().dodgepen =-2
     break;
     case 6:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.4)
-      dotrack[sl_namelist.value].dodgepen =-3
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.4)
+      chara().dodgepen =-3
     break;
     case 10:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.2)
-      dotrack[sl_namelist.value].dodgepen =-4
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.2)
+      chara().dodgepen =-4
     break;
     default:
     console.log("an error in encumberance occured, value= "+_enc)
     
   }
-  dotrack[sl_namelist.value].mov = Math.max(dotrack[sl_namelist.value].mov,1)  
+  chara().mov = Math.max(chara().mov,1)  
 }
 
 //display
 function display(){
-  document.getElementById("txt_name").textContent = dotrack[sl_namelist.value].name
-  document.getElementById("txt_AP").textContent = dotrack[sl_namelist.value].ap +"/"+ dotrack[sl_namelist.value].apmax + " AP"
-  document.getElementById("txt_FP").textContent = dotrack[sl_namelist.value].fp +"/"+ dotrack[sl_namelist.value].fpmax + " FP"
-  document.getElementById("txt_st").textContent = round(dotrack[sl_namelist.value].st*10)/10 +"/"+ dotrack[sl_namelist.value].stmax + " ST"
-  document.getElementById("txt_dx").textContent = dotrack[sl_namelist.value].dx +"/"+ dotrack[sl_namelist.value].dxmax + " DX"
-  var pentext = -Math.floor((dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2*10) + " to most skills.";
+  document.getElementById("txt_name").textContent = chara().name
+  document.getElementById("txt_AP").textContent = chara().ap +"/"+ chara().apmax + " AP"
+  document.getElementById("txt_FP").textContent = chara().fp +"/"+ chara().fpmax + " FP"
+  document.getElementById("txt_st").textContent = round(chara().st*10)/10 +"/"+ chara().stmax + " ST"
+  document.getElementById("txt_dx").textContent = chara().dx +"/"+ chara().dxmax + " DX"
+  var pentext = -Math.floor((chara().fpmax -chara().fp)/chara().fpmax/2*10) + " to most skills.";
   if(cb_highres.checked){
-    pentext = `IQ skills: ${dotrack[sl_namelist.value].iq - dotrack[sl_namelist.value].iqmax} DX skills: ${dotrack[sl_namelist.value].dx - dotrack[sl_namelist.value].dxmax}`
+    pentext = `IQ skills: ${chara().iq - chara().iqmax} DX skills: ${chara().dx - chara().dxmax}`
   }
   document.getElementById("txt_pen").textContent = pentext
-  document.getElementById("txt_iq").textContent = dotrack[sl_namelist.value].iq +"/"+ dotrack[sl_namelist.value].iqmax + " IQ"
-  document.getElementById("txt_ht").textContent = dotrack[sl_namelist.value].ht +"/"+ dotrack[sl_namelist.value].htmax + " HT"
-  document.getElementById("txt_lif").innerHTML = basiclift(dotrack[sl_namelist.value].st) +"/"+ basiclift(dotrack[sl_namelist.value].st) + "lbs <b>BL</b>"
-  document.getElementById("txt_enc").textContent = "Encumberance Dodge penalty: "+ dotrack[sl_namelist.value].dodgepen
-  document.getElementById("txt_mov").textContent =`Move: ${dotrack[sl_namelist.value].mov} || Dodge: ${Math.floor(((dotrack[sl_namelist.value].ht + dotrack[sl_namelist.value].dx)/4)+3 + parseInt(in_dod.value))} || ${dotrack[sl_namelist.value].notes} `
+  document.getElementById("txt_iq").textContent = chara().iq +"/"+ chara().iqmax + " IQ"
+  document.getElementById("txt_ht").textContent = chara().ht +"/"+ chara().htmax + " HT"
+  document.getElementById("txt_lif").innerHTML = basiclift(chara().st) +"/"+ basiclift(chara().st) + "lbs <b>BL</b>"
+  document.getElementById("txt_enc").textContent = "Encumberance Dodge penalty: "+ chara().dodgepen
+  document.getElementById("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(((chara().ht + chara().dx)/4)+3 + parseInt(in_dod.value))} || ${chara().notes} `
   document.getElementById("txt_status").innerHTML = status
-  document.getElementById("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(dotrack[sl_namelist.value].st)]} sw: ${dmgtbl.swing[Math.floor(dotrack[sl_namelist.value].st)]}`
+  document.getElementById("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(chara().st)]} sw: ${dmgtbl.swing[Math.floor(chara().st)]}`
 }
 //calc
 
 function calc(){
-  dotrack[sl_namelist.value].fp = Math.max(dotrack[sl_namelist.value].fp, -dotrack[sl_namelist.value].fpmax); //floor of fp loss
-  dotrack[sl_namelist.value].st = dotrack[sl_namelist.value].stmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2)
+  chara().fp = Math.max(chara().fp, -chara().fpmax); //floor of fp loss
+  chara().st = chara().stmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2)
   //fp recovery for showing where someone's actually at in recovery.
-  dotrack[sl_namelist.value].fprec = Math.min(dotrack[sl_namelist.value].fprec,dotrack[sl_namelist.value].fp)
+  chara().fprec = Math.min(chara().fprec,chara().fp)
   //
-  var penalty = Math.floor((dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2*10);
+  var penalty = Math.floor((chara().fpmax -chara().fp)/chara().fpmax/2*10);
 
   if(cb_cap.checked){
     penalty = Math.min(penalty,5)
   }
   
   if(cb_highres.checked && !cb_cap.checked){
-    dotrack[sl_namelist.value].iq = Math.ceil(dotrack[sl_namelist.value].iqmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2));
-    dotrack[sl_namelist.value].dx = Math.ceil(dotrack[sl_namelist.value].dxmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2));
-    dotrack[sl_namelist.value].ht = Math.ceil(dotrack[sl_namelist.value].htmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2));
+    chara().iq = Math.ceil(chara().iqmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
+    chara().dx = Math.ceil(chara().dxmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
+    chara().ht = Math.ceil(chara().htmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
   }else if(cb_highres.checked && cb_cap.checked){
-    dotrack[sl_namelist.value].iq = Math.ceil(dotrack[sl_namelist.value].iqmax * Math.max((1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2),0.5));
-    dotrack[sl_namelist.value].ht = Math.ceil(dotrack[sl_namelist.value].htmax * Math.max((1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2),0.5));
-    dotrack[sl_namelist.value].dx = Math.ceil(dotrack[sl_namelist.value].dxmax * Math.max((1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2),0.5));
+    chara().iq = Math.ceil(chara().iqmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
+    chara().ht = Math.ceil(chara().htmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
+    chara().dx = Math.ceil(chara().dxmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
   }else{
-    dotrack[sl_namelist.value].iq = dotrack[sl_namelist.value].iqmax -  penalty;
-    dotrack[sl_namelist.value].dx = dotrack[sl_namelist.value].dxmax - penalty;
-    dotrack[sl_namelist.value].ht = dotrack[sl_namelist.value].htmax - penalty;
+    chara().iq = chara().iqmax -  penalty;
+    chara().dx = chara().dxmax - penalty;
+    chara().ht = chara().htmax - penalty;
   };
-  if((dotrack[sl_namelist.value].fp/(dotrack[sl_namelist.value].fppoint)>=1)){
+  if((chara().fp/(chara().fppoint)>=1)){
     status = "<b>Mild Fatigue</b></br>"
-  }else if (dotrack[sl_namelist.value].fp/(dotrack[sl_namelist.value].fppoint)<1 && dotrack[sl_namelist.value].fp/(dotrack[sl_namelist.value].fppoint)>=0){
+  }else if (chara().fp/(chara().fppoint)<1 && chara().fp/(chara().fppoint)>=0){
     status = "<b style=\"color:red;\">Severe Fatigue</b></br>"
-  }else if((dotrack[sl_namelist.value].fp/dotrack[sl_namelist.value].fppoint)< 0 ){
+  }else if((chara().fp/chara().fppoint)< 0 ){
     status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</b>" + "</br>Lose HP for each FP spent."
   }
-  if(dotrack[sl_namelist.value].fp <= -dotrack[sl_namelist.value].fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor(((240/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100
+  if(chara().fp <= -chara().fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor(((240/chara().fpmax)*chara().fittime)*100)/100
   }
+}
+
+////////////////SKILL ZONE GIT GUD/////////////
+function initskill(){
+  for (var i = sl_namelist.length - 1; i >= 0; i--) {
+    if(typeof dotrack[sl_namelist[i].value].skills === 'undefined'){
+      dotrack[sl_namelist[i].value].skills = []
+    }
+  };
+
+}
+
+function updateskilllist(){
+  //At least this only gets called once or twice.
+  repopulatelist('sl_nsba',["ST","DX","IQ","HT","WILL","PER"])
+}
+
+
+function newskill(){
+  chara().skills.push({
+    "name":ti_s_nsname.value,
+    "base":sl_nsba.value,
+    "RSL":ti_nsnum.valueAsNumber
+  }
+    )
+}
+
+
+btn_nskill.onclick = newskill
+
+//////////////////ZONE END SCRUB//////////////
+
+function repopulatelist(list,arr){
+  var list = document.getElementById(list)
+  while(list.lastChild){
+    list.removeChild(list.lastChild);
+  }
+  arr.forEach(function(item){
+    var option = document.createElement('option')
+    option.textContent=item
+    option.value = item
+    list.add(option);
+  }
+    )
 }
 
 ///fun stuff
