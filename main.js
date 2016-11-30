@@ -474,6 +474,8 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].fppoint = dotrack[ti_name.value].fpmax/2
     dotrack[ti_name.value].dodgepen = 0;
     dotrack[ti_name.value].skills=[];
+    dotrack[ti_name.value].weapons=[];
+    setupAnS();
     updateskilllist();
     sl_namelist.selectedIndex = sl_namelist.length-1
     calc();
@@ -564,6 +566,7 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   for (var i = btns.length - 1; i >= 0; i--) {
     btns[i].disabled=false
   };
+  setupAnS(); //populate the weapon add list damage type
   updateskilllist();
   supportcheck();
   updatenamelist();
@@ -576,6 +579,8 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   in_enc.value = chara().enc
   btn_fload.textContent = "Load From File";
   initskill();
+  weapondisplay();
+  skilldisplay();
 }
 catch(err){
   switch(type){
@@ -611,7 +616,7 @@ function update(){
 
 function diceadds(dice,modi){ //Thanks to Aion#4968 on the GURPS discord for help.
   var fdi = dice + (Math.floor(modi / 7) *2) + Math.floor((modi % 7) / 4) //final dice
-  var fmodi = Math.floor(modifier % 7 % 4) //final modifier
+  var fmodi = Math.floor(modi % 7 % 4) //final modifier
   return [fdi,fmodi]
 }
 
@@ -745,6 +750,15 @@ function calc(){
 }
 
 ////////////////SKILL ZONE GIT GUD/////////////
+
+function setupAnS(){
+    repopulatelist('sl_nwd',["thr","sw","dmg"]) //populate the weapon add list damage type
+    repopulatelist('sl_nwdt',["pi-","burn","cor","cr","fat","pi","tox","cut","pi+","imp","pi++"])
+    sl_nwdt.selectedIndex = 3
+}
+
+
+////////
 function initskill(){
   for (var i = sl_namelist.length - 1; i >= 0; i--) {
     if(typeof dotrack[sl_namelist[i].value].skills === 'undefined'){
@@ -756,6 +770,7 @@ function initskill(){
 function updateskilllist(){
   //At least this only gets called once or twice.
   repopulatelist('sl_nsba',["ST","DX","IQ","HT","WILL","PER"])
+  sl_nsba.selectedIndex=1
 }
 
 function newskill(){
@@ -771,20 +786,19 @@ function newskill(){
 btn_nskill.onclick = newskill
 
 
-rollqueue = []
 function rollskill(e){
   var success = false
   var thisskill = chara().skills[parseInt(e.target.id.split("_")[1])]
-  var sl = thisskill.sl
+  var sl = thisskill.sl + ti_skillbon.valueAsNumber
   r = rolldice()
 
   if (r <= sl){
     success=true;
     e.target.textContent = `Roll ${thisskill.name} ${sl}  RSL: ${thisskill.base}+${thisskill.RSL} Success: ${r} MoS: ${sl-r}`
-    e.target.style.border = 'border:2px solid #33FF33;'
+    e.target.style.borderColor = 'green'
   }else{
     e.target.textContent = `Roll ${thisskill.name} ${sl}  RSL: ${thisskill.base}+${thisskill.RSL} Failure: ${r} MoF: ${r-sl}`
-    e.target.style.border = 'border:2px solid #FF3333;'
+    e.target.style.borderColor = 'red'
   }
 
   
@@ -795,6 +809,9 @@ function skilldisplay(){
   while(h.lastChild){
     h.removeChild(h.lastChild);
   }
+  while(sl_removeskill.lastChild){
+    sl_removeskill.removeChild(sl_removeskill.lastChild);
+  }
   for (var i = 0; i < chara().skills.length; i++) {
     var nb = document.createElement("button")
     //nb.className
@@ -803,14 +820,142 @@ function skilldisplay(){
     nb.textContent=`Roll ${chara().skills[i].name} ${chara().skills[i].sl}  RSL: ${chara().skills[i].base}+${chara().skills[i].RSL}`
     nb.onclick = rollskill
     h.appendChild(nb)
+    ///addd to removal list
+    var option = document.createElement('option')
+    option.textContent=chara().skills[i].name
+    option.value = i
+    sl_removeskill.add(option);
   };
 }
-//////////////////ZONE END SCRUB//////////////
 
+function removeskill(){
+  if(sl_removeskill.value){
+    chara().skills.splice(parseInt(sl_removeskill.value),1)
+  }
+  skilldisplay()
+}
+
+
+btn_removeskill.onclick = removeskill
+
+/////////////ZONE END - WEAPON ZONE BEGIN//////////
+
+function newweapon(){
+  chara().weapons.push({
+    "name":ti_nwname.value,
+    "base":sl_nwd.value,
+    "dice":ti_nwdice.valueAsNumber,
+    "mod":ti_nwmod.valueAsNumber,
+    "type":sl_nwdt.value
+  }
+    )
+  weapondisplay();
+}
+btn_nweapon.onclick =newweapon
+
+function weapondisplay(){
+  var h  = getId('weaponholder')
+  while(h.lastChild){
+    h.removeChild(h.lastChild);
+  }
+  while(sl_removeweapon.lastChild){sl_removeweapon.removeChild(sl_removeweapon.lastChild);}
+  for (var i = 0; i < chara().weapons.length; i++) {
+    var nb = document.createElement("button")
+    //nb.className
+    nb.className = "skillbar"
+    nb.id=`weapon_${[i]}`
+    var dmg = getweapondamage(i)
+    var addstxt = dmg[1]
+    if(dmg[1]>=0){
+      addstxt = `+${dmg[1]}`
+    }
+    nb.textContent=`Roll ${chara().weapons[i].name}\nDamage: ${dmg[0]}d${addstxt} ${chara().weapons[i].type} Roll: --`
+    nb.onclick = rollweapon
+    h.appendChild(nb)
+    ///addd to removal list
+    var option = document.createElement('option')
+    option.textContent=chara().weapons[i].name
+    option.value = i
+    sl_removeweapon.add(option);
+  };
+}
+
+function removeweapon(){
+  if(sl_removeweapon.value){
+    chara().weapons.splice(parseInt(sl_removeweapon.value),1)
+  }
+  weapondisplay()
+}
+btn_removeweapon.onclick = removeweapon
+
+function rollweapon(e){
+  var w = parseInt(e.target.id.split("_")[1])
+  var weapondmg = getweapondamage(w);
+
+  var array = new Uint8ClampedArray(weapondmg[0]);
+  window.crypto.getRandomValues(array);
+  var r = 0
+  for (var i = 0; i < array.length; i++) {
+    r += Math.ceil(array[i]/255 *6)
+  }
+  r+=weapondmg[1]
+  var addstxt = ""
+  if(weapondmg[1]>=0){
+    addstxt = `+${weapondmg[1]}`
+  }
+  e.target.textContent=`Roll ${chara().weapons[w].name}\nDamage: ${weapondmg[0]}d${addstxt} ${chara().weapons[w].type} Roll: ${r}`
+}
+
+cb_dmgbon.onchange = weapondisplay
+ti_dmgbon.onchange = weapondisplay
+
+function getweapondamage(x){
+  var thisweapon = chara().weapons[x]
+  var dice = 0
+  var adds  = 0
+  var ds = ""
+  switch(thisweapon.base){ // bases  ["thr","sw","other"]
+    case "thr":
+    ds = dmgtbl.thrust[Math.floor(chara().st)].split("d")
+    dice = parseInt(ds[0])
+    adds = parseInt(ds[1])
+    break;
+    case "sw":
+    ds = dmgtbl.swing[Math.floor(chara().st)].split("d")
+    dice = parseInt(ds[0])
+    adds = parseInt(ds[1])
+    break;
+
+    default:
+    dice = 0
+    adds  = 0
+    break;
+  }
+  dice += thisweapon.dice
+  adds += thisweapon.mod
+  if(cb_dmgbon.checked){
+    adds += (dice * ti_dmgbon.valueAsNumber)
+  }else{
+    adds += ti_dmgbon.valueAsNumber
+  }
+
+  if(cb_diceadds.checked){
+    var arr = diceadds(dice,adds)
+    dice = arr[0]
+    adds = arr[1]
+  }
+  return [dice,adds]
+}
+cb_diceadds.onclick=function(){
+  weapondisplay()
+}
+
+//////////////////Main Code Ends Here//////////////
 function repopulatelist(list,arr){
   var list = getId(list)
   while(list.lastChild){
-    list.removeChild(list.lastChild);
+    var x = list.removeChild(list.lastChild);
+    x = null
   }
   arr.forEach(function(item){
     var option = document.createElement('option')

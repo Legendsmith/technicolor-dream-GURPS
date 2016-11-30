@@ -4,16 +4,7 @@
   <meta charset="UTF-8">
   <title>Technicolor Dream GURPS Sheet</title>
   <link rel="stylesheet" type="text/css" href="appstyle.css">
-  <script>
-  //analytics
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-87618703-1', 'auto');
-  ga('send', 'pageview');
-</script>
 <script type="text/javascript" src="damagetables.json"></script>
 <script type="text/javascript" src="patterns.js"></script>
 <script type="text/javascript" src="lz-string.min.js"></script>
@@ -26,7 +17,7 @@
   <li><select id="sl_namelist" style="width:120px">Character</select></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'lastgasp')">Last Gasp</a></li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'wounds')">Wounds & HP</a></li>
-  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'attacksskills')">Attacks & Skills</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'attacksskills')">Skills & Weapons</a></li>
   </div>
 </ul>
 <div id="page-wrap"><canvas id="display" width="150px" ></canvas></div>
@@ -107,10 +98,23 @@
  <button class="fancybtn" id="btn_eva">Roll For Recovery (Eval/Wait)</button></br><span id ="txt_out"></span></div></div></div>
 
 <div id="attacksskills" class="tabcontent">
-  <h2>Skills</h2>
-  <p> <input type="text" class=insmt id="ti_nsname" maxlength="20" value="Skill Name"></input> RSL:<select style="width:50px" id="sl_nsba">Base Attribute</select><input type="number" class=insm id="ti_nsnum" width="30" value=0> <button class="fancybtn" id="btn_nskill">New Skill</button></p>
-  </hr>
-  <div id="skillholder"></div>
+  <h2>Skills & Weapons/Attacks</h2>
+  <p> <input type="text" class=insmt id="ti_nsname" maxlength="20" value="Skill Name"></input> RSL:<select style="width:50px" id="sl_nsba">Base Attribute</select>+<input type="number" class=insm id="ti_nsnum" width="30" value=0> <button class="fancybtn" id="btn_nskill">New Skill</button></p>
+  <p> <input type="text" class=insmt id="ti_nwname" maxlength="20" value="Weapon Name">
+  </input> Damage:<select style="width:50px" id="sl_nwd"></select>
+   <input type="number" class=insm id="ti_nwdice" width="20" value=0>d6+<input type="number" class=insm id="ti_nwmod" width="20" value=0> <select style="width:50px" id="sl_nwdt"></select> <button class="fancybtn" id="btn_nweapon">New Weapon</button></p>
+   <input type="checkbox" id="cb_diceadds">Use Optional Rule: Modifying Dice + Adds (B269)</input>
+  <hr>
+  <div class="lefty"><h3>Skills</h3> Situational Skill Bonus: <input type="number" class=insm id="ti_skillbon" width="30" value=0></br>
+    <button class="fancybtn" id="btn_removeskill">Remove</button> <select style="width:150px" id="sl_removeskill"></select>
+  </div>
+  <div class="righty">
+    <h3>Weapons</h3>
+    Damage Bonus: <input type="number" class=insm id="ti_dmgbon" width="30" value=0> <input type="checkbox" id="cb_dmgbon">per Die</input></br>
+    <button class="fancybtn" id="btn_removeweapon">Remove</button> <select style="width:150px" id="sl_removeweapon"></select></div>
+  <div style="clear: both"></div>
+  <div id="skillholder" class="lefty"></div>
+  <div id="weaponholder" class="righty"></div>
 </div>
 <div id='wounds' class="tabcontent">Feature not Implimented, please wait!</div>
 

@@ -183,10 +183,10 @@ h5 {
   color:#000000;
   font-family:Arial;
   font-size:17px;
-  padding:16px 76px;
+  padding:5px 2px;
   text-decoration:none;
   text-shadow:0px 1px 0px #2f6627;
-  width: 600px
+  width: 100%
 }
 .skillbar:hover {
   background-color:#e3e358;
@@ -195,7 +195,14 @@ h5 {
   position:relative;
   top:1px;
 }
-
+.lefty{
+  width: 295px;
+  float:left;
+}
+.righty{
+  width: 295px;
+  float:right;
+}
 
 .page-wrap { 
   width: 600px;
