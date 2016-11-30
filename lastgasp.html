@@ -21,8 +21,8 @@
 <body>
 <div id="main">
 <div id="controls"><h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
-<p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed for "The Last Gasp" rules found in <a href="http://www.warehouse23.com/products/pyramid-number-3-slash-44-alternate-gurps-ii"> Pyramid 3/44</a>. These rules add excellent depth to combat, but the extra tracking required can be a bit much for some. This small app is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p>
-<p>Saving and loading are not currently implimented. You only have to remember your FP and AP anyway. Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes.The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge in order to prevent ambiguity.</p> <p>The FP bar on the side tracks your current FP. As expected, it decreases when you spend it and show you the stages of fatigue. But when you increase it will show a hatched line pattern, this allows you to see what stage of fatigue you are working through. Once your fatigue returns to maximum, the solid bar will fill again. 
+<p> <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> "The Last Gasp" Assistant is designed for "The Last Gasp" rules found in <a href="http://www.warehouse23.com/products/pyramid-number-3-slash-44-alternate-gurps-ii"> Pyramid 3/44</a>. These rules add excellent depth to combat, but the extra tracking required can be a bit much for some. This small app is designed to make tracking the effects of FP loss and Action points a quick and easy task.</p><p>Android and Google Chrome users can add this app to be used in offline modes, simply use "Add to Home Screen" or "Add to Desktop", accessible from the "3 dots" menu in chrome.</p>
+<p>Additional FP and AP, and Move are modifiers, do not enter your base AP, FP, and Move! Only modify those if you have differing attributes from the norm derived from your primary attributes.The dodge penalty from encumberance is <b>NOT</b> incorporated into the displayed dodge in order to prevent ambiguity.</p> <p>The FP bar on the side tracks your current FP. As expected, it decreases when you spend it and show you the stages of fatigue. But when you increase it will show a hatched line pattern, this allows you to see what stage of fatigue you are working through. Once your fatigue returns to maximum, the solid bar will fill again. Remember, dotted underlines mean that there is a tooltip for that element.
 <h4>Enter your character's stats</h4>
 <p class="subnote">Basic speed is not shown here, but unless you have a move modifier your basic speed will be the same as your move, except perhaps for a fraction. If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
 Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise</button></br>
@@ -39,7 +39,10 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
 <div style="clear:left;"><p style="font-size:10px">If the <i>base</i> level of a stat changes due to magic or some other force, you will need to reinitialise. The exception to this is Weight Carried, that can (and should) be modified on the fly as characters move loads.</p>
-<div style="float:left;width:60%">Character List: <select id="sl_namelist" style="width:120px"></select> <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button></div><div style="float:left;width:40%"><hr SIZE="6"></div></div><div style="clear:left;"></div>
+<div style="float:left">Character List: <select id="sl_namelist" style="width:120px"></select> <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_load">Load</button>
+  <button class="fancybtn" id="btn_fsave">Save To File</button>
+  <button class="fancybtn" id="btn_fload">Load From File</button>
+</div></div><div style="clear:left;"><hr></div>
 <span class="subnote"> <input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input> <input type="checkbox" id="cb_highres"></input><div class="tooltip">High Resoluton stat loss.<span class="tooltiptext">Normally stat loss increases by -1 per 20% FP lost, for -10 at -1×FP. Enabling this option turns it to 10% per 20% FP lost, so that high stat characters will still reach 0 DX, IQ, etc at -1×FP</span></div> <input type="checkbox" id="cb_cap"><div class="tooltip">Cap penalties at -5 or -50%.<span class="tooltiptext">With this option stat loss will not exceed -5, or -50% of the base stat when using High Resolution stat loss.</span></div></input>  </span>
 </br>
 <div style="float:left;width:295px">
@@ -72,6 +75,7 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 
 <div style="float:right;width:295px;background-color:#e6e6ee;border-radius:10px;padding:5px;margin-top:10px;">
   <h3>AP Quick Reference</h3>
+  <p class="smallnote" >Mouse over the headings below to see a list of actions for a cost.</p>
   <h4 class="tooltip" style="font-size:14">One AP Actions
   <ul class="tooltiptext">
     <li>Active Defense</li>
@@ -90,9 +94,9 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
   
   <hr>
   <b class="tooltip">Movement Calculator<span class="tooltiptext">If you haven't taken your free step yet, don't include that on the distance slider.</span></b></br>
-<!-- <input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br> -->
+<input type="checkbox" id="cb_mcv"><span class="smallnote">Variant Move: Acceleration</span></input></br>
 <input type="range" id="rn_mov"><span id="txt_rnmov" step="1"></span></br>
-<span class="subnote">This feature is not yet complete!</span>
+<span id="txt_varmov"></br></span>
   <hr>
   Taking injury also reduces AP, but this can be mitigated with a HT Roll.</br>
   <input class=insm type="number" id="in_inj" value =0 min=0> Injury<br>
@@ -116,6 +120,7 @@ Name: <input type="text" id="ti_name" maxlength="26" value="default"></input> <b
 <div style="clear:left;clear:right;float:left;font-size:10px">Last Gasp Assistant made by <a href="mailto:legendsmith.au@gmail.com">Legendsmith</a> as part of the Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> project. The material presented here is my original creation, intended for use with the <a href="http://www.sjgames.com/gurps/"><b><i><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span></i></b></a> system from <a href="http://www.sjgames.com/">Steve Jackson Games</a>. This material is not official and is not endorsed by Steve Jackson Games.</p><p class="subnote" ><a href="https://github.com/Legendsmith/technicolor-dream-GURPS">Repository on Github</a> <input type="checkbox" id="cb_tcd">Disable Technicolour GURPS </div></div>
 </div>
 <div id="page-wrap"><canvas id="display" width="150px" ></canvas><div>
+<input type="file" id="in_fload" style="display:none">
 </body>
 <script type="text/javascript" src="damagetables.json"></script>
 <script type="text/javascript" src="patterns.js"></script>
@@ -127,16 +132,44 @@ for (var i = btns.length - 1; i >= 0; i--) {
   btns[i].disabled=true
 };
 
+chara = function(){
+  return dotrack[sl_namelist.value]
+}
+
+
 btn_init.disabled=false
 if(localStorage.lastgasp){
   btn_load.disabled=false
 }
+init = false
+supportcheck();
 rn_mov.disabled =true
 ///patterns
 var dotrack = {}
 var status = ""
 var cvs = document.getElementById("display")
 var ctx = cvs.getContext("2d");
+//dice
+var rolldice = function(){ console.log("Something went very wrong with dice function"); return 0}
+//use crypto random if browser supports it, otherwise fall back to awful js random
+if(typeof window.crypto.getRandomValues !== 'undefined'){
+  console.log("cryptorandom active");
+  rolldice = function(){
+    var array = new Uint8ClampedArray(3);
+    window.crypto.getRandomValues(array);
+    r = 0
+    for (var i = 0; i < array.length; i++) {
+      r += Math.ceil(array[i]/255 *6)
+    }
+    return r
+  }
+}else{
+  console.log("awful js random active")
+  rolldice = function(){
+    return Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)}
+}
+
+
 //canvas
 function cvssetup(_fp){
   var fontscale = document.getElementById("display").height/875
@@ -172,78 +205,78 @@ function cvsdisplay(){
   //
   var sevblock_o = 0//SEVERE BLOCK origin
   var sevblock_size = 0
-  if(dotrack[sl_namelist.value].fprec<dotrack[sl_namelist.value].fpmax){
-    var mldtext_y = dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec) // it's actually the line of the fp point
-    var mldblock_yo = Math.max(dsplyhght-((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec+Math.floor(dotrack[sl_namelist.value].fppoint))),0)
-    var mildsize = Math.min(((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax-dotrack[sl_namelist.value].fprec)),
-      (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*dotrack[sl_namelist.value].fppoint);
+  if(chara().fprec<chara().fpmax){
+    var mldtext_y = dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec) // it's actually the line of the fp point
+    var mldblock_yo = Math.max(dsplyhght-((dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec+Math.floor(chara().fppoint))),0)
+    var mildsize = Math.min(((dsplyhght/chara().fpmax/2)*(chara().fpmax-chara().fprec)),
+      (dsplyhght/chara().fpmax/2)*chara().fppoint);
     //ctx.fillStyle="#"
     ctx.fillStyle=ctx.createPattern(p,'repeat');
 
     ctx.fillRect(25,mldblock_yo,80,mildsize);//MILD FATIGUE DRAW
     //severe block
-    var sevblock_size = Math.max(dsplyhght-((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec+Math.floor(dotrack[sl_namelist.value].fppoint))),0)
+    var sevblock_size = Math.max(dsplyhght-((dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec+Math.floor(chara().fppoint))),0)
     ctx.font= `${round(Math.max(16*fontscale,8))}px Arial`;
   }
 
-  if(dotrack[sl_namelist.value].fprec<0){//deep
+  if(chara().fprec<0){//deep
     ctx.font= `${round(Math.max(15*fontscale,8))}px Arial`;
     ctx.fillStyle="Purple";
-    ctx.fillRect(25,0,80,(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec))
-    sevblock_o = (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)
-    sevblock_size += (dsplyhght/dotrack[sl_namelist.value].fpmax/2)*dotrack[sl_namelist.value].fprec //reduce the size of the severe block
+    ctx.fillRect(25,0,80,(dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec))
+    sevblock_o = (dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)
+    sevblock_size += (dsplyhght/chara().fpmax/2)*chara().fprec //reduce the size of the severe block
   }
-  if(dotrack[sl_namelist.value].fprec<(dotrack[sl_namelist.value].fpmax-dotrack[sl_namelist.value].fppoint)){ //severe block actual drawing
+  if(chara().fprec<(chara().fpmax-chara().fppoint)){ //severe block actual drawing
     ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.fillStyle="#FF9999"
     ctx.fillRect(25,sevblock_o,80,sevblock_size)
   };
   //fp recovery block
-  var fprecsize = (dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec)) - (dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp))
+  var fprecsize = (dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec)) - (dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp))
   ctx.fillStyle = ctx.createPattern(p2,'repeat');
-  ctx.fillRect(25,(dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp)),80,fprecsize)
+  ctx.fillRect(25,(dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp)),80,fprecsize)
   ctx.strokeStyle = "#77DD66";
   ctx.lineWidth =3
   ctx.beginPath()
-  ctx.moveTo(25,(dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp)))
-  ctx.lineTo(105,(dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fp)))
+  ctx.moveTo(25,(dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp)))
+  ctx.lineTo(105,(dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fp)))
   ctx.closePath()
   ctx.stroke()
   //TEXT
-  if(dotrack[sl_namelist.value].fprec<dotrack[sl_namelist.value].fpmax){//mild
+  if(chara().fprec<chara().fpmax){//mild
     ctx.fillStyle="#000000";
     ctx.font= `${round(Math.min(16*fontscale,8))}px Arial`;
     ctx.fillText("Mild",110,mldtext_y-((mldtext_y - mldblock_yo)/2)+6)
     ctx.font= `bolder ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.strokeStyle="#FFFFFF";
-    ctx.strokeText((Math.floor(((20/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
+    ctx.strokeText((Math.floor(((20/chara().fpmax)*chara().fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)//MILD FATIGUE DRAW TEXT
     ctx.strokeText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
     ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
-    ctx.fillText((Math.floor(((20/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
+    ctx.fillText((Math.floor(((20/chara().fpmax)*chara().fittime)*100)/100),60,mldtext_y-((mldtext_y - mldblock_yo)/2)-8)
     ctx.fillText("hours/FP",32,mldtext_y-((mldtext_y - mldblock_yo)/2)+8)
 
   }
-  if(dotrack[sl_namelist.value].fprec<(dotrack[sl_namelist.value].fpmax-dotrack[sl_namelist.value].fppoint)){//SEVERE
+  if(chara().fprec<(chara().fpmax-chara().fppoint)){//SEVERE
     ctx.fillStyle="#000000";
-    ctx.fillText(Math.floor(((80/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
+    ctx.fillText(Math.floor(((80/chara().fpmax)*chara().fittime)*100)/100,60,sevblock_o+(sevblock_size/2)-8)
     ctx.fillText("hours/FP",32,sevblock_o+(sevblock_size/2)+8)
     ctx.font= `${round(Math.max(12*fontscale,8))}px Arial`;
     ctx.fillText("Severe",108,sevblock_o+(sevblock_size/2))
 
   };
-  if(dotrack[sl_namelist.value].fprec<0){ // deep
-    ctx.fillText("Deep",110,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2))
+  if(chara().fprec<0){ // deep
+    ctx.fillText("Deep",110,((dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)/2))
     ctx.font= `bold ${round(Math.max(16*fontscale,8))}px Arial`;
     ctx.fillStyle="#EEEEEE";
-    ctx.fillText((Math.floor(((240/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100),60,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2)-8)
-    ctx.fillText("hours/FP",32,((dsplyhght/dotrack[sl_namelist.value].fpmax/2)*Math.abs(dotrack[sl_namelist.value].fprec)/2)+8)
+    ctx.fillText((Math.floor(((240/chara().fpmax)*chara().fittime)*100)/100),60,((dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)/2)-8)
+    ctx.fillText("hours/FP",32,((dsplyhght/chara().fpmax/2)*Math.abs(chara().fprec)/2)+8)
   };
 
 
   //main FP bar
-  if(dotrack[sl_namelist.value].fprec>0){ctx.fillStyle="#99ff33";}else{ctx.fillStyle="#77CC22"}//colour of the main FP bar
-  ctx.fillRect(25, dsplyhght-(dsplyhght/dotrack[sl_namelist.value].fpmax/2)*(dotrack[sl_namelist.value].fpmax+dotrack[sl_namelist.value].fprec),80,cvs.height)
-  cvssetup(dotrack[sl_namelist.value].fpmax);
+  if(chara().fprec>0){ctx.fillStyle="#99ff33";}else{ctx.fillStyle="#77CC22"}//colour of the main FP bar
+  ctx.fillRect(25, dsplyhght-(dsplyhght/chara().fpmax/2)*(chara().fpmax+chara().fprec),80,cvs.height)
+  cvssetup(chara().fpmax);
 
 }
 
@@ -283,44 +316,88 @@ in_enc.onchange=function(){
 var currenthtbonus = 0
 //fp and AP recovery quick buttons.
 btn_app1.onclick=function(){
-  dotrack[sl_namelist.value].ap+=1
+  chara().ap+=1
   update();
 }
 btn_apm1.onclick=function(){
-  dotrack[sl_namelist.value].ap-=1
+  chara().ap-=1
   update();
 }
 btn_fpp1.onclick=function(){
-  dotrack[sl_namelist.value].fp+=1
+  chara().fp+=1
   update();
 }
 btn_fpm1.onclick=function(){
-  dotrack[sl_namelist.value].fp-=1
+  chara().fp-=1
   update();
 }
 //saving and loading
+function supportcheck(){
+  if (window.File && window.FileReader && window.FileList && window.Blob && init) {
+    btn_fsave.disabled =false
+    btn_fload.disabled =false
 
+  }else if(window.File && window.FileReader && window.FileList && window.Blob){btn_fload.disabled =false} else {
+    alert('The File APIs are not fully supported in this browser.');
+    btn_fsave.disabled =true
+    btn_fload.disabled =true
+  }
+}
 
+function fsave(){
+  var sav = LZString.compressToEncodedURIComponent(JSON.stringify(dotrack));
+  var savBlob = new Blob([sav], {type:"text/plain"});
+  var savAsURL = window.URL.createObjectURL(savBlob);
+  var downloadLink = document.createElement("a");
+  downloadLink.download = "lastgasp";
+  downloadLink.innerHTML = "Download File";
+  downloadLink.href = savAsURL;
+  downloadLink.onclick = destroyClickedElement;
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+ 
+  downloadLink.click();
+}
+function destroyClickedElement(event)
+{
+    document.body.removeChild(event.target);
+}
+btn_fsave.onclick = fsave
+function fload(){
+  document.getElementById('in_fload').click()
+  var fileReader = new FileReader()
+  fileReader.onload = function(floadEvent){
+    var inp = floadEvent.target.result;
+    load(inp,2)
+  }
+  document.getElementById('in_fload').onchange = function(){
+    if(typeof document.getElementById('in_fload').files[0] !== 'undefined'){
+      var ftarget = document.getElementById('in_fload').files[0];
+      fileReader.readAsText(ftarget,"UTF-8")
+    };
+  }
+}
+btn_fload.onclick = fload
 
 //buttons for AP recovery
 btn_not.onclick=function(){
-  currenthtbonus=4+dotrack[sl_namelist.value].fitbon
+  currenthtbonus=4+chara().fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").innerHTML = rollHT();
   }
   //update ui and everything
   update();
 }
 btn_eva.onclick=function(){
-  currenthtbonus=dotrack[sl_namelist.value].fitbon
+  currenthtbonus=chara().fitbon
   if(cb_rnd.checked){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     document.getElementById("txt_out").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out").innerHTML = rollHT(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out").innerHTML = rollHT(rolldice());
   }
     //update ui and everything
   update();
@@ -331,7 +408,7 @@ btn_injury.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackmitigate)
     document.getElementById("txt_out2").textContent = "Waiting for Random.org"
   }else{
-    document.getElementById("txt_out2").innerHTML = rollmitigate(Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1));
+    document.getElementById("txt_out2").innerHTML = rollmitigate(rolldice());
   }
   update();
 }
@@ -360,17 +437,17 @@ function rollmitigate(r){
   var shock = Math.min(loss,4)//if the shock value is greater than 4, lower it to 4
   if(parseInt(in_jcap.value) > 0){loss=Math.min(loss,in_jcap.value)}
     
-  if (r <= (dotrack[sl_namelist.value].ht-shock)){
+  if (r <= (chara().ht-shock)){
     success=true;
-    loss -= ((dotrack[sl_namelist.value].ht-shock) - r)
+    loss -= ((chara().ht-shock) - r)
   }
   loss= Math.max(loss,0)
 
   if (success) {
-    dotrack[sl_namelist.value].ap -= round(loss / in_lossdiv.valueAsNumber)
+    chara().ap -= round(loss / in_lossdiv.valueAsNumber)
     op = "<b style=\"color:green\">Success: "+r+" Lost "+loss+" AP</b>"
   }else{
-    dotrack[sl_namelist.value].ap -= loss 
+    chara().ap -= loss 
     op="<b style=\"color:red\">Failure: "+r+" Lost "+loss+" AP</b>"
   }
   update();
@@ -404,9 +481,9 @@ var HttpClient = function() {
 function rollHT(r){
   var _bon = currenthtbonus
   var op = "" //output
-  if (r <= (dotrack[sl_namelist.value].ht + _bon)) {
-    var aprecovered = 1 + Math.floor(((dotrack[sl_namelist.value].ht + _bon) -r)/4)
-    dotrack[sl_namelist.value].ap += aprecovered;
+  if (r <= (chara().ht + _bon)) {
+    var aprecovered = 1 + Math.floor(((chara().ht + _bon) -r)/4)
+    chara().ap += aprecovered;
     op = `<b style=\"color:green\">Success: ${r} Recovered ${aprecovered} AP</b>`
   }else{op=`<b style=\"color:red\">Failure: ${r}</b>`}
   return op
@@ -414,8 +491,8 @@ function rollHT(r){
 
 //buttons for AP use
 btn_wnd.onclick=function(){
-  dotrack[sl_namelist.value].fp -=1
-  dotrack[sl_namelist.value].ap += Math.ceil(dotrack[sl_namelist.value].htmax * 0.5)
+  chara().fp -=1
+  chara().ap += Math.ceil(chara().htmax * 0.5)
   update();
 }
 
@@ -424,6 +501,7 @@ dotrack.names = []
 sl_namelist.onchange =  function(){
   //ti_name.value = sl_namelist.value
   update();
+  in_enc.value = chara().enc
 }
 
 function updatenamelist(){
@@ -442,8 +520,6 @@ function updatenamelist(){
     )
 }
 
-
-init = false
 btn_init.onclick=function(){ //initialisation
   init = true
   if(dotrack.names.indexOf(ti_name.value)== -1){ // if the name isn't in the list, add it to the list.
@@ -490,6 +566,7 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].dxmax=parseInt(in_DX.value)
     dotrack[ti_name.value].dx=dotrack[ti_name.value].dxmax
     dotrack[ti_name.value].movmax=((parseInt(dotrack[ti_name.value].dx)+parseInt(dotrack[ti_name.value].ht))/4)+parseInt(in_mov.value)
+    dotrack[ti_name.value].movmod = parseInt(in_mov.value)
     dotrack[ti_name.value].mov = dotrack[ti_name.value].movmax
     dotrack[ti_name.value].ap = dotrack[ti_name.value].apmax
     dotrack[ti_name.value].st = dotrack[ti_name.value].stmax
@@ -508,30 +585,38 @@ btn_init.onclick=function(){ //initialisation
     //canvas init
     cvsdisplay(dotrack[ti_name.value].fpmax);
     update();
-    document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+    movdo();
     rn_mov.disabled =false
+    supportcheck()
 }
 //name list box
 
 
 //ui callbacks
-rn_mov.oninput=function(){
-  document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+function movdo(){
+  if(cb_mcv.checked){
+  document.getElementById('txt_rnmov').textContent = `Velocity: ${rn_mov.value}`
+  document.getElementById('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/chara().mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/chara().mov/3)*10)}`
+  }else{
+    document.getElementById('txt_varmov').textContent = `
+    `
+    document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`}
 }
+rn_mov.oninput = movdo
 
 
 btn_updt.onclick=function(){
-  dotrack[sl_namelist.value].fp += parseInt(in_fps.value);
-  dotrack[sl_namelist.value].ap += parseInt(in_aps.value);
+  chara().fp += parseInt(in_fps.value);
+  chara().ap += parseInt(in_aps.value);
   update();
 }
 
 btn_apf.onclick=function(){
-  dotrack[sl_namelist.value].ap=dotrack[sl_namelist.value].apmax
+  chara().ap=chara().apmax
   update()
 }
 btn_fpf.onclick=function(){
-  dotrack[sl_namelist.value].fp=dotrack[sl_namelist.value].fpmax
+  chara().fp=chara().fpmax
   update()
 }
 btn_save.onclick=function(){
@@ -540,57 +625,83 @@ btn_save.onclick=function(){
   btn_load.textContent = "Load"
 }
 btn_one.onclick=function(){
-  dotrack[sl_namelist.value].ap -= 1
+  chara().ap -= 1
   update();
 }
 btn_two.onclick=function(){
-  dotrack[sl_namelist.value].ap -= 2
+  chara().ap -= 2
   update();
 }
 
 btn_load.onclick=function(){
-  var btns = document.getElementsByTagName('button');
-  init = true
-  
-  var list = document.getElementById('sl_namelist')
-  try{
-  JSON.parse(LZString.decompress(localStorage.lastgasp)).names.forEach(function(item){
+  load(localStorage.lastgasp,1)
+}
+
+function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
+    var list = document.getElementById('sl_namelist') 
+    var fdata = ""
+    try{
+    switch(type){
+      case 1:
+      fdata = JSON.parse(LZString.decompress(loadsource))
+      break;
+      case 2:
+      fdata = JSON.parse(LZString.decompressFromEncodedURIComponent(loadsource))
+      break
+    }
+    var btns = document.getElementsByTagName('button');
+    init = true
+
+  fdata.names.forEach(function(item){
     var option = document.createElement('option')
     option.textContent=item
     option.value = item
     list.add(option);
   }
     )
-  dotrack = JSON.parse(LZString.decompress(localStorage.lastgasp))
+  dotrack = fdata
   for (var i = btns.length - 1; i >= 0; i--) {
     btns[i].disabled=false
   };
-  updatenamelist()
+  supportcheck();
+  updatenamelist();
   calc();
   encumber();
   display();
   cvsdisplay();
   rn_mov.disabled=false
-  document.getElementById('txt_rnmov').textContent = document.getElementById('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/dotrack[sl_namelist.value].mov)*10)} AP`
+  movdo();
+  in_enc.value = chara().enc
+  btn_fload.textContent = "Load From File"
 }
 catch(err){
-  btn_load.textContent="Failed!"
-  btn_load.disabled = true
+  switch(type){
+      case 1:
+      btn_load.textContent="Failed!"
+      btn_load.disabled = true
+      break;
+      case 2:
+      btn_fload.textContent = "File Corrupt"
+      break
+    }  
 }
+
+
 }
 
 
 
 function update(){
-  dotrack[sl_namelist.value].fp = Math.min(dotrack[sl_namelist.value].fp,dotrack[sl_namelist.value].fpmax);
-  dotrack[sl_namelist.value].fp = Math.max(dotrack[sl_namelist.value].fp,-dotrack[sl_namelist.value].fpmax);
-  dotrack[sl_namelist.value].ap = Math.min(dotrack[sl_namelist.value].ap,dotrack[sl_namelist.value].apmax);
-  dotrack[sl_namelist.value].ap = Math.max(dotrack[sl_namelist.value].ap,0);
-  if(dotrack[sl_namelist.value].fp == dotrack[sl_namelist.value].fpmax){
-    dotrack[sl_namelist.value].fprec = dotrack[sl_namelist.value].fpmax;
+  chara().fp = Math.min(chara().fp,chara().fpmax);
+  chara().fp = Math.max(chara().fp,-chara().fpmax);
+  chara().ap = Math.min(chara().ap,chara().apmax);
+  chara().ap = Math.max(chara().ap,0);
+  chara().enc = in_enc.valueAsNumber
+  if(chara().fp == chara().fpmax){
+    chara().fprec = chara().fpmax;
   }
   document.getElementById('rn_mov').min = 1
-  document.getElementById('rn_mov').max = dotrack[sl_namelist.value].mov
+  document.getElementById('rn_mov').max = chara().mov
   encumber();
   calc();
   display();
@@ -617,96 +728,96 @@ function basiclift(_st){
 }
 
 function encumber(){
-  var _enc = Math.ceil(parseInt(in_enc.value)/basiclift(dotrack[sl_namelist.value].st))
+  var _enc = Math.ceil(parseInt(in_enc.value)/basiclift(chara().st))
   if (_enc >6){_enc = 10}else if(_enc > 3){_enc = 6;} //rounding encumberance
   switch(_enc){
     case 0:
-    dotrack[sl_namelist.value].mov = Math.floor(((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))
-      dotrack[sl_namelist.value].dodgepen =0
+    chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)
+      chara().dodgepen =0
     break;
     case 1:
-      dotrack[sl_namelist.value].mov = Math.floor(((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))
-      dotrack[sl_namelist.value].dodgepen =0
+      chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)
+      chara().dodgepen =0
     break;
     case 2:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.8)
-      dotrack[sl_namelist.value].dodgepen =-1
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.8)
+      chara().dodgepen =-1
      break;
      case 3:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.6)
-      console.log(dotrack[sl_namelist.value].mov)
-      dotrack[sl_namelist.value].dodgepen =-2
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.6)
+      console.log(chara().mov)
+      chara().dodgepen =-2
     break;
     case 6:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.4)
-      dotrack[sl_namelist.value].dodgepen =-3
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.4)
+      chara().dodgepen =-3
     break;
     case 10:
-      dotrack[sl_namelist.value].mov = Math.floor((((parseInt(dotrack[sl_namelist.value].dx)+parseInt(dotrack[sl_namelist.value].ht))/4)+parseInt(in_mov.value))*0.2)
-      dotrack[sl_namelist.value].dodgepen =-4
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.2)
+      chara().dodgepen =-4
     break;
     default:
     console.log("an error in encumberance occured, value= "+_enc)
     
   }
-  dotrack[sl_namelist.value].mov = Math.max(dotrack[sl_namelist.value].mov,1)  
+  chara().mov = Math.max(chara().mov,1)  
 }
 
 //display
 function display(){
-  document.getElementById("txt_name").textContent = dotrack[sl_namelist.value].name
-  document.getElementById("txt_AP").textContent = dotrack[sl_namelist.value].ap +"/"+ dotrack[sl_namelist.value].apmax + " AP"
-  document.getElementById("txt_FP").textContent = dotrack[sl_namelist.value].fp +"/"+ dotrack[sl_namelist.value].fpmax + " FP"
-  document.getElementById("txt_st").textContent = round(dotrack[sl_namelist.value].st*10)/10 +"/"+ dotrack[sl_namelist.value].stmax + " ST"
-  document.getElementById("txt_dx").textContent = dotrack[sl_namelist.value].dx +"/"+ dotrack[sl_namelist.value].dxmax + " DX"
-  var pentext = -Math.floor((dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2*10) + " to most skills.";
+  document.getElementById("txt_name").textContent = chara().name
+  document.getElementById("txt_AP").textContent = chara().ap +"/"+ chara().apmax + " AP"
+  document.getElementById("txt_FP").textContent = chara().fp +"/"+ chara().fpmax + " FP"
+  document.getElementById("txt_st").textContent = round(chara().st*10)/10 +"/"+ chara().stmax + " ST"
+  document.getElementById("txt_dx").textContent = chara().dx +"/"+ chara().dxmax + " DX"
+  var pentext = -Math.floor((chara().fpmax -chara().fp)/chara().fpmax/2*10) + " to most skills.";
   if(cb_highres.checked){
-    pentext = `IQ skills: ${dotrack[sl_namelist.value].iq - dotrack[sl_namelist.value].iqmax} DX skills: ${dotrack[sl_namelist.value].dx - dotrack[sl_namelist.value].dxmax}`
+    pentext = `IQ skills: ${chara().iq - chara().iqmax} DX skills: ${chara().dx - chara().dxmax}`
   }
   document.getElementById("txt_pen").textContent = pentext
-  document.getElementById("txt_iq").textContent = dotrack[sl_namelist.value].iq +"/"+ dotrack[sl_namelist.value].iqmax + " IQ"
-  document.getElementById("txt_ht").textContent = dotrack[sl_namelist.value].ht +"/"+ dotrack[sl_namelist.value].htmax + " HT"
-  document.getElementById("txt_lif").innerHTML = basiclift(dotrack[sl_namelist.value].st) +"/"+ basiclift(dotrack[sl_namelist.value].st) + "lbs <b>BL</b>"
-  document.getElementById("txt_enc").textContent = "Encumberance Dodge penalty: "+ dotrack[sl_namelist.value].dodgepen
-  document.getElementById("txt_mov").textContent =`Move: ${dotrack[sl_namelist.value].mov} || Dodge: ${Math.floor(((dotrack[sl_namelist.value].ht + dotrack[sl_namelist.value].dx)/4)+3 + parseInt(in_dod.value))} || ${dotrack[sl_namelist.value].notes} `
+  document.getElementById("txt_iq").textContent = chara().iq +"/"+ chara().iqmax + " IQ"
+  document.getElementById("txt_ht").textContent = chara().ht +"/"+ chara().htmax + " HT"
+  document.getElementById("txt_lif").innerHTML = basiclift(chara().st) +"/"+ basiclift(chara().st) + "lbs <b>BL</b>"
+  document.getElementById("txt_enc").textContent = "Encumberance Dodge penalty: "+ chara().dodgepen
+  document.getElementById("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(((chara().ht + chara().dx)/4)+3 + parseInt(in_dod.value))} || ${chara().notes} `
   document.getElementById("txt_status").innerHTML = status
-  document.getElementById("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(dotrack[sl_namelist.value].st)]} sw: ${dmgtbl.swing[Math.floor(dotrack[sl_namelist.value].st)]}`
+  document.getElementById("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(chara().st)]} sw: ${dmgtbl.swing[Math.floor(chara().st)]}`
 }
 //calc
 
 function calc(){
-  dotrack[sl_namelist.value].fp = Math.max(dotrack[sl_namelist.value].fp, -dotrack[sl_namelist.value].fpmax); //floor of fp loss
-  dotrack[sl_namelist.value].st = dotrack[sl_namelist.value].stmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2)
+  chara().fp = Math.max(chara().fp, -chara().fpmax); //floor of fp loss
+  chara().st = chara().stmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2)
   //fp recovery for showing where someone's actually at in recovery.
-  dotrack[sl_namelist.value].fprec = Math.min(dotrack[sl_namelist.value].fprec,dotrack[sl_namelist.value].fp)
+  chara().fprec = Math.min(chara().fprec,chara().fp)
   //
-  var penalty = Math.floor((dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2*10);
+  var penalty = Math.floor((chara().fpmax -chara().fp)/chara().fpmax/2*10);
 
   if(cb_cap.checked){
     penalty = Math.min(penalty,5)
   }
   
   if(cb_highres.checked && !cb_cap.checked){
-    dotrack[sl_namelist.value].iq = Math.ceil(dotrack[sl_namelist.value].iqmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2));
-    dotrack[sl_namelist.value].dx = Math.ceil(dotrack[sl_namelist.value].dxmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2));
-    dotrack[sl_namelist.value].ht = Math.ceil(dotrack[sl_namelist.value].htmax * (1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2));
+    chara().iq = Math.ceil(chara().iqmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
+    chara().dx = Math.ceil(chara().dxmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
+    chara().ht = Math.ceil(chara().htmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
   }else if(cb_highres.checked && cb_cap.checked){
-    dotrack[sl_namelist.value].iq = Math.ceil(dotrack[sl_namelist.value].iqmax * Math.max((1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2),0.5));
-    dotrack[sl_namelist.value].ht = Math.ceil(dotrack[sl_namelist.value].htmax * Math.max((1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2),0.5));
-    dotrack[sl_namelist.value].dx = Math.ceil(dotrack[sl_namelist.value].dxmax * Math.max((1 - (dotrack[sl_namelist.value].fpmax -dotrack[sl_namelist.value].fp)/dotrack[sl_namelist.value].fpmax/2),0.5));
+    chara().iq = Math.ceil(chara().iqmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
+    chara().ht = Math.ceil(chara().htmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
+    chara().dx = Math.ceil(chara().dxmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
   }else{
-    dotrack[sl_namelist.value].iq = dotrack[sl_namelist.value].iqmax -  penalty;
-    dotrack[sl_namelist.value].dx = dotrack[sl_namelist.value].dxmax - penalty;
-    dotrack[sl_namelist.value].ht = dotrack[sl_namelist.value].htmax - penalty;
+    chara().iq = chara().iqmax -  penalty;
+    chara().dx = chara().dxmax - penalty;
+    chara().ht = chara().htmax - penalty;
   };
-  if((dotrack[sl_namelist.value].fp/(dotrack[sl_namelist.value].fppoint)>=1)){
+  if((chara().fp/(chara().fppoint)>=1)){
     status = "<b>Mild Fatigue</b></br>"
-  }else if (dotrack[sl_namelist.value].fp/(dotrack[sl_namelist.value].fppoint)<1 && dotrack[sl_namelist.value].fp/(dotrack[sl_namelist.value].fppoint)>=0){
+  }else if (chara().fp/(chara().fppoint)<1 && chara().fp/(chara().fppoint)>=0){
     status = "<b style=\"color:red;\">Severe Fatigue</b></br>"
-  }else if((dotrack[sl_namelist.value].fp/dotrack[sl_namelist.value].fppoint)< 0 ){
+  }else if((chara().fp/chara().fppoint)< 0 ){
     status = "<b style=\"font-family=impact;color:Purple\">DEEP Fatigue</b>" + "</br>Lose HP for each FP spent."
   }
-  if(dotrack[sl_namelist.value].fp <= -dotrack[sl_namelist.value].fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor(((240/dotrack[sl_namelist.value].fpmax)*dotrack[sl_namelist.value].fittime)*100)/100
+  if(chara().fp <= -chara().fpmax){status= "<b style=\"font-family=impact;color:Purple\">UNCONCIOUS! DEEP Fatigue</br>Hours Per FP recovered: </b>" +  Math.floor(((240/chara().fpmax)*chara().fittime)*100)/100
   }
 }
 
