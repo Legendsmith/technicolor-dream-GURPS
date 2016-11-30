@@ -453,7 +453,9 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].blmax=parseInt(in_ST.value);
     dotrack[ti_name.value].apmax=parseInt(in_HT.value)+parseInt(in_AP.value);
     dotrack[ti_name.value].fpmax=parseInt(in_FP.value);
-    dotrack[ti_name.value].dxmax=parseInt(in_DX.value)
+    dotrack[ti_name.value].dxmax=parseInt(in_DX.value);
+    dotrack[ti_name.value].hpmax=in_HP.valueAsNumber;
+    dotrack[ti_name.value].hp= in_HP.valueAsNumber;
     dotrack[ti_name.value].dx=dotrack[ti_name.value].dxmax
     //dotrack[ti_name.value].movmax=((parseInt(dotrack[ti_name.value].dx)+parseInt(dotrack[ti_name.value].ht))/4)+parseInt(in_mov.value)
     dotrack[ti_name.value].spdmax= in_spd.valueAsNumber
@@ -694,7 +696,8 @@ function display(){
   getId("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(((chara().ht + chara().dx)/4)+3 + parseInt(in_dod.value))} || ${chara().notes} `
   getId("txt_status").innerHTML = status
   getId("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(chara().st)]} sw: ${dmgtbl.swing[Math.floor(chara().st)]}`
-  skilldisplay()
+  skilldisplay();
+  weapondisplay();
 }
 //calc
 

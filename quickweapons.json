@@ -1,0 +1,206 @@
+// bases  ["thr","sw","other"]
+[
+	[
+	"Punch",
+		{
+    		"name":"Punch",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":-1,
+    		"type":"cr"
+		}
+	],
+	["Axe",
+		{
+    		"name":"Axe Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":2,
+    		"type":"cut"
+		}
+	],
+	["Hatchet",
+		{
+    		"name":"Hatchet Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":0,
+    		"type":"cut"
+		}
+	],
+	["Mace",
+		{
+    		"name":"Mace Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":3,
+    		"type":"cr"
+		}
+	],
+	["Small Mace",
+		{
+    		"name":"S. Mace Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":2,
+    		"type":"cr"
+		}
+	],
+	["Pick",
+		{
+    		"name":"Pick Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"imp"
+		}
+	],
+	["Brass Knuckles",
+		{
+    		"name":"B. Knuckles",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":0,
+    		"type":"cr"
+		}
+	],
+	["Light Club",
+		{
+    		"name":"L. Club Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cr"
+		},
+		{
+    		"name":"Li. Club Thrust",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cr"
+		}
+	],
+	["Broadsword",
+		{
+    		"name":"Broadsword Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cut"
+		},
+		{
+    		"name":"Broadsword Thrust",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cr"
+		}
+	],
+	["Thrusting Broadsword",
+		{
+    		"name":"Thr Broadsword Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cut"
+		},
+		{
+    		"name":"Thr Broadsword Thrust",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":2,
+    		"type":"imp"
+		}
+	],
+	["Bastard sword 1h",
+		{
+    		"name":"Bastard Swing 1h",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cut"
+		},
+		{
+    		"name":"Bastard Thrust 1h",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cr"
+		}
+	],
+	["Thr Bastard sword 1h",
+		{
+    		"name":"Thr Bastard Swing 1h",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cut"
+		},
+		{
+    		"name":"Thr Bastard Thrust 1h",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":2,
+    		"type":"imp"
+		}
+	],
+	["KATANA 1h",
+		{
+    		"name":"KATANA Swing 1h",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cut"
+		},
+		{
+    		"name":"KATANA Thrust 1h",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":1,
+    		"type":"imp"
+		}
+	],
+	["Morningstar",
+		{
+    		"name":"Morningstar",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":3,
+    		"type":"cr"
+		},
+	],
+	["Nunchaku",
+		{
+    		"name":"Nunchaku",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cr"
+		},
+	],
+	["Force Sword",
+		{
+    		"name":"Nunchaku",
+    		"base":"other",
+    		"dice":8,
+    		"mod":0,
+    		"type":"(5) Burn"
+		},
+	],
+	["KATANA 1h",
+		{
+    		"name":"KATANA Swing 1h",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":1,
+    		"type":"cut"
+		},
+		{
+    		"name":"KATANA Thrust 1h",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":1,
+    		"type":"imp"
+		}
+	],
+]
