@@ -126,19 +126,19 @@
 <p class="subnote"> If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
 Name: <input type="text" id="ti_name" class=insmt maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise</button></br>
 <div style="width:50%;float:left;">
-<input class=insm type="number" id="in_ST" value =10> ST</input></br>
-<input class=insm type="number" id="in_HT" value =10> HT</input></br>
-<input class=insm type="number" id="in_WILL" value =10> Will</input></br>
-<input class=insm type="number" id="in_FP" value = 0> FP</input> </br>
+<input class=insm type="number" id="in_ST" value =10 min=1> ST</input></br>
+<input class=insm type="number" id="in_HT" value =10 min=1> HT</input></br>
+<input class=insm type="number" id="in_WILL" value =10 min=1> Will</input></br>
+<input class=insm type="number" id="in_FP" value = 10 min=1> FP</input> </br>
 <input class=insm type="number" id="in_AP" value =0> Extra AP</input></br></br>
 <input type="checkbox" id="cb_fit">Fit</input></br><input type="checkbox" id="cb_ufit">Unfit</input></div>
 
 <div style="width:50%;float:left;">
-<input class=insm type="number" id="in_DX" value =10> DX</input></br>
-<input class=insm type="number" id="in_IQ" value =10> IQ</input></br>
-<input class=insm type="number" id="in_PER" value =10> Per</input></br>
-<input class=insm type="number" id="in_spd" value =5> Speed</input></br>
-<input class=insm type="number" id="in_mov" value =5> Move</input></br>
+<input class=insm type="number" id="in_DX" value =10 min=1> DX</input></br>
+<input class=insm type="number" id="in_IQ" value =10 min=1> IQ</input></br>
+<input class=insm type="number" id="in_PER" value =10 min=1> Per</input></br>
+<input class=insm type="number" id="in_spd" value =5 min=1> Speed</input></br>
+<input class=insm type="number" id="in_mov" value =5 min=1> Move</input></br>
 <input class=insm type="number" id="in_dod" value = 0> Dodge Modifier</input></br>
 <input type="checkbox" id="cb_vfit">Very Fit</input></br><input type="checkbox" id="cb_vufit">Very Unfit</input>
 </div>
