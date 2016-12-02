@@ -721,6 +721,7 @@ function display(){
   getId('btn_dodge').textContent =  `Roll Dodge (${Math.floor(chara().spd)+3 + chara().dodgemod + ti_dodgebon.valueAsNumber + chara().dodgepen})`
   getId('txt_hp').textContent = `${chara().hp}/${chara().hpmax} HP`;
   woundcolor();
+  getId('txt_wtpen').textContent = `Bleeding Roll Base Penalty: ${Math.ceil((chara().hp-chara().hpmax)/5)}`
 }
 //calc
 
@@ -1121,7 +1122,7 @@ hitloc.onSelect = function(e){
       manhitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-width']='1'
     }
   };
-  e.target.style.stroke = '#FF0000'
+  e.target.style.stroke = '#FFFF66'
   e.target.style['stroke-width']=2
   e.target.style['stroke-opacity'] = '1'
   //display in the wounddisplay
