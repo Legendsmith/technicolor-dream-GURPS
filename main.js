@@ -1108,6 +1108,7 @@ function getHPpercentPart(part_){
 in_hps.onchange = function(){
   chara().hp = Math.min(chara().hpmax, in_hps.valueAsNumber)
   in_hps.value= chara().hp
+  display();
 }
 
 hitloc.onSelect = function(e){
