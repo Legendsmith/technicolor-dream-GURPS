@@ -26,6 +26,13 @@ function openTab(evt, tabName) {
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
+    if (tabName=="wounds"){
+      getId('display').style.display = "none";
+      getId('wounddisplay').style.display ="block";
+    }else{
+      getId('display').style.display = "";
+      getId('wounddisplay').style.display ="none"
+    };
 
     // Show the current tab, and add an "active" class to the link that opened the tab
     getId(tabName).style.display = "block";
@@ -474,9 +481,15 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].per = in_PER.valueAsNumber
     dotrack[ti_name.value].permax = in_PER.valueAsNumber
     dotrack[ti_name.value].fppoint = dotrack[ti_name.value].fpmax/2
+    dotrack[ti_name.value].dodgemod = in_dod.valueAsNumber
     dotrack[ti_name.value].dodgepen = 0;
     dotrack[ti_name.value].skills=[];
     dotrack[ti_name.value].weapons=[];
+    dotrack[ti_name.value].hittrack = {}
+    for (var i = 0; i < wdatahitloc.track.length; i++) {
+      dotrack[ti_name.value].hittrack[wdatahitloc.track[i]] = {"hp":Math.ceil(dotrack[ti_name.value].hpmax/wdatahitloc[wdatahitloc.track[i]].mod),"hpmax":Math.ceil(dotrack[ti_name.value].hpmax/wdatahitloc[wdatahitloc.track[i]].mod)}
+    };
+    hitloc.init()
     setupAnS();
     updateskilllist();
     sl_namelist.selectedIndex = sl_namelist.length-1
@@ -490,6 +503,9 @@ btn_init.onclick=function(){ //initialisation
     //canvas init
     cvsdisplay(dotrack[ti_name.value].fpmax);
     update();
+    //additional init
+    setupwdisplay();
+    woundcolor();
     getId('txt_rnmov').textContent = getId('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
     rn_mov.disabled =false
 
@@ -568,6 +584,7 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   for (var i = btns.length - 1; i >= 0; i--) {
     btns[i].disabled=false
   };
+  hitloc.init()
   setupAnS(); //populate the weapon add list damage type
   updateskilllist();
   supportcheck();
@@ -581,7 +598,10 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   in_enc.value = chara().enc
   btn_fload.textContent = "Load From File";
   initskill();
+  setupwdisplay();
   weapondisplay();
+  //additional init
+  woundcolor()
   skilldisplay();
 }
 catch(err){
@@ -605,7 +625,6 @@ function update(){
   if(chara().fp == chara().fpmax){
     chara().fprec = chara().fpmax;
   }
-  chara().enc = in_enc.valueAsNumber
   getId('rn_mov').min = 1
   getId('rn_mov').max = chara().mov
   encumber();
@@ -640,7 +659,8 @@ function basiclift(_st){
 }
 
 function encumber(){
-  var _enc = Math.ceil(parseInt(in_enc.value)/basiclift(chara().st))
+  var _enc = Math.ceil(chara().enc/basiclift(chara().st))
+  if(isNaN(_enc)){_enc=0}
   if (_enc >6){_enc = 10}else if(_enc > 3){_enc = 6;} //rounding encumberance
   switch(_enc){
     case 0:
@@ -693,11 +713,14 @@ function display(){
   getId("txt_per").textContent = chara().per +"/"+ chara().permax + " Perception"
   getId("txt_lif").innerHTML = basiclift(chara().st) +"/"+ basiclift(chara().st) + "lbs <b>BL</b>"
   getId("txt_enc").textContent = "Encumberance Dodge penalty: "+ chara().dodgepen
-  getId("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(((chara().ht + chara().dx)/4)+3 + parseInt(in_dod.value))} || ${chara().notes} `
+  getId("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(chara().spd)+3 + chara().dodgemod} || ${chara().notes} `
   getId("txt_status").innerHTML = status
   getId("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(chara().st)]} sw: ${dmgtbl.swing[Math.floor(chara().st)]}`
   skilldisplay();
   weapondisplay();
+  getId('btn_dodge').textContent =  `Roll Dodge (${Math.floor(chara().spd)+3 + chara().dodgemod + ti_dodgebon.valueAsNumber + chara().dodgepen})`
+  getId('txt_hp').textContent = `${chara().hp}/${chara().hpmax} HP`;
+  woundcolor();
 }
 //calc
 
@@ -736,6 +759,7 @@ function calc(){
     chara().will = chara().willmax - penalty;
 
   };
+  chara().spd = (chara().dx + chara().ht)/4
   if((chara().fp/(chara().fppoint)>=1)){
     status = "<b>Mild Fatigue</b></br>"
   }else if (chara().fp/(chara().fppoint)<1 && chara().fp/(chara().fppoint)>=0){
@@ -750,7 +774,21 @@ function calc(){
     var max =   chara()[chara().skills[i].base.toLowerCase()+"max"] + chara().skills[i].RSL
     chara().skills[i].sl = max + (chara()[chara().skills[i].base.toLowerCase()] - chara()[chara().skills[i].base.toLowerCase()+"max"])
   };
+  chara().hp = Math.min(chara().hp,chara().hpmax)
 }
+////encumberance calc////
+function encumberupdate(e){
+  chara().enc = e.target.valueAsNumber
+  in_enc.value = chara().enc
+  in_encs.value = chara().enc
+  in_encw.value = chara().enc
+
+}
+in_enc.onchange = encumberupdate
+in_encs.onchange = encumberupdate
+in_encw.onchange = encumberupdate
+
+
 
 ////////////////SKILL ZONE GIT GUD/////////////
 
@@ -951,6 +989,161 @@ function getweapondamage(x){
 }
 cb_diceadds.onclick=function(){
   weapondisplay()
+}
+//////////wound and wound svg stuff////////
+hitloc = {}
+hitloc.selected=""
+hitloc.init =function(){
+  manhitsvg = document.getElementById("man-svg").contentDocument
+  for (var i = 0; i < manhitsvg.getElementById('mainhitloc').childNodes.length; i++) {
+      if(manhitsvg.getElementById('mainhitloc').childNodes[i].style){
+      manhitsvg.getElementById('mainhitloc').childNodes[i].onclick=hitloc.onSelect
+      manhitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-opacity']='0.1'
+      manhitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-width']='1'
+    }
+  };
+
+}
+hitloc.getpart = function(id){
+  return manhitsvg.getElementById(id)
+}
+ti_dodgebon.onchange = function(){
+  display()
+}
+
+btn_dodge.onclick = function(e){
+  var roll = rolldice()
+  if(roll <= Math.floor(chara().spd)+3 + chara().dodgemod + ti_dodgebon.valueAsNumber + chara().dodgepen){
+    txt_dodgeroll.textContent = `Success! ${roll}, MoS: ${(Math.floor(chara().spd)+3 + chara().dodgemod + ti_dodgebon.valueAsNumber + chara().dodgepen) - roll}`
+    txt_dodgeroll.className = 'fine'
+  }else{
+    txt_dodgeroll.textContent = `Failure! ${roll}, MoF: ${roll - (Math.floor(chara().spd)+3 + chara().dodgemod + ti_dodgebon.valueAsNumber + chara().dodgepen)}`
+    txt_dodgeroll.className = 'cripple'
+  }
+}
+
+
+function woundcolor(){
+   manhitsvg.getElementById('base').style['stroke-width'] = 3
+  if(chara().hp>=0){
+    var x = Math.max(chara().hp,0.5)
+    var r = Math.ceil(255*(1-(x/chara().hpmax)))
+    var g = Math.ceil(255*((x/chara().hpmax)))
+    var b = 128
+    manhitsvg.getElementById('base').style.stroke = `rgb(${r},${g},${b})`
+  }
+
+}
+btn_hpp.onclick = function(){
+  chara().hp+=1
+  calc()
+  display();
+}
+btn_hpm.onclick = function(){
+  chara().hp-=1
+  calc()
+  display();
+}
+
+
+function setupwdisplay(){
+  var area = getId("wtarea")
+  while(area.lastChild){
+    var x = area.removeChild(area.lastChild);
+    x = null
+  }
+  for (var i = 0; i < wdatahitloc.track.length; i++) {
+    var cont = document.createElement('span') 
+    var txt  = document.createElement('span') 
+    txt.textContent = `${wdatahitloc[wdatahitloc.track[i]].name} `;
+    cont.id = `p_${wdatahitloc.track[i]}`
+    cont.className='fine'
+    txt.style.display ='inline-block'
+    txt.style.width ='90px'
+    cont.appendChild(txt)
+    var put = document.createElement("input");
+    put.type = "number";
+    put.id = `in_${wdatahitloc.track[i]}`;
+    put.value = chara().hittrack[wdatahitloc.track[i]].hp;
+    put.onchange=wtrackupdate
+    cont.appendChild(put);
+    var divider = document.createElement('span');
+    divider.textContent =  `/${chara().hittrack[wdatahitloc.track[i]].hpmax} HP `;
+    var dis = document.createElement('b');
+    dis.id =`txt_${wdatahitloc.track[i]}`;
+    cont.appendChild(divider)
+    cont.appendChild(dis)
+
+    cont.appendChild(document.createElement('br'))
+    area.appendChild(cont)
+  };
+}
+function wtrackupdate(e){
+  var part = e.target.id.split("_")[1]
+  chara().hittrack[part].hp = e.target.valueAsNumber
+
+  chara().hittrack[part].hp = Math.min(chara().hittrack[part].hp,chara().hittrack[part].hpmax)
+  e.target.value = chara().hittrack[part].hp
+  if(chara().hittrack[part].hp <= -(chara().hittrack[part].hpmax+1) * 2){
+  getId(`txt_${part}`).textContent = `DESTROYED/DISMEMBERED`
+  getId(`p_${part}`).className = 'destroy'
+  }else if(chara().hittrack[part].hp <0){
+    getId(`txt_${part}`).textContent = `CRIPPLED`
+    getId(`p_${part}`).className = 'cripple'
+  }else{
+    getId(`txt_${part}`).textContent = ""
+    getId(`p_${part}`).className = 'fine'
+  }
+  e.target.value = chara().hittrack[part].hp
+  if(wdatahitloc.display[part]==2){
+    manhitsvg.getElementById(part).style.fill =gradtwoGet(getHPpercentPart(part))
+  }else{
+    manhitsvg.getElementById(part).style.fill =gradthreeGet(getHPpercentPart(part))
+  }
+}
+
+function getHPpercentPart(part_){
+  return Math.floor((((chara().hittrack[part_].hpmax+1)*2) + chara().hittrack[part_].hp) / (((chara().hittrack[part_].hpmax +1)*2)+ chara().hittrack[part_].hpmax)*100)/100
+}
+in_hps.onchange = function(){
+  chara().hp = Math.min(chara().hpmax, in_hps.valueAsNumber)
+  in_hps.value= chara().hp
+}
+
+hitloc.onSelect = function(e){
+  hitloc.selected=e.target.id
+  console.log(hitloc.selected)
+  for (var i = 0; i < manhitsvg.getElementById('mainhitloc').childNodes.length; i++) {
+    if(manhitsvg.getElementById('mainhitloc').childNodes[i].style){
+      manhitsvg.getElementById('mainhitloc').childNodes[i].style.stroke='#000000';
+      manhitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-opacity']='0.1'
+      manhitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-width']='1'
+    }
+  };
+  e.target.style.stroke = '#FF0000'
+  e.target.style['stroke-width']=2
+  e.target.style['stroke-opacity'] = '1'
+  //display in the wounddisplay
+  var distext = `<h4>${wdatahitloc[e.target.id].name}</h4><h5>Hit Penalty ${wdatahitloc[e.target.id].penalty}</h5>`
+  var tags = wdatahitloc[e.target.id].tags.split(",")
+  for (var i = 0; i < tags.length; i++) {
+    distext = distext.concat(`<p>${wdatatags[tags[i]]}</p>`)
+  };
+  getId('wounddisplay').innerHTML= distext
+}
+
+hitloc.displaypart = function(id){
+  if (manhitsvg.getElementById(id).style.display=="none") {
+    manhitsvg.getElementById(id).style.display = "inline"
+  }else{
+    manhitsvg.getElementById(id).style.display = "none"
+  };
+}
+hitloc.colour = function(id,colour){
+  if(typeof colour === 'undefined'){; return manhitsvg.getElementById(id).style.fill}
+    else{
+      return manhitsvg.getElementById(id).style.fill = colour
+    }
 }
 
 //////////////////Main Code Ends Here//////////////

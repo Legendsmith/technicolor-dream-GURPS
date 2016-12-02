@@ -172,6 +172,74 @@ h5 {
   margin-left: 640px
 }
 
+#wounddisplay{
+  width:150px;height:895px
+  font:#000;
+  background-color:#ffffff;
+  border-radius:20px;
+  border:1px solid #3333aa;
+  position: fixed;
+  margin-left: 640px;
+  display:none;
+  padding:5px 2px;
+  padding-top: 15px;
+}
+#wounddisplay h4{
+  text-align:center;
+}
+#wounddisplay h5{
+  text-align:center;
+  font-style: italic;
+}
+#wounddisplay p{
+  font-size: 14px
+}
+#wtarea{
+  float: left;
+  width: 370px; 
+  background-color:Wheat;
+  border-radius:20px;
+  padding:10px;
+}
+#wtarea input[type='number'] {
+    text-align: right;
+    width: 50px;
+    -moz-appearance:textfield;
+}
+#wtarea input::-webkit-outer-spin-button,
+#wtarea input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+}
+#wtarea b{
+  font-size: 12px;
+  display: inline-block;
+}
+.destroy{
+  color:purple;
+}
+.cripple{
+  color:red;
+}
+.fine{
+  color:green;
+}
+
+.wtbutton{
+  background-color:#99FF99;
+  border-radius:20px;
+  border:2px solid green;
+  display:block;
+  cursor:pointer;
+  color:#000000;
+  font-family:Arial;
+  font-size:17px;
+  padding:5px 2px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #2f6627;
+  width: 200px;
+}
+
+
 .skillbar {
   background-color:#ddddbb;
   -moz-border-radius:20px;
@@ -186,7 +254,7 @@ h5 {
   padding:5px 2px;
   text-decoration:none;
   text-shadow:0px 1px 0px #2f6627;
-  width: 100%
+  width: 100%;
 }
 .skillbar:hover {
   background-color:#e3e358;
@@ -195,6 +263,12 @@ h5 {
   position:relative;
   top:1px;
 }
+.skillbar:disabled {
+  background-color:#AAAAAA;
+  position:relative;
+  top:1px;
+}
+
 .lefty{
   width: 295px;
   float:left;
@@ -217,10 +291,14 @@ h5 {
   float:left;
   margin-left:auto;
   margin-right:auto;
-  background-color:Wheat;
+  background-color:#EFEFEF;
   border-radius:20px;
   padding:20px;
 }
+#man-svg{
+  float:right;
+}
+
 #attacksskills{
   float:left;
   width:600px;

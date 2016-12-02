@@ -20,7 +20,10 @@
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'attacksskills')">Skills & Weapons</a></li>
   </div>
 </ul>
-<div id="page-wrap"><canvas id="display" width="150px" ></canvas></div>
+<div id="page-wrap">
+  <canvas id="display" width="150px" ></canvas>
+  <div id="wounddisplay"><p>Hit location data appears here.</p></div>
+</div>
 <div id="lastgasp" class="tabcontent">
   <h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
   <span class="subnote"> <input type="checkbox" id="cb_rnd">Use <a href="https://www.random.org/">Random.org</a> for dice.</input> <input type="checkbox" id="cb_highres"></input><div class="tooltip">High Resoluton stat loss.<span class="tooltiptext">Normally stat loss increases by -1 per 20% FP lost, for -10 at -1×FP. Enabling this option turns it to 10% per 20% FP lost, so that high stat characters will still reach 0 DX, IQ, etc at -1×FP</span></div> <input type="checkbox" id="cb_cap"><div class="tooltip">Cap penalties at -5 or -50%.<span class="tooltiptext">With this option stat loss will not exceed -5, or -50% of the base stat when using High Resolution stat loss.</span></div></input>  </span>
@@ -103,7 +106,8 @@
   <p> <input type="text" class=insmt id="ti_nwname" maxlength="20" value="Weapon Name">
   </input> Damage:<select style="width:50px" id="sl_nwd"></select>
    <input type="number" class=insm id="ti_nwdice" width="20" value=0>d6+<input type="number" class=insm id="ti_nwmod" width="20" value=0> <select style="width:50px" id="sl_nwdt"></select> <button class="fancybtn" id="btn_nweapon">New Weapon</button></p>
-   <input type="checkbox" id="cb_diceadds">Use Optional Rule: Modifying Dice + Adds (B269)</input>
+   <p>Skills are straightforward, just enter the name, select the base attribute and add the RSL modifier. For weapons, enter the modifier that the weapon gives. For example, an Axe is sw+2 cut, so enter sw 0d6+2 above. For weapons that do not depend on muscle strength such as guns or spells select 'other' from the damge dropdown and then enter the full damage dice and modifier.</p>
+   <input type="checkbox" id="cb_diceadds">Use Optional Rule: Modifying Dice + Adds (B269)</input></br><input class=insm type="number" id="in_encs" value = 0>lbs Carried</input>
   <hr>
   <div class="lefty"><h3>Skills</h3> Situational Skill Bonus: <input type="number" class=insm id="ti_skillbon" width="30" value=0></br>
     <button class="fancybtn" id="btn_removeskill">Remove</button> <select style="width:150px" id="sl_removeskill"></select>
@@ -116,7 +120,22 @@
   <div id="skillholder" class="lefty"></div>
   <div id="weaponholder" class="righty"></div>
 </div>
-<div id='wounds' class="tabcontent">Feature not Implimented, please wait!</div>
+<div id='wounds' class="tabcontent">
+  <h2>Wounds, HP, & Defence</h2>
+  <p>
+  <h3>
+  <button class="fancybtn" id="btn_hpp">+1</button>
+  <button class="fancybtn" id="btn_hpm">-1</button>
+  <span id="txt_hp">X/X HP</span></br>
+  Set HP: <input class=insm type="number" id="in_hps" value =0>
+  </br>
+  </h3>
+  <div id='wtarea'></div>
+  <object id="man-svg" type="image/svg+xml" data="manhitloc.svg" 
+  width="200" height="600" border="1"></object>
+  <input type="number" class=insm id="ti_dodgebon" width="30" value=0> Dodge Bonus/Penalty</br>
+  <input class=insm type="number" id="in_encw" value = 0>lbs Carried</input>
+<button class="wtbutton" id="btn_dodge">Dodge</button></br><b id="txt_dodgeroll"></b></div>
 
 <div id="controls" class="tabcontent">
   <h2>Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Character Sheet</h2>
@@ -124,14 +143,14 @@
 <button class="fancybtn" id="btn_load">Load</button> <button class="fancybtn" id="btn_fload">Load From File</button>
 <h4>Enter your character's stats</h4>
 <p class="subnote"> If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
-Name: <input type="text" id="ti_name" class=insmt maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise</button></br>
+Name: <input type="text" id="ti_name" class=insmt maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise/Add Character</button></br>
 <div style="width:50%;float:left;">
 <input class=insm type="number" id="in_ST" value =10 min=1> ST</input></br>
 <input class=insm type="number" id="in_HT" value =10 min=1> HT</input></br>
 <input class=insm type="number" id="in_HP" value =10 min=1> HP</input></br>
 <input class=insm type="number" id="in_WILL" value =10 min=1> Will</input></br>
 <input class=insm type="number" id="in_FP" value = 10 min=1> FP</input> </br>
-<input class=insm type="number" id="in_AP" value =0> Extra AP</input></br></br>
+<input class=insm type="number" id="in_AP" value =0> Extra AP</input></br>
 <input type="checkbox" id="cb_fit">Fit</input></br><input type="checkbox" id="cb_ufit">Unfit</input></div>
 
 <div style="width:50%;float:left;">
