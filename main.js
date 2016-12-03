@@ -636,8 +636,15 @@ function update(){
 //functions
 
 function diceadds(dice,modi){ //Thanks to Aion#4968 on the GURPS discord for help.
-  var fdi = dice + (Math.floor(modi / 7) *2) + Math.floor((modi % 7) / 4) //final dice
-  var fmodi = Math.floor(modi % 7 % 4) //final modifier
+  var fdi = 0
+  var fmodi = 0
+  if(modi >= 0){
+  fdi = dice + (Math.floor(modi / 7) *2) + Math.floor((modi % 7) / 4) //final dice
+  fmodi = Math.floor(modi % 7 % 4) //final modifier
+  }else{
+    fdi = (Math.floor(modi / -7) *2) + Math.floor((modi % -7) / -4)
+    fmodi = Math.floor(modi % -7 % -4) //final modifier
+  }
   return [fdi,fmodi]
 }
 
@@ -659,33 +666,41 @@ function basiclift(_st){
 }
 
 function encumber(){
+  //torso penalties
+  var movpen =1
+  if(chara().hittrack['torso'].hp < chara().hpmax*0.5){
+    movpen =0.8
+  }
+  if(chara().hittrack['torso'].hp < chara().hpmax*(1/3)){
+    movpen =0.5
+  }
   var _enc = Math.ceil(chara().enc/basiclift(chara().st))
   if(isNaN(_enc)){_enc=0}
   if (_enc >6){_enc = 10}else if(_enc > 3){_enc = 6;} //rounding encumberance
   switch(_enc){
     case 0:
-    chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)
+    chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*movpen
       chara().dodgepen =0
     break;
     case 1:
-      chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)
+      chara().mov = Math.floor(((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*movpen
       chara().dodgepen =0
     break;
     case 2:
-      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.8)
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.8*movpen)
       chara().dodgepen =-1
      break;
      case 3:
-      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.6)
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.6*movpen)
       console.log(chara().mov)
       chara().dodgepen =-2
     break;
     case 6:
-      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.4)
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.4*movpen)
       chara().dodgepen =-3
     break;
     case 10:
-      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.2)
+      chara().mov = Math.floor((((parseInt(chara().dx)+parseInt(chara().ht))/4)+chara().movmod)*0.2*movpen)
       chara().dodgepen =-4
     break;
     default:
@@ -713,7 +728,7 @@ function display(){
   getId("txt_per").textContent = chara().per +"/"+ chara().permax + " Perception"
   getId("txt_lif").innerHTML = basiclift(chara().st) +"/"+ basiclift(chara().st) + "lbs <b>BL</b>"
   getId("txt_enc").textContent = "Encumberance Dodge penalty: "+ chara().dodgepen
-  getId("txt_mov").textContent =`Move: ${chara().mov} || Dodge: ${Math.floor(chara().spd)+3 + chara().dodgemod} || ${chara().notes} `
+  getId("txt_mov").textContent =`Move: ${chara().mov}, Spd: ${chara().spd} || Dodge: ${Math.floor(chara().spd)+3 + chara().dodgemod} || ${chara().notes} `
   getId("txt_status").innerHTML = status
   getId("txt_dmg").textContent = `thr: ${dmgtbl.thrust[Math.floor(chara().st)]} sw: ${dmgtbl.swing[Math.floor(chara().st)]}`
   skilldisplay();
@@ -737,30 +752,39 @@ function calc(){
     penalty = Math.min(penalty,5)
     chara().st = Math.max(chara().st = chara().stmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2),chara().stmax/2)
   }
-
-  
+  var dxpen = 0
+  //torso injury penalties
+  if(chara().hittrack['torso'].hp < chara().hpmax *(2/3)){
+    dxpen = -1
+  }
+  if(chara().hittrack['torso'].hp < chara().hpmax*0.5){
+    dxpen = -2
+  }
+  if(chara().hittrack['torso'].hp < chara().hpmax*(1/3)){
+    dxpen = -3
+  }
   
   if(cb_highres.checked && !cb_cap.checked){
     chara().iq = Math.ceil(chara().iqmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
-    chara().dx = Math.ceil(chara().dxmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
+    chara().dx = Math.ceil(chara().dxmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2)+dxpen);
     chara().ht = Math.ceil(chara().htmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
     chara().will = Math.ceil(chara().willmax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
     chara().per = Math.ceil(chara().permax * (1 - (chara().fpmax -chara().fp)/chara().fpmax/2));
   }else if(cb_highres.checked && cb_cap.checked){
     chara().iq = Math.ceil(chara().iqmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
     chara().ht = Math.ceil(chara().htmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
-    chara().dx = Math.ceil(chara().dxmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
+    chara().dx = Math.ceil(chara().dxmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5)+dxpen);
     chara().will = Math.ceil(chara().willmax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
     chara().per = Math.ceil(chara().permax * Math.max((1 - (chara().fpmax -chara().fp)/chara().fpmax/2),0.5));
   }else{
     chara().iq = chara().iqmax -  penalty;
-    chara().dx = chara().dxmax - penalty;
+    chara().dx = chara().dxmax - penalty +dxpen;
     chara().ht = chara().htmax - penalty;
     chara().per = chara().permax - penalty;
     chara().will = chara().willmax - penalty;
 
   };
-  chara().spd = (chara().dx + chara().ht)/4
+  chara().spd = ((chara().dx + chara().ht)/4) +chara().spdmod
   if((chara().fp/(chara().fppoint)>=1)){
     status = "<b>Mild Fatigue</b></br>"
   }else if (chara().fp/(chara().fppoint)<1 && chara().fp/(chara().fppoint)>=0){
@@ -1101,6 +1125,8 @@ function wtrackupdate(e){
   }else{
     manhitsvg.getElementById(part).style.fill =gradthreeGet(getHPpercentPart(part))
   }
+  encumber();
+  display();
 }
 
 function getHPpercentPart(part_){

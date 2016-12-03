@@ -2,6 +2,7 @@ var dmgtbl={
   "thrust": [
     "1d-6",
     "1d-6",
+    "1d-6",
     "1d-5",
     "1d-5",
     "1d-4",
@@ -42,6 +43,7 @@ var dmgtbl={
     "4d+1"
   ],
   "swing": [
+    "1d-5",
     "1d-5",
     "1d-5",
     "1d-4",
@@ -87,10 +89,13 @@ var dmgtbl={
 var wdatahitloc={
     "track":["eye-right",
     "eye-left",
+    "eye-left",
+    "ear-left",
     "arm-right",
     "arm-left",
     "hand-right",
     "hand-left",
+    "torso",
     "leg-right",
     "leg-left",
     "foot-right",
@@ -108,10 +113,13 @@ var wdatahitloc={
     ],
     "display":{"eye-right":3,
     "eye-left":3,
+    "ear-left":3,
+    "ear-right":3,
     "arm-right":2,
     "arm-left":2,
     "hand-right":2,
     "hand-left":2,
+    "torso":2,
     "leg-right":2,
     "leg-left":2,
     "foot-right":2,
@@ -159,6 +167,8 @@ var wdatahitloc={
     "joint-right-ankle":{"mod":4,"name":"Right Ankle", "tags":"N", "penalty":-7},
     "pelvis":{"mod":1,"name":"Pelvis", "tags":"S", "penalty":-3},
     "digestive":{"mod":1,"name":"Digestive Tract", "tags":"U", "penalty":-2},
+    "ear-left":{"mod":4,"name":"Left Ear", "tags":"A,L", "penalty":-7},
+    "ear-right":{"mod":4,"name":"Right Ear", "tags":"A,L", "penalty":-7},
 
 }
 
