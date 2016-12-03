@@ -591,7 +591,6 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   updatenamelist();
   calc();
   encumber();
-  display();
   cvsdisplay();
   rn_mov.disabled=false
   movdo();
@@ -601,8 +600,19 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   setupwdisplay();
   weapondisplay();
   //additional init
-  woundcolor()
+  woundcolor();
   skilldisplay();
+  display();
+  for (var i = 0; i < wdatahitloc.track.length; i++) {
+    var part = wdatahitloc.track[i]
+    if(wdatahitloc.display[part]==2){
+    manhitsvg.getElementById(part).style.fill =gradtwoGet(getHPpercentPart(part))
+    }else{
+     manhitsvg.getElementById(part).style.fill =gradthreeGet(getHPpercentPart(part))
+    }
+
+  };
+  
 }
 catch(err){
   switch(type){
