@@ -1,12 +1,22 @@
-// bases  ["thr","sw","other"]
+//HOW TO ADD NEW WEAPONS, a guide.
+//Each weapon is an array. The first element in the array is the weapons name. Every subsequent element is an object with contents that define a weapon in one of its uses.
+//"name" is the name of the weapon and its usage, so "axe swing" for an axe when swung. This is the only way to use an axe so the axe entry only has one object.
+//Try to keep the "name" entries of the weapon objects to around 16 characters or less. Use abbreviations if you need to.
+//"base" is what the weapon is based on, this is either "thr" for thrust,
+//"sw" for swing or "dmg" for straight up damage like force swords
+//dice" is damage dice added , this should be 0 for muscle powered weapons
+//"mod" is modifiers. For muscle pwrd weapons, this is the part after the sw or thrust in the books.
+//Type is damage type. This is one of the following: "pi-","burn","cor","cr","fat","pi","tox","cut","pi+","imp","pi++"
+//use http://www.jsoneditoronline.org if you're unused to writing JSON, it will do all the formatting for you.\
+//when using soneditoronline.org you can use the 'duplicate' function on the last element of the array to add a new weapon you can then modify to a new entry.
 [
 	[
-	"Punch",
+	"Kick",
 		{
     		"name":"Punch",
     		"base":"thr",
     		"dice":0,
-    		"mod":-1,
+    		"mod":0,
     		"type":"cr"
 		}
 	],
@@ -167,7 +177,7 @@
     		"dice":0,
     		"mod":3,
     		"type":"cr"
-		},
+		}
 	],
 	["Nunchaku",
 		{
@@ -176,7 +186,7 @@
     		"dice":0,
     		"mod":1,
     		"type":"cr"
-		},
+		}
 	],
 	["Force Sword",
 		{
@@ -185,7 +195,7 @@
     		"dice":8,
     		"mod":0,
     		"type":"(5) Burn"
-		},
+		}
 	],
 	["Large Knife",
 		{
@@ -218,5 +228,5 @@
     		"mod":0,
     		"type":"imp"
 		}
-	],
+	]
 ]
