@@ -520,6 +520,7 @@ btn_init.onclick=function(){ //initialisation
     setupwdisplay();
     wthlsInit()
     woundcolor();
+    qwepSetup();
     in_hps.value=dotrack[ti_name.value].hp
     getId('txt_rnmov').textContent = getId('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
     rn_mov.disabled =false
@@ -621,6 +622,7 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   wthlsInit()
   woundcolor();
   skilldisplay();
+  qwepSetup();
   display();
   in_hps.value=chara().hp
   for (var i = 0; i < wdatahitloc.track.length; i++) {
@@ -1572,6 +1574,25 @@ function log(t){
     dotrack.log += `${d.getDate()}/${d.getMonth()+1} (UTC+ ${d.getTimezoneOffset()/-60}) ${d.getHours()}:${d.getMinutes()}: ${t} \n `
   }
 }
+
+//quick weapons
+function qwepSetup(){
+  for (var i = 0; i < quickweps.length; i++) {
+    var option = document.createElement('option')
+    option.textContent = quickweps[i][0]
+    option.value = i
+    getId('sl_qwep').add(option);
+  };
+}
+
+function qwepAdd(e){
+  var wep = quickweps[getId('sl_qwep').value]
+  for (var i = 1; i < wep.length; i++) {
+    chara().weapons.push(wep[i])
+  };
+  weapondisplay();
+}
+btn_qwep.onclick=qwepAdd
 
 ///fun stuff
 document.onclick=function(){

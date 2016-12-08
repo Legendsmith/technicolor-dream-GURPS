@@ -8,6 +8,7 @@
 <script type="text/javascript" src="damagetables.json"></script>
 <script type="text/javascript" src="patterns.js"></script>
 <script type="text/javascript" src="lz-string.min.js"></script>
+<script type="text/javascript" src="quickweapons.json"></script>
 </head>
 <body>
   <input type="file" id="in_fload" style="display:none">
@@ -111,6 +112,7 @@
   <p> <input type="text" class=insmt id="ti_nwname" maxlength="20" value="Weapon Name">
   </input> Damage:<select style="width:50px" id="sl_nwd"></select>
    <input type="number" class=insm id="ti_nwdice" width="20" value=0>d6+<input type="number" class=insm id="ti_nwmod" width="20" value=0> <select style="width:50px" id="sl_nwdt"></select> <button class="fancybtn" id="btn_nweapon">New Weapon</button></p>
+   <p><select style="width:200px" id="sl_qwep"></select> <button class="fancybtn" id="btn_qwep">Quick Add Weapon</button></p>
    <p>Skills are straightforward, just enter the name, select the base attribute and add the RSL modifier. For weapons, enter the modifier that the weapon gives. For example, an Axe is sw+2 cut, so enter sw 0d6+2 above. For weapons that do not depend on muscle strength such as guns or spells select 'other' from the damge dropdown and then enter the full damage dice and modifier.</p>
    <input type="checkbox" id="cb_diceadds">Use Optional Rule: Modifying Dice + Adds (B269)</input></br><input class=insm type="number" id="in_encs" value = 0>lbs Carried</input>
    <hr>

@@ -8,12 +8,13 @@
 //"mod" is modifiers. For muscle pwrd weapons, this is the part after the sw or thrust in the books.
 //Type is damage type. This is one of the following: "pi-","burn","cor","cr","fat","pi","tox","cut","pi+","imp","pi++"
 //use http://www.jsoneditoronline.org if you're unused to writing JSON, it will do all the formatting for you.\
-//when using soneditoronline.org you can use the 'duplicate' function on the last element of the array to add a new weapon you can then modify to a new entry.
-[
+//when using jsoneditoronline.org you can use the 'duplicate' function on the last element of the array to add a new weapon you can then modify to a new entry.
+//also when using jspneditoronline, don't copy the 'var quickweps='
+var quickweps=[
 	[
 	"Kick",
 		{
-    		"name":"Punch",
+    		"name":"Kick",
     		"base":"thr",
     		"dice":0,
     		"mod":0,
@@ -124,14 +125,14 @@
 	],
 	["Bastard sword 1h",
 		{
-    		"name":"Bastard Swing 1h",
+    		"name":"Bastard Sword Swing 1h",
     		"base":"sw",
     		"dice":0,
     		"mod":1,
     		"type":"cut"
 		},
 		{
-    		"name":"Bastard Thrust 1h",
+    		"name":"Bastard Sword Thrust 1h",
     		"base":"thr",
     		"dice":0,
     		"mod":1,
@@ -140,14 +141,14 @@
 	],
 	["Thr Bastard sword 1h",
 		{
-    		"name":"Thr Bastard Swing 1h",
+    		"name":"Thr Bastard Sword Swing 1h",
     		"base":"sw",
     		"dice":0,
     		"mod":1,
     		"type":"cut"
 		},
 		{
-    		"name":"Thr Bastard Thrust 1h",
+    		"name":"Thr Bastard Sword Thrust 1h",
     		"base":"thr",
     		"dice":0,
     		"mod":2,
@@ -190,7 +191,7 @@
 	],
 	["Force Sword",
 		{
-    		"name":"Nunchaku",
+    		"name":"Force Sword",
     		"base":"other",
     		"dice":8,
     		"mod":0,
