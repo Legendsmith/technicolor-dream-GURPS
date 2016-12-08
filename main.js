@@ -1221,7 +1221,6 @@ in_hps.onchange = function(){
 
 hitloc.onSelect = function(e){
   hitloc.selected=e.target.id
-  console.log(hitloc.selected)
   for (var i = 0; i < manhitsvg.getElementById('mainhitloc').childNodes.length; i++) {
     if(manhitsvg.getElementById('mainhitloc').childNodes[i].style){
       manhitsvg.getElementById('mainhitloc').childNodes[i].style.stroke='#000000';
@@ -1302,54 +1301,59 @@ function atkcalcbonus(){
   }
   var hitpen = 0 
   var text = ""
+  var locselect = "random hit location"
   ti_dmgbon.value = 0
-  if(!cb_randomhit.checked){hitpen = wdatahitloc[wthitselected].penalty}
+  if(!cb_randomhit.checked){
+    hitpen = wdatahitloc[wthitselected].penalty
+    locselect = wdatahitloc[wthitselected].name
+
+  }
   switch(manu){
     case "atk":
       bonus += hitpen
-      text = `Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl}`
+      text = `Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl}`
     break;
     case "com-stron":
       bonus += hitpen
       ti_dmgbon.value = 1
       cb_dmgbon.checked =false
-      text = `Committed Strong Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `Committed Strong Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "com-deter":
       bonus +=2 + hitpen
-      text= `Committed Strong Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text= `Committed Strong Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "def":
       bonus +=hitpen
-      text = `Defensive Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `Defensive Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "aoa-stron":
       bonus +=hitpen
-      text = `All Out Strong Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `All Out Strong Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "aoa-deter":
       bonus +=hitpen +4
-      text = `All Out Determined Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `All Out Determined Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "aoa-feint":
       bonus +=hitpen
-      text = `All Out Feint & Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `All Out Feint & Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "aoa-long":
       bonus +=hitpen
-      text = `All Out Long Attack (Add +1 to Reach) on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `All Out Long Attack (Add +1 to Reach) on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "aoa-doub":
       bonus +=hitpen
-      text = `All Out Double Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `All Out Double Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "atk-r":
       bonus +=hitpen + ti_rangepen.valueAsNumber + ti_aimbon.valueAsNumber
-      text = `Ranged Attack on enemy with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `Ranged Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     case "aoa-detr":
       bonus +=hitpen + ti_rangepen.valueAsNumber + ti_aimbon.valueAsNumber + 1
-      text = `All Out Ranged Attack on enemy with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+      text = `All Out Ranged Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
     
   }
@@ -1423,6 +1427,19 @@ function atkcalc(){
   var thisskill = chara().skills[parseInt(sl_atkskill.value)]
   var sl = thisskill.sl + ti_skillbon.valueAsNumber + bonus
   var success =false
+  wthitsvg.getElementById('face').style.fill = '#8ae234'
+  wthitsvg.getElementById('neck').style.fill = '#8ae234'
+  wthitsvg.getElementById('head').style.fill = '#8ae234'
+  wthitsvg.getElementById('groin').style.fill = '#8ae234'
+  for (var i = 0; i < wthitsvg.getElementById('mainhitloc').childNodes.length; i++) {
+    var type = wdatahitloc.display[manhitsvg.getElementById('mainhitloc').childNodes[i].id]
+    if(manhitsvg.getElementById('mainhitloc').childNodes[i].style && type == 2){
+      wthitsvg.getElementById('mainhitloc').childNodes[i].style.fill = '#8ae234'
+    }
+    if(manhitsvg.getElementById('mainhitloc').childNodes[i].style &&  type == 3){
+      wthitsvg.getElementById('mainhitloc').childNodes[i].style.fill = '#729fcf'
+    }
+  };
   switch(manu){
     case "atk":
     break;
@@ -1480,7 +1497,13 @@ function atkcalc(){
         damageroll += Math.ceil(array[i]/255 *6)
       }
       damageroll+=dmg[1]
+      damageroll = Math.max(damageroll,1)
       text += damageroll.toString()
+      if(cb_randomhit.checked){
+        var locationhit =wdatarollloc[rolldice()]
+        wthitsvg.getElementById(locationhit).style.fill= '#FF0000'
+        text += ` Location: ${wdatahitloc[locationhit].name}`
+      }
     break;
     case "atk-r":
     break;
@@ -1504,8 +1527,21 @@ function atkcalc(){
     damageroll += Math.ceil(array[i]/255 *6)
   }
   damageroll+=dmg[1]
+  damageroll = Math.max(damageroll,1)
   text += damageroll.toString()
-  console.log(text)
+  if(cb_randomhit.checked){
+    var locationhit =wdatarollloc[rolldice()]
+    if (locationhit== 'foot' || locationhit== 'hand') {
+      
+      if(rolldice()>10){
+        locationhit +='-left'
+      }else{
+        locationhit +='-right'
+      }
+    };
+    wthitsvg.getElementById(locationhit).style.fill= '#FF0000'
+    text += ` Location: ${wdatahitloc[locationhit].name}`
+  }
   getId('txt_atkcalc').textContent += text
   log(`Rolled attack: text`)
 }
