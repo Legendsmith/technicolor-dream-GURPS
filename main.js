@@ -1313,7 +1313,7 @@ function atkcalcbonus(){
   switch(manu){
     case "atk":
       bonus += hitpen
-      text = `Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl}`
+      text = `Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}`
     break;
     case "com-stron":
       bonus += hitpen
