@@ -949,6 +949,7 @@ function skilldisplay(){
     option.value = i
     sl_atkskill.add(option);
   };
+  sl_removeskill.removeChild(sl_removeskill.firstChild)
 }
 
 function removeskill(){
@@ -1014,6 +1015,7 @@ function weapondisplay(){
     option.value = i
     sl_atkweapon.add(option)
   };
+  sl_removeweapon.removeChild(sl_removeweapon.firstChild)
 }
 
 function removeweapon(){
@@ -1304,7 +1306,6 @@ function atkcalcbonus(){
   var hitpen = 0 
   var text = ""
   var locselect = "random hit location"
-  ti_dmgbon.value = 0
   if(!cb_randomhit.checked){
     hitpen = wdatahitloc[wthitselected].penalty
     locselect = wdatahitloc[wthitselected].name
@@ -1317,7 +1318,6 @@ function atkcalcbonus(){
     break;
     case "com-stron":
       bonus += hitpen
-      ti_dmgbon.value = 1
       cb_dmgbon.checked =false
       text = `Committed Strong Attack on enemy ${locselect} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
     break;
