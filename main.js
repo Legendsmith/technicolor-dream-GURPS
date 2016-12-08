@@ -26,20 +26,26 @@ function openTab(evt, tabName) {
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-    if (tabName=="wounds"){
-      getId('display').style.display = "none";
-      getId('wounddisplay').style.display ="block";
-    }else{
-      getId('display').style.display = "";
-      getId('wounddisplay').style.display ="none"
+    //display the proper sidebar, but first hide the others
+    var displays = document.getElementsByName('displays')
+    for (var i = displays.length - 1; i >= 0; i--) {
+      displays[i].style.display='none'
     };
+    
+    getId(`${tabName}_display`).style.display='block'
+    /*
+    if(typeof window[`fun_${tabName}`] === 'function'){
+      window[`fun_${tabName}`]()
+    }
+    */
 
     // Show the current tab, and add an "active" class to the link that opened the tab
     getId(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-getId('defaultOpen').click()
 
+
+getId('defaultOpen').click()
 //setup
 
 
@@ -58,17 +64,17 @@ rn_mov.disabled =true
 ///patterns
 var dotrack = {}
 var status = ""
-var cvs = getId("display")
+var cvs = getId("lastgasp_display")
 var ctx = cvs.getContext("2d");
 //canvas
 function cvssetup(_fp){
-  var fontscale = getId("display").height/875
+  var fontscale = getId("lastgasp_display").height/875
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle="#000000"
   ctx.font= `${round(Math.max(32*fontscale,8))}px Arial`;
   ctx.fillText("FP",30,32)
   ctx.font= `${round(Math.max(18*fontscale,8))}px Arial`;
-  ctx.translate(0,72 * Math.max(getId("display").height/875),0.5)
+  ctx.translate(0,72 * Math.max(getId("lastgasp_display").height/875),0.5)
   var dsplyhght =(cvs.height - 85) //height minus the big FP
     for (var i = _fp*2; i >= 0; i--) {
     var _x = 5
@@ -103,13 +109,13 @@ window.onresize = function(){
 
 function cvsdisplay(){
   //scale code
-  getId("display").style.height = Math.min(window.innerHeight,875)+"px"
-  getId("display").height = Math.min((window.innerHeight*0.95),875)
-  var fontscale = getId("display").height/875
+  getId("lastgasp_display").style.height = Math.min(window.innerHeight,875)+"px"
+  getId("lastgasp_display").height = Math.min((window.innerHeight*0.95),875)
+  var fontscale = getId("lastgasp_display").height/875
   //scale code
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, cvs.width, cvs.height);
-  ctx.translate(0,72 * Math.max(getId("display").height/875),0.5)
+  ctx.translate(0,72 * Math.max(getId("lastgasp_display").height/875),0.5)
   var dsplyhght =(cvs.height - 85)
   //
   //
@@ -409,6 +415,8 @@ btn_wnd.onclick=function(){
 dotrack.names = []
 sl_namelist.onchange =  function(){
   //ti_name.value = sl_namelist.value
+  if(init){
+  log(`Chara changed to ${sl_namelist.value}`)}
   update();
 }
 
@@ -423,6 +431,7 @@ btn_init.onclick=function(){ //initialisation
     dotrack.names.push(ti_name.value) 
   }
   updatenamelist()
+  log(`added ${ti_name.value}`)
   dotrack[ti_name.value]={}
   dotrack[ti_name.value].fitbon = 0
   dotrack[ti_name.value].fittime =1
@@ -483,8 +492,12 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].fppoint = dotrack[ti_name.value].fpmax/2
     dotrack[ti_name.value].dodgemod = in_dod.valueAsNumber
     dotrack[ti_name.value].dodgepen = 0;
-    dotrack[ti_name.value].skills=[];
-    dotrack[ti_name.value].weapons=[];
+    dotrack[ti_name.value].skills=[{"name":"DX", "base":"DX", 'RSL':0}];
+    dotrack[ti_name.value].weapons=[{"name":"Punch",
+    "base":"thr",
+    "dice":0,
+    "mod":-1,
+    "type":"cr"}];
     dotrack[ti_name.value].hittrack = {}
     for (var i = 0; i < wdatahitloc.track.length; i++) {
       dotrack[ti_name.value].hittrack[wdatahitloc.track[i]] = {"hp":Math.ceil(dotrack[ti_name.value].hpmax/wdatahitloc[wdatahitloc.track[i]].mod),"hpmax":Math.ceil(dotrack[ti_name.value].hpmax/wdatahitloc[wdatahitloc.track[i]].mod)}
@@ -505,7 +518,9 @@ btn_init.onclick=function(){ //initialisation
     update();
     //additional init
     setupwdisplay();
+    wthlsInit()
     woundcolor();
+    in_hps.value=dotrack[ti_name.value].hp
     getId('txt_rnmov').textContent = getId('txt_rnmov').textContent = `${rn_mov.value} Cost: ${round((rn_mov.valueAsNumber/chara().mov)*10)} AP`
     rn_mov.disabled =false
 
@@ -515,6 +530,8 @@ btn_init.onclick=function(){ //initialisation
 
 //ui callbacks
 function movdo(){
+  getId('rn_mov').min = 1
+  getId('rn_mov').max = Math.floor(chara().mov)
   if(cb_mcv.checked){
       getId('txt_rnmov').textContent = `Velocity: ${rn_mov.value}`
       getId('txt_varmov').textContent = `Increase ${round((rn_mov.valueAsNumber/chara().mov/2)*10)} Decrease: ${Math.floor((rn_mov.valueAsNumber/chara().mov/3)*10)}`
@@ -594,15 +611,18 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   cvsdisplay();
   rn_mov.disabled=false
   movdo();
+  defaultwp();;
   in_enc.value = chara().enc
   btn_fload.textContent = "Load From File";
   initskill();
   setupwdisplay();
   weapondisplay();
   //additional init
+  wthlsInit()
   woundcolor();
   skilldisplay();
   display();
+  in_hps.value=chara().hp
   for (var i = 0; i < wdatahitloc.track.length; i++) {
     var part = wdatahitloc.track[i]
     if(wdatahitloc.display[part]==2){
@@ -626,6 +646,19 @@ catch(err){
     }  
 }
 }
+function defaultwp(){
+  if(typeof chara().skills[0] ==='undefined'){
+  chara().skills.push({"name":"DX", "base":"DX", 'RSL':0})
+  };
+  if(typeof chara().weapons[0] ==='undefined'){
+    chara.weapons.push({"name":"Punch",
+    "base":"thr",
+    "dice":0,
+    "mod":-1,
+    "type":"cr"});
+  }
+} //default weapon and skills
+
 
 function update(){
   chara().fp = Math.min(chara().fp,chara().fpmax);
@@ -651,8 +684,8 @@ function diceadds(dice,modi){ //Thanks to Aion#4968 on the GURPS discord for hel
   if(modi >= 0){
   fdi = dice + (Math.floor(modi / 7) *2) + Math.floor((modi % 7) / 4) //final dice
   fmodi = Math.floor(modi % 7 % 4) //final modifier
-  }else{
-    fdi = (Math.floor(modi / -7) *2) + Math.floor((modi % -7) / -4)
+  }else{//negative values  need to be handled with negative multipliers.
+    fdi = dice + (Math.floor(modi / -7) *2) + Math.floor((modi % -7) / -4)
     fmodi = Math.floor(modi % -7 % -4) //final modifier
   }
   return [fdi,fmodi]
@@ -860,14 +893,18 @@ function newskill(){
   skilldisplay();
 }
 btn_nskill.onclick = newskill
-
+ti_skillbon.onchange = function(e){
+  numFieldcheck(e)
+  skilldisplay()
+  atkcalcbonus()
+}
 
 function rollskill(e){
   var success = false
   var thisskill = chara().skills[parseInt(e.target.id.split("_")[1])]
   var sl = thisskill.sl + ti_skillbon.valueAsNumber
   r = rolldice()
-
+  text = ""
   if (r <= sl){
     success=true;
     e.target.textContent = `Roll ${thisskill.name} ${sl}  RSL: ${thisskill.base}+${thisskill.RSL} Success: ${r} MoS: ${sl-r}`
@@ -876,17 +913,21 @@ function rollskill(e){
     e.target.textContent = `Roll ${thisskill.name} ${sl}  RSL: ${thisskill.base}+${thisskill.RSL} Failure: ${r} MoF: ${r-sl}`
     e.target.style.borderColor = 'red'
   }
-
+  log(`Rolled ${thisskill.name} ${success.toString()} MoS: ${sl-r} B: ${ti_skillbon.value}`)
   
 }
 
 function skilldisplay(){
   var h  = getId('skillholder')
+  defaultwp()
   while(h.lastChild){
     h.removeChild(h.lastChild);
   }
   while(sl_removeskill.lastChild){
     sl_removeskill.removeChild(sl_removeskill.lastChild);
+  }
+  while(sl_atkskill.lastChild){
+    sl_atkskill.removeChild(sl_atkskill.lastChild);
   }
   for (var i = 0; i < chara().skills.length; i++) {
     var nb = document.createElement("button")
@@ -901,6 +942,10 @@ function skilldisplay(){
     option.textContent=chara().skills[i].name
     option.value = i
     sl_removeskill.add(option);
+    var option = document.createElement('option')
+    option.textContent=chara().skills[i].name
+    option.value = i
+    sl_atkskill.add(option);
   };
 }
 
@@ -915,6 +960,11 @@ function removeskill(){
 btn_removeskill.onclick = removeskill
 
 /////////////ZONE END - WEAPON ZONE BEGIN//////////
+
+function attackcalcdisplay(){
+  txt_atkskill.textContent=1
+}
+
 
 function newweapon(){
   chara().weapons.push({
@@ -931,8 +981,12 @@ btn_nweapon.onclick =newweapon
 
 function weapondisplay(){
   var h  = getId('weaponholder')
+  defaultwp()
   while(h.lastChild){
     h.removeChild(h.lastChild);
+  }
+  while(getId('sl_atkweapon').lastChild){
+    getId('sl_atkweapon').removeChild(getId('sl_atkweapon').lastChild);
   }
   while(sl_removeweapon.lastChild){sl_removeweapon.removeChild(sl_removeweapon.lastChild);}
   for (var i = 0; i < chara().weapons.length; i++) {
@@ -953,6 +1007,10 @@ function weapondisplay(){
     option.textContent=chara().weapons[i].name
     option.value = i
     sl_removeweapon.add(option);
+    var option = document.createElement('option')
+    option.textContent=chara().weapons[i].name
+    option.value = i
+    sl_atkweapon.add(option)
   };
 }
 
@@ -978,15 +1036,31 @@ function rollweapon(e){
   var addstxt = ""
   if(weapondmg[1]>=0){
     addstxt = `+${weapondmg[1]}`
+  }else{
+    addstxt=weapondmg[1]
   }
-  e.target.textContent=`Roll ${chara().weapons[w].name}\nDamage: ${weapondmg[0]}d${addstxt} ${chara().weapons[w].type} Roll: ${r}`
+  e.target.textContent=`Roll ${chara().weapons[w].name}\nDamage: ${weapondmg[0]}d${addstxt} ${chara().weapons[w].type} Roll: ${Math.max(r,1)}`
+  log(`Rolled Weapon ${w.name}, B: ${ti_dmgbon.value} Dmg: ${Math.max(r,1)}`)
 }
 
-cb_dmgbon.onchange = weapondisplay
-ti_dmgbon.onchange = weapondisplay
+cb_dmgbon.onchange = function(e){
+  if(init){
+  weapondisplay()
+  atkcalcbonus()}
+}
+ti_dmgbon.onchange = function(e){
+  if(init){
+  numFieldcheck(e)
+  weapondisplay()
+  atkcalcbonus()
+}
+}
 
 function getweapondamage(x){
-  var thisweapon = chara().weapons[x]
+  var thisweapon = x
+  if(typeof x === 'number'){
+  thisweapon = chara().weapons[x]
+  }
   var dice = 0
   var adds  = 0
   var ds = ""
@@ -1059,14 +1133,11 @@ btn_dodge.onclick = function(e){
 
 
 function woundcolor(){
-   manhitsvg.getElementById('base').style['stroke-width'] = 3
-  if(chara().hp>=0){
-    var x = Math.max(chara().hp,0.5)
-    var r = Math.ceil(255*(1-(x/chara().hpmax)))
-    var g = Math.ceil(255*((x/chara().hpmax)))
-    var b = 128
-    manhitsvg.getElementById('base').style.stroke = `rgb(${r},${g},${b})`
-  }
+  var torpercent = Math.floor(((chara().hpmax*5) + chara().hp) / ((chara().hpmax*5)+ chara().hpmax)*100)/100
+   manhitsvg.getElementById('base').style['stroke-width'] = 10 * (1.1-torpercent)
+
+    manhitsvg.getElementById('base').style.stroke = gradGet(torpercent)
+  
 
 }
 btn_hpp.onclick = function(){
@@ -1093,7 +1164,7 @@ function setupwdisplay(){
     txt.textContent = `${wdatahitloc[wdatahitloc.track[i]].name} `;
     cont.id = `p_${wdatahitloc.track[i]}`
     cont.className='fine'
-    txt.style.display ='inline-block'
+    txt.className='textblock'
     txt.style.width ='90px'
     cont.appendChild(txt)
     var put = document.createElement("input");
@@ -1161,13 +1232,13 @@ hitloc.onSelect = function(e){
   e.target.style.stroke = '#FFFF66'
   e.target.style['stroke-width']=2
   e.target.style['stroke-opacity'] = '1'
-  //display in the wounddisplay
+  //display in the wounds_display
   var distext = `<h4>${wdatahitloc[e.target.id].name}</h4><h5>Hit Penalty ${wdatahitloc[e.target.id].penalty}</h5>`
   var tags = wdatahitloc[e.target.id].tags.split(",")
   for (var i = 0; i < tags.length; i++) {
     distext = distext.concat(`<p>${wdatatags[tags[i]]}</p>`)
   };
-  getId('wounddisplay').innerHTML= distext
+  getId('wounds_display').innerHTML= distext
 }
 
 hitloc.displaypart = function(id){
@@ -1184,6 +1255,264 @@ hitloc.colour = function(id,colour){
     }
 }
 
+
+
+//////////attack calculator//////////
+
+hitselect="torso"
+
+getId('rb_atk-melee').checked=true
+function radioVisSwitch(e){
+  var t = getId(e.target.id.split("_")[1])
+
+  var a = document.getElementsByName(e.target.name)
+  for (var i = a.length - 1; i >= 0; i--) {
+    getId(a[i].id.split("_")[1]).style.display='none'
+  };
+  if(e.target.checked){
+    t.style.display="block"
+  }
+}
+getId("rb_atk-melee").onchange = function(e){
+  radioVisSwitch(e)
+  atkcalcbonus()
+}
+getId("rb_atk-ranged").onchange = function(e){
+  radioVisSwitch(e)
+  atkcalcbonus()
+}
+
+function atkcalcbonus(){
+  var bonus = ti_skillbon.valueAsNumber
+  var manu = "atk"
+  var weapon = chara().weapons[parseInt(sl_atkweapon.value)]
+  var base =""
+  switch(weapon.base){
+    case "thr":
+    base='thrust'
+    break;
+    case "sw":
+    base="swing"
+    break;
+  }
+  if(getId('rb_atk-melee').checked){
+    manu=sl_meleeopt.value
+  }else if(getId('rb_atk-ranged').checked){
+    manu=sl_rangedopt.value
+  }
+  var hitpen = 0 
+  var text = ""
+  ti_dmgbon.value = 0
+  if(!cb_randomhit.checked){hitpen = wdatahitloc[wthitselected].penalty}
+  switch(manu){
+    case "atk":
+      bonus += hitpen
+      text = `Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl}`
+    break;
+    case "com-stron":
+      bonus += hitpen
+      ti_dmgbon.value = 1
+      cb_dmgbon.checked =false
+      text = `Committed Strong Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "com-deter":
+      bonus +=2 + hitpen
+      text= `Committed Strong Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "def":
+      bonus +=hitpen
+      text = `Defensive Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "aoa-stron":
+      bonus +=hitpen
+      text = `All Out Strong Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "aoa-deter":
+      bonus +=hitpen +4
+      text = `All Out Determined Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "aoa-feint":
+      bonus +=hitpen
+      text = `All Out Feint & Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "aoa-long":
+      bonus +=hitpen
+      text = `All Out Long Attack (Add +1 to Reach) on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "aoa-doub":
+      bonus +=hitpen
+      text = `All Out Double Attack on enemy ${wdatahitloc[wthitselected].name} with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "atk-r":
+      bonus +=hitpen + ti_rangepen.valueAsNumber + ti_aimbon.valueAsNumber
+      text = `Ranged Attack on enemy with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    case "aoa-detr":
+      bonus +=hitpen + ti_rangepen.valueAsNumber + ti_aimbon.valueAsNumber + 1
+      text = `All Out Ranged Attack on enemy with skill ${chara().skills[parseInt(sl_atkskill.value)].sl+bonus}.`
+    break;
+    
+  }
+  getId('txt_atkcalc').textContent = text
+  return [bonus,manu]
+}
+sl_atkweapon.onchange=atkcalcbonus
+sl_atkskill.onchange=atkcalcbonus
+cb_randomhit.onchange=atkcalcbonus
+sl_meleeopt.onchange=atkcalcbonus
+sl_rangedopt.onchange=atkcalcbonus
+ti_rangepen.onchange=function(e){
+  numFieldcheck(e)
+  atkcalcbonus()
+}
+ti_aimbon.onchange=function(e){
+  numFieldcheck(e)
+  atkcalcbonus()
+}
+
+function numFieldcheck(e){
+  if(isNaN(e.target.valueAsNumber)){
+    e.target.value = "0"
+  }
+}
+
+// wound tracker hit location figure
+function wthlsInit(){ //wound tracker hit location selector init
+  wthitsvg = document.getElementById("atk-man-svg").contentDocument
+  for (var i = 0; i < wthitsvg.getElementById('mainhitloc').childNodes.length; i++) {
+      if(wthitsvg.getElementById('mainhitloc').childNodes[i].style){
+      wthitsvg.getElementById('mainhitloc').childNodes[i].onclick=wthls
+      wthitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-opacity']='0.1'
+      wthitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-width']='1'
+    }
+  };
+
+}
+wthitselected = "torso"
+function wthls(e){ //wound tracker hit location select. I sure do love duplicated functionality
+  wthitselected=e.target.id
+  for (var i = 0; i < wthitsvg.getElementById('mainhitloc').childNodes.length; i++) {
+    if(wthitsvg.getElementById('mainhitloc').childNodes[i].style){
+      wthitsvg.getElementById('mainhitloc').childNodes[i].style.stroke='#000000';
+      wthitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-opacity']='0.1'
+      wthitsvg.getElementById('mainhitloc').childNodes[i].style['stroke-width']='1'
+    }
+  };
+  e.target.style.stroke = '#FFFF66'
+  e.target.style['stroke-width']=2
+  e.target.style['stroke-opacity'] = '1'
+  //display in the wounds_display
+  var distext = `<h4>${wdatahitloc[e.target.id].name}</h4><b>Hit Penalty ${wdatahitloc[e.target.id].penalty}</b></br>`
+  var tags = wdatahitloc[e.target.id].tags.split(",")
+  for (var i = 0; i < tags.length; i++) {
+    distext = distext.concat(`<p>${wdatatags[tags[i]]}</p>`)
+  };
+  getId('txt_wthls').innerHTML= distext
+  if(!cb_randomhit.checked){
+    atkcalcbonus()
+  }
+}
+
+function atkcalc(){
+  var a = atkcalcbonus()
+  var manu = a[1]
+  var bonus = a[0]
+  var weapon = chara().weapons[parseInt(sl_atkweapon.value)]
+  var dmg = getweapondamage(parseInt(sl_atkweapon.value))// 0 is dice, 1 is modifiers
+  var text = ""
+  var thisskill = chara().skills[parseInt(sl_atkskill.value)]
+  var sl = thisskill.sl + ti_skillbon.valueAsNumber + bonus
+  var success =false
+  switch(manu){
+    case "atk":
+    break;
+    case "com-stron":
+      if(parseInt(dmgtbl[base][Math.floor(chara().st)].split('d')[0])>2){//aoa strong damage bonus
+        dmg[1] += Math.floor(dmg[0]/2)
+      }else{
+        dmg[1] += 1
+      }
+    break;
+    case "com-deter":
+    break;
+    case "def":
+      if(parseInt(dmgtbl[base][Math.floor(chara().st)].split('d')[0])>2){//defensive damage penalty
+        dmg[1] -= dmg[0]
+      }else{
+        dmg[1] -= 2
+      }
+    break;
+    case "aoa-stron":
+      if(parseInt(dmgtbl[base][Math.floor(chara().st)].split('d')[0])>2){//aoa strong damage bonus
+        dmg[1] += dmg[0]
+      }else{
+        dmg[1] += 2
+      }
+    break;
+    case "aoa-deter":
+    break;
+    case "aoa-feint":
+      fr = rolldice()
+      if (r <= sl){
+        text += `\n Roll ${r} Feint Success, MoS: MoS: ${sl-r}`
+      }else if(r==sl+1 ){
+        text += ""
+      }else{
+        text += `\n Roll ${r} Feint failed: MoF: ${r-sl}`
+      }
+    break;
+    case "aoa-long":
+    break;
+    case "aoa-doub":
+      r = rolldice()
+      if (r <= sl){
+        text += `\n Roll: ${r} Hit, MoS: MoS: ${sl-r} Damage: `
+      }else if(r==sl+1 ){
+        text += `\n Roll: ${r} Miss By 1, MoS: MoS: ${sl-r} Damage: `
+      }else{
+        text += `\n Roll: ${r} Miss: MoF: ${r-sl} Damage: `
+      }
+      //damage
+      var array = new Uint8ClampedArray(dmg[0]);
+      window.crypto.getRandomValues(array);
+      var damageroll = 0
+      for (var i = 0; i < array.length; i++) {
+        damageroll += Math.ceil(array[i]/255 *6)
+      }
+      damageroll+=dmg[1]
+      text += damageroll.toString()
+    break;
+    case "atk-r":
+    break;
+    case "aoa-detr":
+    break;
+  }
+  //skill roll part
+  r = rolldice()
+  if (r <= sl){
+    text += `\n Roll: ${r} Hit, MoS: MoS: ${sl-r} Damage: `
+  }else if(r==sl+1 ){
+    text += `\n Roll: ${r} Miss By 1, MoS: MoS: ${sl-r} Damage: `
+  }else{
+    text += `\n Roll: ${r} Miss: MoF: ${r-sl} Damage: `
+  }
+  //damage
+  var array = new Uint8ClampedArray(dmg[0]);
+  window.crypto.getRandomValues(array);
+  var damageroll = 0
+  for (var i = 0; i < array.length; i++) {
+    damageroll += Math.ceil(array[i]/255 *6)
+  }
+  damageroll+=dmg[1]
+  text += damageroll.toString()
+  console.log(text)
+  getId('txt_atkcalc').textContent += text
+  log(`Rolled attack: text`)
+}
+
+btn_atkcalc.onclick = atkcalc
+
+
 //////////////////Main Code Ends Here//////////////
 function repopulatelist(list,arr){
   var list = getId(list)
@@ -1198,6 +1527,14 @@ function repopulatelist(list,arr){
     list.add(option);
   }
     )
+}
+
+function log(t){
+  if(typeof dotrack.log === 'undefined'){dotrack.log =""}
+  if(!mobilecheck()){
+    var d = new Date()
+    dotrack.log += `${d.getDate()}/${d.getMonth()+1} (UTC+ ${d.getTimezoneOffset()/-60}) ${d.getHours()}:${d.getMinutes()}: ${t} \n `
+  }
 }
 
 ///fun stuff
@@ -1219,3 +1556,9 @@ document.onclick=function(){
 }
 
 }}
+
+function mobilecheck() {
+  var check = false;
+  (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+  return check;
+};

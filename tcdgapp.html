@@ -20,9 +20,14 @@
   <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'attacksskills')">Skills & Weapons</a></li>
   </div>
 </ul>
-<div id="page-wrap">
-  <canvas id="display" width="150px" ></canvas>
-  <div id="wounddisplay"><p>Hit location data appears here.</p></div>
+<div id="page-wrap" >
+  <div name="displays" id="controls_display" class="displays"></div>
+  <div class="displays" name="displays" id="attacksskills_display">
+    <object class='right' id="atk-man-svg" type="image/svg+xml" data="manhitloc.svg" 
+  width="150" height="450" border="0"></object><span id="txt_wthls"></span>
+  </div>
+  <canvas id="lastgasp_display" width="150px" name="displays"></canvas>
+  <div id="wounds_display" name="displays"><p>Hit location data appears here.</p></div>
 </div>
 <div id="lastgasp" class="tabcontent">
   <h1><span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Last Gasp Assistant</h1>
@@ -108,7 +113,46 @@
    <input type="number" class=insm id="ti_nwdice" width="20" value=0>d6+<input type="number" class=insm id="ti_nwmod" width="20" value=0> <select style="width:50px" id="sl_nwdt"></select> <button class="fancybtn" id="btn_nweapon">New Weapon</button></p>
    <p>Skills are straightforward, just enter the name, select the base attribute and add the RSL modifier. For weapons, enter the modifier that the weapon gives. For example, an Axe is sw+2 cut, so enter sw 0d6+2 above. For weapons that do not depend on muscle strength such as guns or spells select 'other' from the damge dropdown and then enter the full damage dice and modifier.</p>
    <input type="checkbox" id="cb_diceadds">Use Optional Rule: Modifying Dice + Adds (B269)</input></br><input class=insm type="number" id="in_encs" value = 0>lbs Carried</input>
-  <hr>
+   <hr>
+   <h5>Attack Calculator</h5>
+   Use the Situational Skill Bonus and 'Damage Bonus' under Skills and Weapons respectively, to give other bonuses or penality, such as those for bad footing.
+   <div id="atk-calc" class='atk'>
+    <input type="radio" name="atktype" checked id="rb_atk-melee">Melee</input>
+    <input type="radio" name="atktype"  id="rb_atk-ranged">Ranged</input></br>
+    <span class='textblock'>Skill</span><select  class='textblock' id="sl_atkskill"></select><span id="txt_atkskill"></span></br>
+    <span class='textblock'>Weapon</span><select id="sl_atkweapon"  class='textblock'></select></br><button class='fancybtn' id='btn_atkcalc'>Attack!</button>
+   </div>
+   <div id="atk-options" class='atk'>
+    <div id="atk-melee">
+      <h5>Melee Options</h5>
+      <select id="sl_meleeopt" style="width:180px" >
+        <option value="atk">Attack</option>
+        <option value="com-deter">Committed Attack: Determined</option>
+        <option value="com-stron">Committed Attack: Strong</option>
+        <option value="def">Defensive Attack</option>
+        <option value="aoa-stron">All-Out Attack: Strong</option>
+        <option value="aoa-deter">All-Out Attack: Determined</option>
+        <option value="aoa-feint">All-Out Attack: Feint</option>
+        <option value="aoa-long">All-Out Attack: Long</option>
+        <option value="aoa-doub">All-Out Attack: Double</option>
+      </select>
+
+    </div>
+    <div id="atk-ranged">
+      <h5>Ranged Options</h5>
+      <select id="sl_rangedopt">
+        <option value="atk-r">Attack</option>
+        <option value="aoa-detr">All-Out Attack: Determined</option>
+      </select>
+      <input type='number' class='insm' id="ti_rangepen" value=0> Range penalty</input></br>
+      <input type='number' class='insm' id="ti_aimbon" value=0> Aim Bonus</input>
+    </div>
+    <div style="float:right;width:49%;border-left: 1px solid black;padding-left:1px"><h5>Hit Location</h5>Select from the figure on the side.</br>
+      <input type="checkbox" id="cb_randomhit">Random Hit Location</input>
+</div>
+   </div>
+  <hr style="clear: both">
+  <textarea cols="4" id="txt_atkcalc">x</textarea>
   <div class="lefty"><h3>Skills</h3> Situational Skill Bonus: <input type="number" class=insm id="ti_skillbon" width="30" value=0></br>
     <button class="fancybtn" id="btn_removeskill">Remove</button> <select style="width:150px" id="sl_removeskill"></select>
   </div>
@@ -122,7 +166,7 @@
 </div>
 <div id='wounds' class="tabcontent">
   <h2>Wounds, HP, & Defence</h2>
-  <p>
+
   <h3>
   <button class="fancybtn" id="btn_hpp">+1</button>
   <button class="fancybtn" id="btn_hpm">-1</button>
@@ -131,8 +175,8 @@
   </h3>
   <span class="lefty" id="txt_wtpen"></span>
   <div id='wtarea'></div>
-  <object id="man-svg" type="image/svg+xml" data="manhitloc.svg" 
-  width="200" height="600" border="1"></object>
+  <object class='right' id="man-svg" type="image/svg+xml" data="manhitloc.svg" 
+  width="200" height="600" border="0"></object>
   <div class='lefty'><input type="number" class=insm id="ti_dodgebon" width="30" value=0> Dodge Bonus/Penalty</br>
   <input class=insm type="number" id="in_encw" value = 0>lbs Carried</input>
 <button class="wtbutton" id="btn_dodge">Dodge</button></br><b id="txt_dodgeroll"></b><p id="txt_wstatus"></p></div></div>

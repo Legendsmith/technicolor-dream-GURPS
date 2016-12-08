@@ -36,9 +36,45 @@
     opacity: 0;
     transition: opacity 1s;
 }
+.tooltip .tooltiptext2 {
+    visibility: hidden;
+    width: 100px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 5px;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 50%;
+    margin-left: -50px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
 
 /* Tooltip arrow */
 .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext2 {
+    visibility: visible;
+    opacity: 1;
+}
+.tooltip .tooltiptext2::after {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -55,8 +91,8 @@
     opacity: 1;
 }
 
-  .left{float:left; width:33%;}
-  .insm{width:40px;
+.left{float:left; width:33%;}
+.insm{width:40px;
     text-align: right;
   border: solid 1px #fff;
   box-shadow: inset 1px 1px 2px 0 #707070;
@@ -163,7 +199,7 @@ h5 {
   width:600px;float:left;background-color:#e6ffe6;border-radius:20px;padding:20px;
 }
 
-#display{
+#lastgasp_display{
   width:150px;height:895px;
   background-color:#ffffff;
   border-radius:20px;
@@ -171,8 +207,7 @@ h5 {
   position: fixed;
   margin-left: 640px
 }
-
-#wounddisplay{
+.displays{
   width:150px;height:895px
   font:#000;
   background-color:#ffffff;
@@ -180,18 +215,33 @@ h5 {
   border:1px solid #3333aa;
   position: fixed;
   margin-left: 640px;
-  display:none;
   padding:5px 2px;
   padding-top: 15px;
 }
-#wounddisplay h4{
+
+#man-svg{
+  margin-right: auto;
+  margin-left: auto;
+}
+#wounds_display{
+  width:150px;height:895px
+  font:#000;
+  background-color:#ffffff;
+  border-radius:20px;
+  border:1px solid #3333aa;
+  position: fixed;
+  margin-left: 640px;
+  padding:5px 2px;
+  padding-top: 15px;
+}
+#wounds_display h4{
   text-align:center;
 }
-#wounddisplay h5{
+#wounds_display h5{
   text-align:center;
   font-style: italic;
 }
-#wounddisplay p{
+#wounds_display p{
   font-size: 14px
 }
 #wtarea{
@@ -201,7 +251,7 @@ h5 {
   border-radius:20px;
   padding:10px;
 }
-#wtarea input[type='number'] {
+#wtarea input[type='number']{
     text-align: right;
     width: 50px;
     -moz-appearance:textfield;
@@ -214,6 +264,7 @@ h5 {
   font-size: 12px;
   display: inline-block;
 }
+
 .destroy{
   color:purple;
 }
@@ -238,6 +289,60 @@ h5 {
   text-shadow:0px 1px 0px #2f6627;
   width: 200px;
 }
+#skillholder,#weaponholder{
+  height:400px;
+  overflow-y:scroll;
+}
+#txt_wthls{
+  overflow-y:auto;
+  height:450px;
+  font-size: 12px;
+}
+#atk-calc{
+  width:200px;
+  float: left;
+  padding: 5px;
+  border-radius:10px;
+  background-color: white;
+}
+#txt_atkcalc{
+  height:50px;
+  width:100%;
+  resize: none;
+  border:1px solid #000;
+  overflow-y:scroll;
+}
+
+.atk h5{
+  margin-top: 0px
+}
+.atk input {
+  font-size: 9px
+}
+#atk-melee{
+  float:left;
+  width:50%;
+}
+#atk-ranged{
+  float:left;
+  width:50%;
+  display:none;
+}
+
+
+
+#atk-options{
+  width:380px;
+  float: right;
+  padding: 5px;
+  border-radius:10px;
+  background-color: #cafff7;
+}
+.textblock{
+  width:90px;
+  display: inline-block;
+}
+
 
 
 .skillbar {
@@ -277,13 +382,16 @@ h5 {
   width: 295px;
   float:right;
 }
+.right{
+  float:right;
+}
 
 .page-wrap { 
   width: 600px;
   position: relative; 
 }
 .tab-wrap { 
-  width: 600px;
+  width: 600px;#
   position: relative; 
 }
 #wounds{
@@ -294,9 +402,6 @@ h5 {
   background-color:#EFEFEF;
   border-radius:20px;
   padding:20px;
-}
-#man-svg{
-  float:right;
 }
 
 #attacksskills{

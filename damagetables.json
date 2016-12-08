@@ -219,3 +219,6 @@ var wdatatags={
     "T":"[20] Roll 1d, 1 is Vitals [11], 2-4 is Digestive Tract [21], 5 Pelvis [19] and 6 is Groin [7].",
     "U":"[21] If major wound HT-3 or get a special infection (B444)"
 }
+
+var sucessprob = [0,0,0.5,,1.9,4.6,9.3,16.2,25.9,37.5,50,62.5,74.1,83.8,90.7,95.4,98.1
+]
