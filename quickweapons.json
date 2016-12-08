@@ -187,19 +187,35 @@
     		"type":"(5) Burn"
 		},
 	],
-	["KATANA 1h",
+	["Large Knife",
 		{
-    		"name":"KATANA Swing 1h",
+    		"name":"L. Knife Swing",
     		"base":"sw",
     		"dice":0,
-    		"mod":1,
+    		"mod":-2,
     		"type":"cut"
 		},
 		{
-    		"name":"KATANA Thrust 1h",
+    		"name":"L. Knife Thrust",
     		"base":"thr",
     		"dice":0,
-    		"mod":1,
+    		"mod":0,
+    		"type":"imp"
+		}
+	],
+	["Small Knife",
+		{
+    		"name":"S. Knife Swing",
+    		"base":"sw",
+    		"dice":0,
+    		"mod":-2,
+    		"type":"cut"
+		},
+		{
+    		"name":"S. Knife Thrust",
+    		"base":"thr",
+    		"dice":0,
+    		"mod":0,
     		"type":"imp"
 		}
 	],
