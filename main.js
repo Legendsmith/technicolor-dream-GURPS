@@ -239,6 +239,7 @@ btn_apm1.onclick=function(){
   chara().ap-=1
   update();
 }
+
 btn_fpp1.onclick=function(){
   chara().fp+=1
   update();
@@ -572,6 +573,15 @@ btn_two.onclick=function(){
   chara().ap -= 2
   update();
 }
+btn_oneSW.onclick=function(){
+  chara().ap -= 1
+  update();
+}
+btn_twoSW.onclick=function(){
+  chara().ap -= 2
+  update();
+}
+
 
 btn_load.onclick=function(){
   load(localStorage.tcdg,1)
@@ -759,6 +769,7 @@ function encumber(){
 function display(){
   getId("txt_name").textContent = chara().name
   getId("txt_AP").textContent = chara().ap +"/"+ chara().apmax + " AP"
+  getId("txt_atkAP").textContent = chara().ap +"/"+ chara().apmax + " AP"
   getId("txt_FP").textContent = chara().fp +"/"+ chara().fpmax + " FP"
   getId("txt_st").textContent = round(chara().st*10)/10 +"/"+ chara().stmax + " ST"
   getId("txt_dx").textContent = chara().dx +"/"+ chara().dxmax + " DX"
@@ -782,6 +793,7 @@ function display(){
   getId('txt_hp').textContent = `${chara().hp}/${chara().hpmax} HP`;
   woundcolor();
   getId('txt_wtpen').textContent = `Bleeding Roll Base Penalty: ${Math.ceil((chara().hp-chara().hpmax)/5)}`
+  atkcalcbonus();
 }
 //calc
 
@@ -1546,6 +1558,7 @@ function atkcalc(){
   }
   getId('txt_atkcalc').textContent += text
   log(`Rolled attack: text`)
+  display();
 }
 
 btn_atkcalc.onclick = atkcalc
