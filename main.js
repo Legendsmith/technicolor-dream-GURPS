@@ -293,7 +293,27 @@ function fload(){
         }
       }
 btn_fload.onclick = fload
-
+//logs
+function lsave(){
+        var sav = dotrack.log.replace(/\n/g, "\r\n")
+        var savBlob = new Blob([sav], {type:"text/plain"});
+        var savAsURL = window.URL.createObjectURL(savBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.download = "tcdg_logs";
+        downloadLink.innerHTML = "Download File";
+        downloadLink.href = savAsURL;
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+       
+        downloadLink.click();
+      }
+      function destroyClickedElement(e)
+      {
+          document.body.removeChild(e.target);
+}
+btn_lsave.onclick = lsave
+btn_lclear.onclick = function(){dotrack.log = ""}
 //buttons for AP recovery
 btn_not.onclick=function(){
   currenthtbonus=4+chara().fitbon
@@ -402,6 +422,7 @@ function rollHT(r){
     chara().ap += aprecovered;
     op = `<b style=\"color:green\">Success: ${r} Recovered ${aprecovered} AP</b>`
   }else{op=`<b style=\"color:red\">Failure: ${r}</b>`}
+  log(`HT roll bon = ${currenthtbonus} recovered AP: ${aprecovered} `)
   return op
 }
 
@@ -409,6 +430,7 @@ function rollHT(r){
 btn_wnd.onclick=function(){
   chara().fp -=1
   chara().ap += Math.ceil(chara().htmax * 0.5)
+  log(`spent 1 FP to regain ap: ap:${chara().ap}`)
   update();
 }
 
@@ -554,10 +576,12 @@ btn_updt.onclick=function(){
 
 btn_apf.onclick=function(){
   chara().ap=chara().apmax
+  log("filled AP")
   update()
 }
 btn_fpf.onclick=function(){
   chara().fp=chara().fpmax
+  log("filled FP")
   update()
 }
 btn_save.onclick=function(){
@@ -567,18 +591,22 @@ btn_save.onclick=function(){
 }
 btn_one.onclick=function(){
   chara().ap -= 1
+  log(`spent 1 AP ap:${chara().ap}`)
   update();
 }
 btn_two.onclick=function(){
   chara().ap -= 2
+  log(`spent 2 AP ap:${chara().ap}`)
   update();
 }
 btn_oneSW.onclick=function(){
   chara().ap -= 1
+  log(`spent 1 AP: AP:${chara().ap}`)
   update();
 }
 btn_twoSW.onclick=function(){
   chara().ap -= 2
+  log(`spent 2 AP: ap:${chara().ap}`)
   update();
 }
 
@@ -1203,7 +1231,7 @@ function setupwdisplay(){
 function wtrackupdate(e){
   var part = e.target.id.split("_")[1]
   chara().hittrack[part].hp = e.target.valueAsNumber
-
+  log(`${wdatahitloc[part]} HP = e.target.valueAsNumber`)
   chara().hittrack[part].hp = Math.min(chara().hittrack[part].hp,chara().hittrack[part].hpmax)
   e.target.value = chara().hittrack[part].hp
   if(chara().hittrack[part].hp <= -(chara().hittrack[part].hpmax+1) * 2){
@@ -1232,6 +1260,7 @@ function getHPpercentPart(part_){
 in_hps.onchange = function(){
   chara().hp = Math.min(chara().hpmax, in_hps.valueAsNumber)
   in_hps.value= chara().hp
+  log(`HP=${chara().hp}`)
   display();
 }
 
@@ -1557,7 +1586,7 @@ function atkcalc(){
     text += ` Location: ${wdatahitloc[locationhit].name}`
   }
   getId('txt_atkcalc').textContent += text
-  log(`Rolled attack: text`)
+  log(`Rolled attack: ${text}`)
   display();
 }
 
@@ -1582,7 +1611,7 @@ function repopulatelist(list,arr){
 
 function log(t){
   if(typeof dotrack.log === 'undefined'){dotrack.log =""}
-  if(!mobilecheck()){
+  if(!mobilecheck() && cb_log.checked){
     var d = new Date()
     dotrack.log += `${d.getDate()}/${d.getMonth()+1} (UTC+ ${d.getTimezoneOffset()/-60}) ${d.getHours()}:${d.getMinutes()}: ${t} \n `
   }
