@@ -83,12 +83,12 @@ function cvssetup(_fp){
   }
 }
 //dice
-      var rolldice = function(){ console.log("Something went very wrong with dice function"); return 0}
+      var rolldice = function(d){ console.log("Something went very wrong with dice function"); return 0}
       //use crypto random if browser supports it, otherwise fall back to awful js random
       if(typeof window.crypto.getRandomValues !== 'undefined'){
         console.log("cryptorandom active");
-        rolldice = function(){
-          var array = new Uint8ClampedArray(3);
+        rolldice = function(d){
+          var array = new Uint8ClampedArray(d);
           window.crypto.getRandomValues(array);
           var r = 0
           for (var i = 0; i < array.length; i++) {
@@ -98,8 +98,12 @@ function cvssetup(_fp){
         }
       }else{
         console.log("awful js random active")
-        rolldice = function(){
-          return Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1) + Math.floor((Math.random() * 6) + 1)}
+        rolldice = function(d){
+          var r = 0;
+          for (var i = 0; i < d; i++) {
+            r+=Math.floor((Math.random() * 6) + 1)
+            };
+          return r}
       }
 
 
@@ -321,7 +325,7 @@ btn_not.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     getId("txt_out").textContent = "Waiting for Random.org"
   }else{
-    getId("txt_out").innerHTML = rollHT(rolldice());
+    getId("txt_out").innerHTML = rollHT(rolldice(3));
   }
   //update ui and everything
   update();
@@ -332,7 +336,7 @@ btn_eva.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackRollHT)
     getId("txt_out").textContent = "Waiting for Random.org"
   }else{
-    getId("txt_out").innerHTML = rollHT(rolldice());
+    getId("txt_out").innerHTML = rollHT(rolldice(3));
   }
     //update ui and everything
   update();
@@ -343,7 +347,7 @@ btn_injury.onclick=function(){
     rollClient.get("https://www.random.org/integers/?num=3&min=1&max=6&col=1&base=10&format=plain&rnd=new",callbackmitigate)
     getId("txt_out2").textContent = "Waiting for Random.org"
   }else{
-    getId("txt_out2").innerHTML = rollmitigate(rolldice());
+    getId("txt_out2").innerHTML = rollmitigate(rolldice(3));
   }
   update();
 }
@@ -821,7 +825,6 @@ function display(){
   getId('txt_hp').textContent = `${chara().hp}/${chara().hpmax} HP`;
   woundcolor();
   getId('txt_wtpen').textContent = `Bleeding Roll Base Penalty: ${Math.ceil((chara().hp-chara().hpmax)/5)}`
-  atkcalcbonus();
 }
 //calc
 
@@ -945,7 +948,7 @@ function rollskill(e){
   var success = false
   var thisskill = chara().skills[parseInt(e.target.id.split("_")[1])]
   var sl = thisskill.sl + ti_skillbon.valueAsNumber
-  r = rolldice()
+  r = rolldice(3)
   text = ""
   if (r <= sl){
     success=true;
@@ -1165,7 +1168,7 @@ ti_dodgebon.onchange = function(){
 }
 
 btn_dodge.onclick = function(e){
-  var roll = rolldice()
+  var roll = rolldice(3)
   if(roll <= Math.floor(chara().spd)+3 + chara().dodgemod + ti_dodgebon.valueAsNumber + chara().dodgepen){
     txt_dodgeroll.textContent = `Success! ${roll}, MoS: ${(Math.floor(chara().spd)+3 + chara().dodgemod + ti_dodgebon.valueAsNumber + chara().dodgepen) - roll}`
     txt_dodgeroll.className = 'fine'
@@ -1512,7 +1515,7 @@ function atkcalc(){
     case "aoa-deter":
     break;
     case "aoa-feint":
-      fr = rolldice()
+      fr = rolldice(3)
       if (r <= sl){
         text += `\n Roll ${r} Feint Success, MoS: MoS: ${sl-r}`
       }else if(r==sl+1 ){
@@ -1524,7 +1527,7 @@ function atkcalc(){
     case "aoa-long":
     break;
     case "aoa-doub":
-      r = rolldice()
+      r = rolldice(3)
       if (r <= sl){
         text += `\n Roll: ${r} Hit, MoS: MoS: ${sl-r} Damage: `
       }else if(r==sl+1 ){
@@ -1533,18 +1536,33 @@ function atkcalc(){
         text += `\n Roll: ${r} Miss: MoF: ${r-sl} Damage: `
       }
       //damage
-      var array = new Uint8ClampedArray(dmg[0]);
-      window.crypto.getRandomValues(array);
-      var damageroll = 0
-      for (var i = 0; i < array.length; i++) {
-        damageroll += Math.ceil(array[i]/255 *6)
-      }
+      var damageroll = rolldice(dmg[0])
       damageroll+=dmg[1]
       damageroll = Math.max(damageroll,1)
       text += damageroll.toString()
       if(cb_randomhit.checked){
-        var locationhit =wdatarollloc[rolldice()]
-        wthitsvg.getElementById(locationhit).style.fill= '#FF0000'
+        var locationhit =wdatarollloc[rolldice(3)]
+        
+        
+      }
+      var locationhit = wthitselected
+      if(cb_randomhit.checked){
+        locationhit =wdatarollloc[rolldice(3)]
+    if (locationhit== 'foot' || locationhit== 'hand') {
+      
+      if(rolldice(3)>10){
+        locationhit +='-left'
+      }else{
+        locationhit +='-right'
+      }
+    };
+    
+  }
+  wthitsvg.getElementById(locationhit).style.fill= '#FF0000'
+      if(typeof wdatahitloc.subhit[locationhit.split("-")[0]] === 'object'){
+        var subhit = wdatahitloc.subhit[locationhit.split("-")[0]][rolldice(1)-1]
+        text += ` Location: ${wdatahitloc[locationhit].name} ${subhit}`
+      }else{
         text += ` Location: ${wdatahitloc[locationhit].name}`
       }
     break;
@@ -1554,7 +1572,7 @@ function atkcalc(){
     break;
   }
   //skill roll part
-  r = rolldice()
+  r = rolldice(3)
   if (r <= sl){
     text += `\n Roll: ${r} Hit, MoS: MoS: ${sl-r} Damage: `
   }else if(r==sl+1 ){
@@ -1563,28 +1581,31 @@ function atkcalc(){
     text += `\n Roll: ${r} Miss: MoF: ${r-sl} Damage: `
   }
   //damage
-  var array = new Uint8ClampedArray(dmg[0]);
-  window.crypto.getRandomValues(array);
-  var damageroll = 0
-  for (var i = 0; i < array.length; i++) {
-    damageroll += Math.ceil(array[i]/255 *6)
-  }
+  var damageroll = rolldice(dmg[0])
   damageroll+=dmg[1]
   damageroll = Math.max(damageroll,1)
   text += damageroll.toString()
+  var locationhit = wthitselected
   if(cb_randomhit.checked){
-    var locationhit =wdatarollloc[rolldice()]
+    locationhit =wdatarollloc[rolldice(3)]
     if (locationhit== 'foot' || locationhit== 'hand') {
       
-      if(rolldice()>10){
+      if(rolldice(3)>10){
         locationhit +='-left'
       }else{
         locationhit +='-right'
       }
     };
-    wthitsvg.getElementById(locationhit).style.fill= '#FF0000'
-    text += ` Location: ${wdatahitloc[locationhit].name}`
+    
   }
+  if(typeof wdatahitloc.subhit[locationhit.split("-")[0]] === 'object'){
+        var subhit = wdatahitloc.subhit[locationhit.split("-")[0]][rolldice(1)-1]
+        console.log(subhit)
+        text += ` Location: ${wdatahitloc[locationhit].name} ${subhit}`
+      }else{
+        text += ` Location: ${wdatahitloc[locationhit].name}`
+  }
+  wthitsvg.getElementById(locationhit).style.fill= '#FF0000'
   getId('txt_atkcalc').textContent += text
   log(`Rolled attack: ${text}`)
   display();

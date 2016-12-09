@@ -89,6 +89,7 @@ var dmgtbl={
 var wdatahitloc={
     "track":["eye-right",
     "eye-left",
+    "nose",
     "eye-left",
     "ear-left",
     "arm-right",
@@ -134,6 +135,14 @@ var wdatahitloc={
     "joint-right-ankle":3,
     "pelvis":3,
     "spine":3,
+    },
+    "subhit":{
+        "torso":["Vitals if cr, imp, pi or tbb","","","","",""],
+        "face":["Skull if  imp, pi, tbb, else nose hit","","","","",""],
+        "neck":["Artery","","","","",""],
+        "arm":["Artery/Joint","Shoulder","Shoulder","Upper Arm","Forearm","Forearm"],
+        "leg":["Artery/Joint","Thigh","Thigh","Thigh","Shins","Shins"],
+        "abdomen":["vitals","Digestive Tract","Digestive Tract","Digestive Tract","pelvis","Groin"]
     },
     "head":{"mod":1,"name":"Skull", "tags":"A,C", "penalty":-7},
     "face":{"mod":1,"name":"Face", "tags":"A,D", "penalty":-5},
