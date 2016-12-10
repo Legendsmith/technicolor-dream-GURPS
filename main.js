@@ -650,7 +650,6 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   supportcheck();
   updatenamelist();
   calc();
-  encumber();
   cvsdisplay();
   rn_mov.disabled=false
   movdo();
@@ -660,6 +659,7 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   initskill();
   setupwdisplay();
   weapondisplay();
+  encumber();
   //additional init
   wthlsInit()
   woundcolor();
@@ -697,7 +697,7 @@ function defaultwp(){
   chara().skills.push({"name":"DX", "base":"DX", 'RSL':0})
   };
   if(typeof chara().weapons[0] ==='undefined'){
-    chara.weapons.push({"name":"Punch",
+    chara().weapons.push({"name":"Punch",
     "base":"thr",
     "dice":0,
     "mod":-1,
@@ -1208,6 +1208,9 @@ function setupwdisplay(){
     x = null
   }
   for (var i = 0; i < wdatahitloc.track.length; i++) {
+    if(!typeof chara().hittrack[wdatahitloc.track[i]] == 'object'){//incase it's not there.
+      chara().hittrack[wdatahitloc.track[i]] = {"hp":Math.ceil(chara().hpmax/wdatahitloc[wdatahitloc.track[i]].mod),"hpmax":Math.ceil(chara().hpmax/wdatahitloc[wdatahitloc.track[i]].mod)}
+    }
     var cont = document.createElement('span') 
     var txt  = document.createElement('span') 
     txt.textContent = `${wdatahitloc[wdatahitloc.track[i]].name} `;
