@@ -683,9 +683,11 @@ catch(err){
       case 1:
       btn_load.textContent="Failed!"
       btn_load.disabled = true
+      console.log(err)
       break;
       case 2:
       btn_fload.textContent = "File Corrupt"
+      console.log(err)
       break
     }  
 }

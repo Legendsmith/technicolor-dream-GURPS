@@ -9,7 +9,7 @@
 //Type is damage type. This is one of the following: "pi-","burn","cor","cr","fat","pi","tox","cut","pi+","imp","pi++"
 //use http://www.jsoneditoronline.org if you're unused to writing JSON, it will do all the formatting for you.\
 //when using jsoneditoronline.org you can use the 'duplicate' function on the last element of the array to add a new weapon you can then modify to a new entry.
-//also when using jspneditoronline, don't copy the 'var quickweps='
+//also when using jsoneditoronline, don't copy the 'var quickweps='
 var quickweps=[
 	[
 	"Kick",
