@@ -1,0 +1,493 @@
+ body{
+    font-family:sans-serif;
+}
+ /* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+.subnote{
+    font-size:12px;
+}
+.smallnote{
+    font-size:14px;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 210px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    padding: 5px 5px;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 50%;
+    margin-left: -105px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+.tooltip .tooltiptext2 {
+    visibility: hidden;
+    width: 100px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 5px;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 50%;
+    margin-left: -50px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext2 {
+    visibility: visible;
+    opacity: 1;
+}
+.tooltip .tooltiptext2::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #555 transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.left{float:left; width:33%;}
+.insm{width:40px;
+    text-align: right;
+  border: solid 1px #fff;
+  box-shadow: inset 1px 1px 2px 0 #707070;
+  transition: box-shadow 0.3s;}
+  .insm:focus,.insm.focus{
+  box-shadow: inset 1px 1px 2px 0 #c9c9FF;
+}
+
+.insmt{width:120px;
+  border: solid 1px #fff;
+  box-shadow: inset 1px 1px 2px 0 #707070;
+  transition: box-shadow 0.3s;}
+  .insmt:focus,.insmt.focus{
+  box-shadow: inset 1px 1px 2px 0 #c9c9FF;
+}
+
+/*tooltip list*/
+.tooltip ul {
+    list-style-position: inside;
+}
+/**/
+h4 {
+    display: block;
+    margin-top: 0em;
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+h5 {
+  font-size:16px;
+  margin-bottom:5px
+}
+.fancybtn {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
+  background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+  background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#7892c2', endColorstr='#476e9e',GradientType=0);
+  background-color:#7892c2;
+  -webkit-border-radius:8px;
+  border-radius:8px;
+  border:1px solid #4e6096;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  margin-top:3px; 
+  margin-bottom:3px;
+  font-family:Arial;
+  font-size:14px;
+  font-weight:bold;
+  padding:2px 5px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #283966;
+}
+.fancybtn:hover {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+  background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
+  background-color:#476e9e;
+}
+.fancybtn:active {
+  position:relative;
+  top:1px;
+}
+
+}
+.fancybtn:hover {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+  background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+  background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
+  background-color:#476e9e;
+}
+.fancybtn:active {
+  position:relative;
+  top:1px;
+}
+.fancybtn:disabled {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #777777), color-stop(1, #666666));
+  background:-moz-linear-gradient(top, #777777 5%, #666666 100%);
+  background:-webkit-linear-gradient(top, #777777 5%, #666666 100%);
+  background:-o-linear-gradient(top, #777777 5%, #666666 100%);
+  background:-ms-linear-gradient(top, #777777 5%, #666666 100%);
+  background:linear-gradient(to bottom, #777777 5%, #666666 100%)
+}
+#main{
+  width:800px;margin-left:auto; margin-right:auto;
+}
+#lastgasp{
+  width:600px;float:left;background-color:#e6e6ff;border-radius:20px;padding:20px;
+  
+}
+#controls{
+  width:600px;float:left;background-color:#e6ffe6;border-radius:20px;padding:20px;
+}
+
+#lastgasp_display{
+  width:150px;height:895px;
+  background-color:#ffffff;
+  border-radius:20px;
+  border:1px solid #3333aa;
+  position: fixed;
+  margin-left: 640px
+}
+.displays{
+  width:150px;height:895px
+  font:#000;
+  background-color:#ffffff;
+  border-radius:20px;
+  border:1px solid #3333aa;
+  position: fixed;
+  margin-left: 640px;
+  padding:5px 2px;
+  padding-top: 15px;
+}
+
+#man-svg{
+  margin-right: auto;
+  margin-left: auto;
+}
+#wounds_display{
+  width:150px;height:895px
+  font:#000;
+  background-color:#ffffff;
+  border-radius:20px;
+  border:1px solid #3333aa;
+  position: fixed;
+  margin-left: 640px;
+  padding:5px 2px;
+  padding-top: 15px;
+}
+#wounds_display h4{
+  text-align:center;
+}
+#wounds_display h5{
+  text-align:center;
+  font-style: italic;
+}
+#wounds_display p{
+  font-size: 14px
+}
+#wtarea{
+  float: left;
+  width: 370px; 
+  background-color:Wheat;
+  border-radius:20px;
+  padding:10px;
+}
+#wtarea input[type='number']{
+    text-align: right;
+    width: 50px;
+    -moz-appearance:textfield;
+}
+#wtarea input::-webkit-outer-spin-button,
+#wtarea input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+}
+#wtarea b{
+  font-size: 12px;
+  display: inline-block;
+}
+
+.destroy{
+  color:purple;
+}
+.cripple{
+  color:red;
+}
+.fine{
+  color:green;
+}
+
+.wtbutton{
+  background-color:#99FF99;
+  border-radius:20px;
+  border:2px solid green;
+  display:block;
+  cursor:pointer;
+  color:#000000;
+  font-family:Arial;
+  font-size:17px;
+  padding:5px 2px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #2f6627;
+  width: 200px;
+}
+#skillholder,#weaponholder{
+  height:400px;
+  overflow-y:scroll;
+}
+#txt_wthls{
+  overflow-y:auto;
+  height:450px;
+  font-size: 12px;
+}
+#atk-calc{
+  width:200px;
+  float: left;
+  padding: 5px;
+  border-radius:10px;
+  background-color: white;
+}
+#txt_atkcalc{
+  resize: none;
+  width:100%;
+  border:1px solid #000;
+  overflow-y:scroll;
+}
+
+.atk h5{
+  margin-top: 0px
+}
+.atk input {
+  font-size: 9px
+}
+#atk-melee{
+  float:left;
+  width:50%;
+}
+#atk-ranged{
+  float:left;
+  width:50%;
+  display:none;
+}
+
+
+
+#atk-options{
+  width:380px;
+  float: right;
+  padding: 5px;
+  border-radius:10px;
+  background-color: #cafff7;
+}
+.textblock{
+  width:90px;
+  display: inline-block;
+}
+
+
+
+.skillbar {
+  background-color:#ddddbb;
+  -moz-border-radius:20px;
+  -webkit-border-radius:20px;
+  border-radius:20px;
+  border:2px solid #bbbb99;
+  display:block;
+  cursor:pointer;
+  color:#000000;
+  font-family:Arial;
+  font-size:17px;
+  padding:5px 2px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px #2f6627;
+  width: 100%;
+}
+.skillbar:hover {
+  background-color:#e3e358;
+}
+.skillbar:active {
+  position:relative;
+  top:1px;
+}
+.skillbar:disabled {
+  background-color:#AAAAAA;
+  position:relative;
+  top:1px;
+}
+
+.lefty{
+  width: 295px;
+  float:left;
+}
+.righty{
+  width: 295px;
+  float:right;
+}
+.right{
+  float:right;
+}
+
+.page-wrap { 
+  width: 600px;
+  position: relative; 
+}
+.tab-wrap { 
+  width: 600px;#
+  position: relative; 
+}
+#wounds{
+  width:600px;
+  float:left;
+  margin-left:auto;
+  margin-right:auto;
+  background-color:#EFEFEF;
+  border-radius:20px;
+  padding:20px;
+}
+
+#attacksskills{
+  float:left;
+  width:600px;
+  margin-left:auto;
+  margin-right:auto;
+  background-color:#EEEECC;
+  border-radius:20px;
+  padding:20px;
+
+}
+/*tabs*/
+/* Style the list */
+ /* Style the list */
+ul.tab {
+    position: fixed;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    border-radius: 20px;
+    width:640px;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 8px 10px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {background-color: #ddd;}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {background-color: #ccc;}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    margin-top: 40px;
+}
+
+ul.tab li select {
+    display: inline-block;
+    text-align: center;
+    padding: 6px 6px;
+    text-decoration: none;
+    font-size: 17px;
+}
+ul.tab li button {
+    display: inline-block;
+    margin-top: 1px;
+    border-style: none;
+    text-align: center;
+    padding: 6px 6px;
+    font-size: 17px;
+}
+ul.tab li button:hover {background-color: #ddd;}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
