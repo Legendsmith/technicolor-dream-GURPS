@@ -1,3 +1,4 @@
+getId('error').style.display = 'none'
 var currentTab = "";
 ///shortcuts
 function getId(str){ //jquer broke everything so lol here we go.
