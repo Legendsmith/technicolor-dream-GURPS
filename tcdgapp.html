@@ -119,10 +119,10 @@
 
 <div id="attacksskills" class="tabcontent">
   <h2>Skills & Weapons/Attacks</h2>
-  <p> <input type="text" class=insmt id="ti_nsname" maxlength="20" value="Skill Name"></input> RSL:<select style="width:50px" id="sl_nsba">Base Attribute</select>+<input type="number" class=insm id="ti_nsnum" width="30" value=0> <button class="fancybtn" id="btn_nskill">New Skill</button></p>
+  <p> <input type="text" class=insmt id="ti_nsname" maxlength="20" value="Skill Name"></input> RSL:<select style="width:50px" id="sl_nsba">Base Attribute</select>+<input type="number" class=insm id="ti_nsnum" width="30" value=0> <button class="fancybtn" id="btn_nskill">New Skill</button> <input type='checkbox' id='cb_nsws'>Weapon Skill</input> </p>
   <p> <input type="text" class=insmt id="ti_nwname" maxlength="20" value="Weapon Name">
   </input> Damage:<select style="width:50px" id="sl_nwd"></select>
-   <input type="number" class=insm id="ti_nwdice" width="20" value=0>d6+<input type="number" class=insm id="ti_nwmod" width="20" value=0> <select style="width:50px" id="sl_nwdt"></select> <button class="fancybtn" id="btn_nweapon">New Weapon</button></p>
+   <input type="number" class=insm id="ti_nwdice" width="20" value=0>d6+<input type="number" class=insm id="ti_nwmod" width="20" value=0> <select style="width:50px" id="sl_nwdt"></select> MinST:<input type="number" class=insm id="ti_nwst" width="20" value=0> <button class="fancybtn" id="btn_nweapon">New Weapon</button></p>
    <p><select style="width:200px" id="sl_qwep"></select> <button class="fancybtn" id="btn_qwep">Quick Add Weapon</button></p>
    <p>Skills are straightforward, just enter the name, select the base attribute and add the RSL modifier. For weapons, enter the modifier that the weapon gives. For example, an Axe is sw+2 cut, so enter sw 0d6+2 above. For weapons that do not depend on muscle strength such as guns or spells select 'other' from the damge dropdown and then enter the full damage dice and modifier.</p>
    <input type="checkbox" id="cb_diceadds">Use Optional Rule: Modifying Dice + Adds (B269)</input></br><input class=insm type="number" id="in_encs" value = 0>lbs Carried</input>
@@ -196,10 +196,11 @@
 <button class="wtbutton" id="btn_dodge">Dodge</button></br><b id="txt_dodgeroll"></b><p id="txt_wstatus"></p></div></div>
 
 <div id="controls" class="tabcontent">
-  <h2>Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Character Sheet</h2>
+  <h2>Technicolor Dream <span class="he">G</span><span class="he">U</span><span class="he">R</span><span class="he">P</span><span class="he">S</span> Assistant</h2>
 <button class="fancybtn" id="btn_save">Save</button> <button class="fancybtn" id="btn_fsave">Save To File</button>
-<button class="fancybtn" id="btn_load">Load</button> <button class="fancybtn" id="btn_fload">Load From File</button></br>
-<button class="fancybtn" id="btn_lsave">Save Logs</button> <button class="fancybtn" id="btn_lclear">Clear Logs</button> <input type="checkbox" id="cb_log"></input> <span class='smallnote'>Log Activity (so you can send it to your GM for verification)</span>
+<button class="fancybtn" id="btn_load">Load</button> <button class="fancybtn" id="btn_fload">Load From File</button> <button class="fancybtn" id="btn_floadc">Load & Combine</button><button class="fancybtn" id="btn_floadgcs">Import GCS</button></br>
+<button class="fancybtn" id="btn_lsave">Save Logs</button> <button class="fancybtn" id="btn_lclear">Clear Logs</button> <input type="checkbox" id="cb_log"></input> <span class='smallnote'>Log Activity (so you can send it to your GM for verification)</span></br>
+<span class='smallnote'>Load from File overwrites current characters. Load & Combine adds them to the list of current characters, useful for GMs!</span>
 <h4>Enter your character's stats</h4>
 <p class="subnote"> If you have <i>Fit</i> or <i>Very Fit</i>, recovery times are halved. <i>Unfit</i> and Very Unfit</i> double recovery times. <i>The bonuses from these dis/advantages <b>are</b> taken into account automatically.</i></p>
 Name: <input type="text" id="ti_name" class=insmt maxlength="26" value="default"></input> <button class="fancybtn" id="btn_init">Initialise/Add Character</button></br>

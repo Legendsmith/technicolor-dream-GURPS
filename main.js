@@ -493,7 +493,6 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].iq=dotrack[ti_name.value].iqmax;
     dotrack[ti_name.value].htmax =in_HT.valueAsNumber;
     dotrack[ti_name.value].ht =dotrack[ti_name.value].htmax
-    dotrack[ti_name.value].blmax=parseInt(in_ST.value);
     dotrack[ti_name.value].apmax=parseInt(in_HT.value)+parseInt(in_AP.value);
     dotrack[ti_name.value].fpmax=parseInt(in_FP.value);
     dotrack[ti_name.value].dxmax=parseInt(in_DX.value);
@@ -506,7 +505,7 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].spdmod = dotrack[ti_name.value].spdmax - ((dotrack[ti_name.value].ht + dotrack[ti_name.value].dx)/4)
     dotrack[ti_name.value].movmax=in_mov.valueAsNumber
     dotrack[ti_name.value].mov = dotrack[ti_name.value].movmax
-    dotrack[ti_name.value].movmod = dotrack[ti_name.value].movmax - Math.floor((dotrack[ti_name.value].ht + dotrack[ti_name.value].dx)/4)
+    dotrack[ti_name.value].movmod = dotrack[ti_name.value].movmax - Math.floor(dotrack[ti_name.value].spdmax)
     dotrack[ti_name.value].ap = dotrack[ti_name.value].apmax
     dotrack[ti_name.value].st = dotrack[ti_name.value].stmax
     dotrack[ti_name.value].fp = dotrack[ti_name.value].fpmax
@@ -519,12 +518,13 @@ btn_init.onclick=function(){ //initialisation
     dotrack[ti_name.value].fppoint = dotrack[ti_name.value].fpmax/2
     dotrack[ti_name.value].dodgemod = in_dod.valueAsNumber
     dotrack[ti_name.value].dodgepen = 0;
-    dotrack[ti_name.value].skills=[{"name":"DX", "base":"DX", 'RSL':0}];
+    dotrack[ti_name.value].skills=[{"name":"DX", "base":"DX", 'RSL':0,'atk':true}];
     dotrack[ti_name.value].weapons=[{"name":"Punch",
     "base":"thr",
     "dice":0,
     "mod":-1,
-    "type":"cr"}];
+    "type":"cr",
+    "st":0}];
     dotrack[ti_name.value].hittrack = {}
     for (var i = 0; i < wdatahitloc.track.length; i++) {
       dotrack[ti_name.value].hittrack[wdatahitloc.track[i]] = {"hp":Math.ceil(dotrack[ti_name.value].hpmax/wdatahitloc[wdatahitloc.track[i]].mod),"hpmax":Math.ceil(dotrack[ti_name.value].hpmax/wdatahitloc[wdatahitloc.track[i]].mod)}
@@ -667,6 +667,7 @@ function load(loadsource,type){ //type 1 is normal, type 2 URICompnent (UTF-8)
   qwepSetup();
   display();
   in_hps.value=chara().hp
+
   for (var i = 0; i < wdatahitloc.track.length; i++) {
     var part = wdatahitloc.track[i]
     if(wdatahitloc.display[part]==2){
@@ -692,6 +693,33 @@ catch(err){
     }  
 }
 }
+// load and add
+function loadadd(){
+  getId('in_fload').click()
+  var fileReader = new FileReader()
+  fileReader.onload = function(floadEvent){
+    var target = JSON.parse(LZString.decompressFromEncodedURIComponent(floadEvent.target.result))
+    for (var k in target){
+        if (typeof target[k] !== 'function' && k != 'log' && k !='names') {
+            dotrack[k]=target[k]
+            if(dotrack.names.indexOf(k)==-1){
+              dotrack.names.push(k)
+            }
+            
+        }
+        updatenamelist()
+        display();
+      }
+  }
+  getId('in_fload').onchange = function(){
+    for (var i = 0; i < getId('in_fload').files.length; i++) {
+      if(typeof getId('in_fload').files[i] !== 'undefined'){
+      fileReader.readAsText(getId('in_fload').files[i],"UTF-8")
+      };
+    };  
+  }
+}
+btn_floadc.onclick = loadadd
 function defaultwp(){
   if(typeof chara().skills[0] ==='undefined'){
   chara().skills.push({"name":"DX", "base":"DX", 'RSL':0})
@@ -890,6 +918,7 @@ function calc(){
     chara().skills[i].sl = max + (chara()[chara().skills[i].base.toLowerCase()] - chara()[chara().skills[i].base.toLowerCase()+"max"])
   };
   chara().hp = Math.min(chara().hp,chara().hpmax)
+  encumber()
 }
 ////encumberance calc////
 function encumberupdate(e){
@@ -934,7 +963,8 @@ function newskill(){
     "name":ti_nsname.value,
     "base":sl_nsba.value,
     "RSL":ti_nsnum.valueAsNumber,
-    "sl": (chara()[sl_nsba.value.toLowerCase()] + ti_nsnum.valueAsNumber)
+    "sl": (chara()[sl_nsba.value.toLowerCase()] + ti_nsnum.valueAsNumber),
+    "atk":cb_nsws.checked
   }
     )
   skilldisplay();
@@ -976,6 +1006,10 @@ function skilldisplay(){
   while(sl_atkskill.lastChild){
     sl_atkskill.removeChild(sl_atkskill.lastChild);
   }
+  chara().skills[0].atk = true
+  for (var i = chara().skills.length - 1; i >= 0; i--) {//backwards compatibility for skills
+    if(!typeof chara().skills[i].atk == 'boolean'){chara().skills[i].atk = true}
+  };
   for (var i = 0; i < chara().skills.length; i++) {
     var nb = document.createElement("button")
     //nb.className
@@ -989,10 +1023,13 @@ function skilldisplay(){
     option.textContent=chara().skills[i].name
     option.value = i
     sl_removeskill.add(option);
-    var option = document.createElement('option')
-    option.textContent=chara().skills[i].name
-    option.value = i
-    sl_atkskill.add(option);
+    if(chara().skills[i].atk){
+      var option = document.createElement('option')
+      option.textContent=chara().skills[i].name
+      option.value = i
+      sl_atkskill.add(option);
+    }
+    
   };
   sl_removeskill.removeChild(sl_removeskill.firstChild)
 }
@@ -1020,7 +1057,8 @@ function newweapon(){
     "base":sl_nwd.value,
     "dice":ti_nwdice.valueAsNumber,
     "mod":ti_nwmod.valueAsNumber,
-    "type":sl_nwdt.value
+    "type":sl_nwdt.value,
+    "st":ti_nwst.valueAsNumber
   }
     )
   weapondisplay();
@@ -1036,6 +1074,12 @@ function weapondisplay(){
   while(getId('sl_atkweapon').lastChild){
     getId('sl_atkweapon').removeChild(getId('sl_atkweapon').lastChild);
   }
+
+  for (var i = chara().weapons.length - 1; i >= 0; i--) {//backwards compatibility
+    if(!typeof chara().weapons[i].st == 'number'){
+      chara().weapons[i].st = 0
+    }
+  };
   while(sl_removeweapon.lastChild){sl_removeweapon.removeChild(sl_removeweapon.lastChild);}
   for (var i = 0; i < chara().weapons.length; i++) {
     var nb = document.createElement("button")
@@ -1235,6 +1279,7 @@ function setupwdisplay(){
     cont.appendChild(document.createElement('br'))
     area.appendChild(cont)
   };
+
 }
 function wtrackupdate(e){
   var part = e.target.id.split("_")[1]
@@ -1338,6 +1383,9 @@ function atkcalcbonus(){
   var bonus = ti_skillbon.valueAsNumber
   var manu = "atk"
   var weapon = chara().weapons[parseInt(sl_atkweapon.value)]
+  if(chara().st < weapon.st){
+    bonus -= weapon.st - chara().st
+  }
   var base =""
   switch(weapon.base){
     case "thr":
@@ -1605,7 +1653,6 @@ function atkcalc(){
   }
   if(typeof wdatahitloc.subhit[locationhit.split("-")[0]] === 'object'){
         var subhit = wdatahitloc.subhit[locationhit.split("-")[0]][rolldice(1)-1]
-        console.log(subhit)
         text += ` Location: ${wdatahitloc[locationhit].name} ${subhit}`
       }else{
         text += ` Location: ${wdatahitloc[locationhit].name}`
